@@ -119,15 +119,18 @@ const List = styled.li`
 
 const StoriesContainer = styled.div`
   margin: auto;
-  width: auto;
   height: auto;
+  width: auto;
   display: flex;
+  justify-content: center;
   flex-direction: row;
   padding-bottom: 10px;
   padding-left: 100px;
   padding-right: 100px;
-  overflow-y: hidden;
-  overflow-x: scroll;
+ 
+  //overflow-y: hidden;
+
+  
 `;
 
 const CreatePostContainer = styled.div`
@@ -197,15 +200,18 @@ function Home(props) {
             <Stories />
 
             <Stories />
-            <Stories />
-            <Stories />
-            <Stories />
+          
+
+            
+
+         
           </StoriesContainer>
           <CreatePostContainer>
             <CreatePost />
           </CreatePostContainer>
 
           <PostsContainer>
+            <Posts />
             <Posts />
           </PostsContainer>
         </Feeds>

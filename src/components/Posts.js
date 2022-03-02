@@ -4,8 +4,6 @@ import storyimage from "../assets/2.jpg";
 import profile from "../assets/1.jpg";
 import ReactRoundedImage from "react-rounded-image";
 
-
-
 const Post = styled.div`
   background-color: white;
   margin: auto;
@@ -26,11 +24,19 @@ const Row = styled.div`
   padding: 15px;
 `;
 
+const RowBottom = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: auto;
+  width: auto;
+  padding: 15px;
+  justify-content: space-between;
+`;
+
 const Name = styled.p`
   font-weight: bold;
   margin-top: -2px;
   font-size: medium;
- 
 `;
 
 const Time = styled.p`
@@ -50,7 +56,11 @@ const PostImage = styled.img`
   max-width: 100%;
   max-height: 100%;
   object-fit: cover;
+`;
 
+const NumberOfLikes = styled.p`
+text-align: end;
+justify-self: end;
 `;
 
 export default function Posts() {
@@ -81,6 +91,10 @@ export default function Posts() {
       </Caption>
 
       <PostImage src={storyimage} alt="post"></PostImage>
+      <RowBottom>
+        <button>Like</button>
+        <NumberOfLikes>0 likes</NumberOfLikes>
+      </RowBottom>
     </Post>
   );
 }

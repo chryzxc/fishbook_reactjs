@@ -32,7 +32,6 @@ const Row = styled.div`
   margin-top: -10px;
 
   padding: 10px;
-
 `;
 
 const WritePost = styled.div`
@@ -57,7 +56,6 @@ const TextArea = styled.textarea`
   resize: none;
 `;
 
-
 export default function CreatePost() {
   return (
     <CreatePostCard>
@@ -79,7 +77,12 @@ export default function CreatePost() {
       <div>
         <Divider />
       </div>
-      <div>Create a post</div>
+      <div>
+        <Row>
+          <button>Test</button>
+          <button>Test</button>
+        </Row>
+      </div>
     </CreatePostCard>
   );
 }
