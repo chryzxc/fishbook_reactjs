@@ -2,50 +2,61 @@ import React from "react";
 
 import styled from "styled-components";
 
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  height: auto;
+  width: auto;
+  align-items: center;
+  margin-left: 30px;
+`;
+
 const Page = (props) => {
   return (
-    <Container>
-      <Container1>
-        <Container2>
-          <Container3>
-            <Container5>
-              <Text05>Fishbook</Text05>
-              <span>
-                Connect with fish and the world around you on Fishbook.
-              </span>
-            </Container5>
-            <Container4>
-              <FeatureCard>
-                <Form>
-                  <Textinput type="text" placeholder="Email or phone number" />
-                  <Textinput1 type="text" placeholder="Password" />
-                  <LoginButton>Login</LoginButton>
-                  <Container7>
-                    <Text02>Forgot password?</Text02>
-                    <RegisterButton>Create account</RegisterButton>
-                  </Container7>
-                </Form>
-              </FeatureCard>
-            </Container4>
-          </Container3>
-          <Banner>
-            <Text03>
-              <Text04>Swim, Swim, Swim</Text04>
-            </Text03>
-            <Text05>Learn to swim</Text05>
-            <Text06>
-              <span>
-                A fish is an amazing animal which lives and breathes in water.
-                Fish have been on the Earth for over 500 million years. All fish
-                have a backbone and most breathe through gills and have fins and
-                scales. Fish have excellent senses of sight, touch, taste and
-                many possess a good sense of smell and 'hearing'.
-              </span>
-            </Text06>
-          </Banner>
-        </Container2>
-      </Container1>
-    </Container>
+    // <Container>
+    //   <Container1>
+    //     <Container2>
+    //       <Container3>
+    //         <Container5>
+    //           <Text05>Fishbook</Text05>
+    //           <span>
+    //             Connect with fish and the world around you on Fishbook.
+    //           </span>
+    //         </Container5>
+    //         <Container4>
+    //           <FeatureCard>
+    //             <Form>
+    //               <Textinput type="text" placeholder="Email or phone number" />
+    //               <Textinput1 type="text" placeholder="Password" />
+    //               <LoginButton>Login</LoginButton>
+    //               <Container7>
+    //                 <Text02>Forgot password?</Text02>
+    //                 <RegisterButton>Create account</RegisterButton>
+    //               </Container7>
+    //             </Form>
+    //           </FeatureCard>
+    //         </Container4>
+    //       </Container3>
+    //       <Banner>
+    //         <Text03>
+    //           <Text04>Swim, Swim, Swim</Text04>
+    //         </Text03>
+    //         <Text05>Learn to swim</Text05>
+    //         <Text06>
+    //           <span>
+    //             A fish is an amazing animal which lives and breathes in water.
+    //             Fish have been on the Earth for over 500 million years. All fish
+    //             have a backbone and most breathe through gills and have fins and
+    //             scales. Fish have excellent senses of sight, touch, taste and
+    //             many possess a good sense of smell and 'hearing'.
+    //           </span>
+    //         </Text06>
+    //       </Banner>
+    //     </Container2>
+    //   </Container1>
+    // </Container>
   );
 };
 
