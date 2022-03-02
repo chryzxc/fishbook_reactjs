@@ -1,12 +1,22 @@
 import React from "react";
 import styled from "styled-components";
 import fish from "../assets/fish.png";
+import ReactRoundedImage from "react-rounded-image";
 
 const Main = styled.div`
   height: 100%;
   width: 100%;
   max-width: 400vh;
   min-width: 200vh;
+`;
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start space-evenly;
+  height: auto;
+  width: auto;
+  align-items: center;
 `;
 
 const NavBar = styled.div`
@@ -52,7 +62,6 @@ const Feeds = styled.div`
   background-color: beige;
   height: 100px;
   width: 60%;
-  
 `;
 
 const FishbookIcon = styled.img`
@@ -63,7 +72,6 @@ const FishbookIcon = styled.img`
 const SearchBar = styled.div`
   height: 30px;
   width: 50px;
-  
 `;
 
 const Search = styled.input`
@@ -75,7 +83,15 @@ const Search = styled.input`
   padding: 5px;
 `;
 
+const UserDisplayName = styled.p`
+  margin-left: 10px;
+`;
 
+const List = styled.li`
+  text-align: left;
+  list-style-type: none;
+  align-items: flex-start;
+`;
 
 function Home(props) {
   return (
@@ -93,9 +109,19 @@ function Home(props) {
       <Body>
         <LeftNav>
           <ul>
-            <li>Coffee</li>
-            <li>Tea</li>
-            <li>Milk</li>
+            <List>
+              <Row>
+                <ReactRoundedImage
+                  image={fish}
+                  roundedSize="0"
+                  imageWidth="30"
+                  imageHeight="30"
+                />
+                <UserDisplayName>Christian Villablanca</UserDisplayName>
+              </Row>
+            </List>
+            <List>Tea</List>
+            <List>Milk</List>
           </ul>
         </LeftNav>
         <Feeds></Feeds>
