@@ -4,11 +4,13 @@ import ReactRoundedImage from "react-rounded-image";
 import profile from "../assets/1.jpg";
 
 const CreatePostCard = styled.div`
+  overflow-y: hidden;
+  overflow-x: hidden;
   background-color: white;
   margin: auto;
-  height: 20vh;
+  height: auto;
   width: 80vh;
-  min-height: 20vh;
+  min-height: auto;
   min-width: 80vh;
   margin-top: 20px;
   border-radius: 10px;
@@ -16,21 +18,21 @@ const CreatePostCard = styled.div`
 `;
 
 const Divider = styled.hr`
-
   border-top: 1pt solid #bbb;
-  margin: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
 `;
 
 const Row = styled.div`
- 
   display: flex;
   flex-direction: row;
   justify-content: center;
   height: auto;
   width: auto;
-  align-items: center;
+  margin-top: -10px;
+
   padding: 10px;
-  padding-top: 20px;
+
 `;
 
 const WritePost = styled.div`
@@ -40,13 +42,26 @@ const WritePost = styled.div`
   height: auto;
   padding: 10px;
   font-size: large;
-  color: #65676B;
+  color: #65676b;
   margin-left: 15px;
 `;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: none;
+  background-color: transparent;
+  resize: none;
+`;
+
 
 export default function CreatePost() {
   return (
     <CreatePostCard>
+      <h2>Create a post</h2>
       <div>
         <Row>
           <ReactRoundedImage
@@ -56,7 +71,9 @@ export default function CreatePost() {
             imageHeight="40"
           ></ReactRoundedImage>
 
-          <WritePost>What's on your mind, Christian?</WritePost>
+          <WritePost>
+            <TextArea placeholder="What's on your mind, Christian?"></TextArea>
+          </WritePost>
         </Row>
       </div>
       <div>
@@ -64,6 +81,5 @@ export default function CreatePost() {
       </div>
       <div>Create a post</div>
     </CreatePostCard>
-
   );
 }

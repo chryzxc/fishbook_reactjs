@@ -82,7 +82,6 @@ const Feeds = styled.div`
   align-items: center;
   justify-content: center;
   padding-bottom: 50px;
-
 `;
 
 const FishbookIcon = styled.img`
@@ -119,6 +118,8 @@ const List = styled.li`
 `;
 
 const StoriesContainer = styled.div`
+  margin: auto;
+  width: auto;
   height: auto;
   display: flex;
   flex-direction: row;
@@ -129,14 +130,26 @@ const StoriesContainer = styled.div`
   overflow-x: scroll;
 `;
 
-const PostsContainer = styled.div`
+const CreatePostContainer = styled.div`
+  margin: auto;
+  width: auto;
   height: auto;
   display: flex;
   flex-direction: column;
   padding-bottom: 10px;
   padding-left: 100px;
   padding-right: 100px;
+`;
 
+const PostsContainer = styled.div`
+  margin: auto;
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10px;
+  padding-left: 100px;
+  padding-right: 100px;
 `;
 
 function Home(props) {
@@ -188,9 +201,12 @@ function Home(props) {
             <Stories />
             <Stories />
           </StoriesContainer>
-          <CreatePost />
+          <CreatePostContainer>
+            <CreatePost />
+          </CreatePostContainer>
+
           <PostsContainer>
-            <Posts/>
+            <Posts />
           </PostsContainer>
         </Feeds>
         <RightNav></RightNav>
