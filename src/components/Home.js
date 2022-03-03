@@ -166,7 +166,11 @@ function Home(props) {
           </SearchBar>
         </Container>
         <Container>
-          <h1>Fishbook</h1>
+          <h1 style={{
+            fontSize:"35px",
+            color: "#1877f2",
+            fontWeight:"bold"
+          }}>Fishbook</h1>
         </Container>
         <Container>asdwqe</Container>
       </NavBar>
