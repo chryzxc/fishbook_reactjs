@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
   font-family:  'Open Sans';
@@ -9,8 +14,10 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family:  'Open Sans';
+ /* font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+  */  
 }
 
 textarea,
@@ -18,4 +25,22 @@ input,
 select {
     font-family: inherit;
   
+}
+
+input{
+
+  border-color: #babfc4;
+  border-width: 1pt;
+  font-size: medium;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+button{
+  font-size: medium;
+  padding: 12px;
+  border-radius: 5px;
+
+  border-style: none;
+
 }
