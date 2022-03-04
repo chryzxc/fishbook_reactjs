@@ -2,8 +2,8 @@ import React, { useState } from "react";
 
 import styled from "styled-components";
 
-import Modal from "react-modal";
 import Button from "react-bootstrap/Button";
+import CreateAccount from "./CreateAccount";
 
 const Column = styled.div`
   background-color: #f0f2f5;
@@ -13,7 +13,7 @@ const Column = styled.div`
   min-width: fit-content;
   min-height: fit-content;
   flex-direction: column;
-  padding-top: 100px;
+  padding-top: 150px;
 `;
 
 const Row = styled.div`
@@ -183,90 +183,30 @@ const Text06 = styled("span")({
   },
 });
 
-const modalStyle = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-  },
-};
-
 const Login = (props) => {
-  // Modal
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  // function afterOpenModal() {
-  //   // references are now sync'd and can be accessed.
-  //   subtitle.style.color = "#f00";
-  // }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  //Register
-
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const registerUser = (e) => {
-    e.preventDefault();
-    console.log(firstname +  lastname  + email  + password);
+  const handleOpenCreateModal = () => {
+    setOpenModal(true);
+    //  console.log("true");
   };
-  
+
+  const handleCloseCreateModal = () => {
+    setOpenModal(false);
+    //console.log("false");
+  };
 
   return (
     <>
-      <Modal
-        isOpen={modalIsOpen}
-        // onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={modalStyle}
-        contentLabel="Example Modal"
-      >
-        <div className="flex flex-row relative"></div>
-        <div>
-          <h1 className="font-extrabold text-3xl">Sign up</h1>
-          <p className="mt-15 text-sm">It's quick and easy</p>
-        </div>
-        <div>
-          <button className="absolute top-2 right-5" onClick={closeModal}>
-            close
-          </button>
-        </div>
+      {openModal ? (
+        <CreateAccount
+          handleOpenCreateModal={handleOpenCreateModal}
+          handleCloseCreateModal={handleCloseCreateModal}
+        />
+      ) : (
+        ""
+      )}
 
-        <Divider></Divider>
-        <div className="text-center">
-          <form className="pt-2" onSubmit={registerUser}>
-            <input className="m-1" placeholder="Fishname" required onChange={(e) => {setFirstname(e.target.value)}}/>
-            <input className="m-1" placeholder="Lastname" required onChange={(e) => {setLastname(e.target.value)}}/>
-            <div
-              style={{
-                display: "flex",
-                "flex-direction": "column",
-              }}
-            >
-              <input className="m-1" placeholder="Email or phone number" required onChange={(e) => {setEmail(e.target.value)}}/>
-              <input className="m-1" placeholder="New password" required onChange={(e) => {setPassword(e.target.value)}}/>
-            </div>
-            <button
-              className="m-auto self-center border-none bg-[#42b72a] text-white rounded-[5px] font-semibold mt-3"
-             onClick='submit'
-            >
-              Sign up
-            </button>
-          </form>
-        </div>
-      </Modal>
       <Column>
         <Row>
           <div
@@ -299,9 +239,11 @@ const Login = (props) => {
               </Form>
 
               <Divider />
-              <p className="mt-5 mb-2">Dont have an account?</p>
+              <p className="mt-5 mb-2">Don't have an account?</p>
 
-              <CreateButton onClick={openModal}>Create account</CreateButton>
+              <CreateButton onClick={handleOpenCreateModal}>
+                Create an account
+              </CreateButton>
             </LoginCard>
           </div>
         </Row>
