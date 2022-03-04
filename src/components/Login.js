@@ -185,6 +185,9 @@ const Text06 = styled("span")({
 
 const Login = (props) => {
   const [openModal, setOpenModal] = useState(false);
+  
+  const [loginEmail, setLoginEMail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
 
   const handleOpenCreateModal = () => {
     setOpenModal(true);
