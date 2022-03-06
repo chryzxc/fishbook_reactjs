@@ -1,9 +1,19 @@
 import React, { useState } from "react";
 
 import styled from "styled-components";
-
+import db from "../others/firebase";
 import Button from "react-bootstrap/Button";
 import CreateAccount from "./CreateAccount";
+import {
+  ref,
+  set,
+  push,
+  getDatabase,
+  child,
+  get,
+  equalTo,
+  orderByChild,
+} from "firebase/database";
 
 const Column = styled.div`
   background-color: #f0f2f5;
@@ -183,11 +193,11 @@ const Text06 = styled("span")({
   },
 });
 
-const Login = (props) => {
+export default function Login(){
   const [openModal, setOpenModal] = useState(false);
-  
-  const [loginEmail, setLoginEMail] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  
 
   const handleOpenCreateModal = () => {
     setOpenModal(true);
@@ -197,6 +207,35 @@ const Login = (props) => {
   const handleCloseCreateModal = () => {
     setOpenModal(false);
     //console.log("false");
+  };
+
+  
+
+  const LoginUser = (e) => {
+    e.preventDefault();
+    const [userExist, setUserExist] = useState(false);
+
+    
+    const dbRef = ref(db);
+
+    get(child(dbRef, "users"), orderByChild("email"), equalTo(loginEmail))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          console.log(snapshot.val());
+
+          snapshot.forEach((child) => {
+            loginEmail === child.val().email &&
+            loginPassword === child.val().password &&
+            console.log("userExist");
+          });
+        
+        } else {
+          console.log("No data available");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -236,9 +275,15 @@ const Login = (props) => {
           >
             <LoginCard>
               <Form>
-                <EmailInput placeholder="Email or phone number"></EmailInput>
-                <PasswordInput placeholder="Password"></PasswordInput>
-                <LoginButton>Login</LoginButton>
+                <EmailInput
+                  placeholder="Email or phone number"
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                ></EmailInput>
+                <PasswordInput
+                  placeholder="Password"
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                ></PasswordInput>
+                <LoginButton onClick={LoginUser}>Login</LoginButton>
               </Form>
 
               <Divider />
@@ -271,4 +316,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+

@@ -37,29 +37,21 @@ const ProfileContainer = styled.div`
 const StoryOwner = styled.p`
   position: absolute;
   font-weight: bold;
-  position: absolute;
-  bottom: 10px;
-  left: 16px;
+  bottom: 1px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+ 
   color: white;
-  margin-right: 16px
 `;
 
-export default function Stories() {
+export default function AddStory() {
   return (
     <Story>
       <StoryImage src={storyimage} alt="story"></StoryImage>
-      <div>
-        <StoryOwner>Christian Vllablanca</StoryOwner>
+      <div className="text-center justify-center align-content-center">
+        <StoryOwner>Add story</StoryOwner>
       </div>
-      <ProfileContainer>
-        <ReactRoundedImage
-          image={profile}
-          imageWidth="50"
-          imageHeight="50"
-          roundedColor="#166ADA"
-          roundedSize="7"
-        ></ReactRoundedImage>
-      </ProfileContainer>
+      
     </Story>
 
     

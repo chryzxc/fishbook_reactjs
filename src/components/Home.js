@@ -5,6 +5,7 @@ import logo from "../assets/logo.png";
 import ReactRoundedImage from "react-rounded-image";
 import CreatePost from "./CreatePost";
 import Stories from "./Stories";
+import AddStory from "./AddStory";
 import Posts from "./Posts";
 
 const Main = styled.div`
@@ -198,11 +199,10 @@ function Home(props) {
         </LeftNav>
         <Feeds>
           <StoriesContainer>
+            <AddStory />
             <Stories />
             <Stories />
             <Stories />
-            <Stories />
-
             <Stories />
           
 

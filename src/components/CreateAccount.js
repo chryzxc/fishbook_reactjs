@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
 import db from "../others/firebase";
@@ -18,7 +18,6 @@ export default function CreateAccount({
   handleOpenCreateModal,
   handleCloseCreateModal,
 }) {
-  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const auth = getAuth();
@@ -39,9 +38,13 @@ export default function CreateAccount({
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [hasError, setHasError] = useState(false);
 
     const registerUser = (e) => {
       setLoading(true);
+      setHasError(false);
 
       e.preventDefault();
 
@@ -53,102 +56,116 @@ export default function CreateAccount({
         date_registered: new Date(),
       };
 
-      
-      const dbRef = ref(db, "users/");
-      const newAccount = push(dbRef);
+      //  const dbRef = ref(db, "users/");
+      //  const newAccount = push(dbRef);
+
+      const auth = getAuth();
 
       setTimeout(() => {
-        set(newAccount, userDetails)
-          .then(() => {
-            setLoading(false);
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            console.log(user);
+      
 
-            const auth = getAuth();
-            createUserWithEmailAndPassword(auth, email, password)
-              .then((userCredential) => {
-                // Signed in 
-                const user = userCredential.user;
-                console.log(user)
-                // ...
+            set(ref(db, "users/" + user.uid), userDetails)
+              .then(() => {
+                setLoading(false);
+                setSuccess(true);
+
+                //handleCloseCreateModal();
               })
               .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorCode + errorMessage)
-                // ..
+                setError(error);
+                setLoading(false);
+                setHasError(true);
+                toast(error);
               });
-            //setSuccess(true);
-            //handleCloseCreateModal();
           })
           .catch((error) => {
-            toast(error);
+            setLoading(false);
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setError(errorMessage);
+            setHasError(true);
           });
       }, 2000);
     };
 
     return (
-      <form className="pt-2" onSubmit={registerUser}>
-        <input
-          className="m-1"
-          placeholder="Fishname"
-          required
-          onChange={(e) => {
-            setFirstname(e.target.value);
-          }}
-        />
-        <input
-          className="m-1"
-          placeholder="Lastname"
-          required
-          onChange={(e) => {
-            setLastname(e.target.value);
-          }}
-        />
-        <div
-          style={{
-            display: "flex",
-            "flex-direction": "column",
-          }}
-        >
+      <div>
+        {hasError ? <p className="mt-15 text-sm text-red-600">{error}</p> : ""}
+
+        {loading ? (
+          <p className="mt-15 text-sm text-blue-600">
+            Creating account... please wait
+          </p>
+        ) : (
+          ""
+        )}
+
+        <Divider></Divider>
+
+        <form className="pt-2" onSubmit={registerUser}>
           <input
             className="m-1"
-            placeholder="Email or phone number"
+            placeholder="Fishname"
             required
             onChange={(e) => {
-              setEmail(e.target.value);
+              setFirstname(e.target.value);
             }}
           />
           <input
             className="m-1"
-            placeholder="New password"
+            placeholder="Lastname"
             required
+            value={lastname}
             onChange={(e) => {
-              setPassword(e.target.value);
+              setLastname(e.target.value);
             }}
           />
-        </div>
-        <button
-          className="m-auto self-center border-none bg-[#42b72a] text-white rounded-[5px] font-semibold mt-3"
-          onClick="submit"
-        >
-          Sign up
-        </button>
-      </form>
+          <div
+            style={{
+              display: "flex",
+              "flex-direction": "column",
+            }}
+          >
+            <input
+              className="m-1"
+              placeholder="Email or phone number"
+              required
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <input
+              className="m-1"
+              placeholder="New password"
+              required
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+          </div>
+          <button
+            className="m-auto self-center border-none bg-[#42b72a] text-white rounded-[5px] font-semibold mt-3"
+            onClick="submit"
+          >
+            Sign up
+          </button>
+        </form>
+      </div>
     );
   };
 
-  const RegisterLayout = () => {
+  const RegisterLayout = (props) => {
     return (
       <>
         <div>
           <h1 className="font-extrabold text-3xl">Sign up</h1>
           <p className="mt-15 text-sm">It's quick and easy</p>
-          {loading ? (
-            <p className="mt-15 text-sm text-blue-600">
-              Creating account... please wait
-            </p>
-          ) : (
-            ""
-          )}
         </div>
         <div>
           <button
@@ -159,7 +176,6 @@ export default function CreateAccount({
           </button>
         </div>
 
-        <Divider></Divider>
         <div className="text-center">
           <InputLayout />
         </div>
@@ -195,7 +211,6 @@ export default function CreateAccount({
       >
         <div className="flex flex-row relative"></div>
         {success ? <SuccessLayout /> : <RegisterLayout />}
-        {console.log(success)}
       </Modal>
     </div>
   );
