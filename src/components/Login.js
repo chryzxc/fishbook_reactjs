@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import db from "../others/firebase";
 import Button from "react-bootstrap/Button";
@@ -14,6 +14,7 @@ import {
   equalTo,
   orderByChild,
 } from "firebase/database";
+import { clear } from "@testing-library/user-event/dist/clear";
 
 const Column = styled.div`
   background-color: #f0f2f5;
@@ -70,6 +71,8 @@ const LoginCard = styled.div`
 const Text = styled.h1`
   font-size: 3rem;
   margin-bottom: 16px;
+  color: #1877f2;
+  font-weight: bold;
 `;
 
 const EmailInput = styled.input`
@@ -98,7 +101,7 @@ const PasswordInput = styled.input`
 `;
 
 const LoginButton = styled.button`
-  margin-top: 15px;
+  margin-top: 14px;
   font-size: medium;
   padding: 12px;
   border-radius: 5px;
@@ -193,49 +196,72 @@ const Text06 = styled("span")({
   },
 });
 
-export default function Login(){
+export default function Login(props) {
   const [openModal, setOpenModal] = useState(false);
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  
+
+  const [userExist, setUserExist] = useState();
+  const [isCheckingLoginDetails, setIsCheckingLoginDetails] = useState(false);
+  const [clearError, setClearError] = useState(true);
 
   const handleOpenCreateModal = () => {
     setOpenModal(true);
-    //  console.log("true");
   };
 
   const handleCloseCreateModal = () => {
     setOpenModal(false);
-    //console.log("false");
   };
 
-  
+  let navigate = useNavigate();
+  const performLogin = () => {
+    if (userExist === true) {
+      console.log("redirecting");
+      navigate("/Home");
+    }else{
+      console.log("not redirecting");
+    }
+  };
 
   const LoginUser = (e) => {
     e.preventDefault();
-    const [userExist, setUserExist] = useState(false);
+    setUserExist(false);
+    setIsCheckingLoginDetails(true);
+    setClearError(true);
 
-    
     const dbRef = ref(db);
 
-    get(child(dbRef, "users"), orderByChild("email"), equalTo(loginEmail))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          console.log(snapshot.val());
+    setTimeout(() => {
+      get(child(dbRef, "users"), orderByChild("email"), equalTo(loginEmail))
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            setUserExist(false);
+            console.log(snapshot.val());
 
-          snapshot.forEach((child) => {
-            loginEmail === child.val().email &&
-            loginPassword === child.val().password &&
-            console.log("userExist");
-          });
-        
-        } else {
-          console.log("No data available");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+            snapshot.forEach((child) => {
+              if (
+                loginEmail === child.val().email &&
+                loginPassword === child.val().password
+              ) {
+                setUserExist(true);
+                setIsCheckingLoginDetails(false);
+                //   console.log("exist");
+              }
+            });
+            setIsCheckingLoginDetails(false);
+            setClearError(false);
+          } else {
+            console.log("No data available");
+            setIsCheckingLoginDetails(false);
+          }
+        })
+        .catch((error) => {
+          setIsCheckingLoginDetails(false);
+          console.error(error);
+        });
+
+      console.log(userExist);
+    }, 5000);
   };
 
   return (
@@ -274,16 +300,39 @@ export default function Login(){
             }}
           >
             <LoginCard>
-              <Form>
+              {isCheckingLoginDetails ? (
+                ""
+              ) : userExist ? (
+                ""
+              ) : clearError ? (
+                performLogin()
+              ) : (
+                <p className="mb-1 text-sm text-red-500 font-semibold">
+                  Account does not exist
+                </p>
+              )}
+              <Form onSubmit={LoginUser}>
                 <EmailInput
                   placeholder="Email or phone number"
+                  required
                   onChange={(e) => setLoginEmail(e.target.value)}
                 ></EmailInput>
                 <PasswordInput
                   placeholder="Password"
+                  required
                   onChange={(e) => setLoginPassword(e.target.value)}
                 ></PasswordInput>
-                <LoginButton onClick={LoginUser}>Login</LoginButton>
+
+                {isCheckingLoginDetails ? (
+                  <button
+                    className="mt-3.5 text-medium text-white bg-blue-400"
+                    disabled
+                  >
+                    Logging in
+                  </button>
+                ) : (
+                  <LoginButton onClick="submit">Login</LoginButton>
+                )}
               </Form>
 
               <Divider />
@@ -302,7 +351,7 @@ export default function Login(){
           </Text03>
           <Text>Discover the ocean</Text>
           <Text06>
-            <span>
+            <span className="font-semibold">
               A fish is an amazing animal which lives and breathes in water.
               Fish have been on the Earth for over 500 million years. All fish
               have a backbone and most breathe through gills and have fins and
@@ -314,6 +363,4 @@ export default function Login(){
       </Column>
     </>
   );
-};
-
-
+}

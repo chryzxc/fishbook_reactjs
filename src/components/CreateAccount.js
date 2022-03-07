@@ -24,7 +24,7 @@ export default function CreateAccount({
 
   const modalStyle = {
     content: {
-      top: "50%",
+      top: "40%",
       left: "50%",
       right: "auto",
       bottom: "auto",
