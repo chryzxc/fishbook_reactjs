@@ -23,7 +23,7 @@ margin: auto;
 const StoryImage = styled.img`
   height: 100%;
   max-width: 100%;
-  max-height: 100%;
+  max-height: 100%;s
   object-fit: cover;
   border-radius: 20px;
 `;
