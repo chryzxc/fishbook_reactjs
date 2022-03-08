@@ -15,6 +15,7 @@ import {
   orderByChild,
 } from "firebase/database";
 import { clear } from "@testing-library/user-event/dist/clear";
+import { propTypes } from "react-bootstrap/esm/Image";
 
 const Column = styled.div`
   background-color: #f0f2f5;
@@ -201,7 +202,6 @@ export default function Login(props) {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
-  const [userExist, setUserExist] = useState();
   const [isCheckingLoginDetails, setIsCheckingLoginDetails] = useState(false);
   const [clearError, setClearError] = useState(true);
 
@@ -214,54 +214,89 @@ export default function Login(props) {
   };
 
   let navigate = useNavigate();
-  const performLogin = () => {
-    if (userExist === true) {
-      console.log("redirecting");
-      navigate("/Home");
-    }else{
-      console.log("not redirecting");
-    }
-  };
+
+  const performLogin = (props) => {
+    
+   
+    navigate("/Home/" +props);
+  }
 
   const LoginUser = (e) => {
     e.preventDefault();
-    setUserExist(false);
+
     setIsCheckingLoginDetails(true);
     setClearError(true);
 
     const dbRef = ref(db);
 
-    setTimeout(() => {
-      get(child(dbRef, "users"), orderByChild("email"), equalTo(loginEmail))
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            setUserExist(false);
-            console.log(snapshot.val());
+    const getData = async () => {
+      const snapshot = await get(
+        child(dbRef, "users"),
+        orderByChild("email"),
+        equalTo(loginEmail)
+      );
 
-            snapshot.forEach((child) => {
-              if (
-                loginEmail === child.val().email &&
-                loginPassword === child.val().password
-              ) {
-                setUserExist(true);
-                setIsCheckingLoginDetails(false);
-                //   console.log("exist");
-              }
-            });
-            setIsCheckingLoginDetails(false);
-            setClearError(false);
-          } else {
-            console.log("No data available");
-            setIsCheckingLoginDetails(false);
-          }
-        })
-        .catch((error) => {
-          setIsCheckingLoginDetails(false);
-          console.error(error);
-        });
+      let userExist = false;
+      let userId = "";
 
-      console.log(userExist);
-    }, 5000);
+      const data = await snapshot.forEach((child) => {
+        console.log("loop");
+        if (
+          loginEmail === child.val().email &&
+          loginPassword === child.val().password
+        ) {
+          console.log("exist");
+          userExist = true;
+          userId = child.key;
+        }
+        return userExist;
+      });
+      console.log("done");
+      console.log("result : " + userExist);
+
+      await setIsCheckingLoginDetails(false);
+      await setClearError(false);
+      if (userExist) {
+       
+        performLogin(userId);
+      }
+    };
+
+    console.log(getData());
+
+    // setTimeout(() => {
+    //   get(child(dbRef, "users"), orderByChild("email"), equalTo(loginEmail))
+    //     .then((snapshot) => {
+    //       if (snapshot.exists()) {
+    //         setUserExist(false);
+    //         console.log(snapshot.val());
+
+    //         let asdw = snapshot.forEach((child) => {
+    //           if (
+    //             loginEmail === child.val().email &&
+    //             loginPassword === child.val().password
+    //           ) {
+    //             setUserExist(true);
+    //             setIsCheckingLoginDetails(false);
+    //             //   console.log("exist");
+    //           }
+    //         }).then(() => {
+
+    //         });
+    //         setIsCheckingLoginDetails(false);
+    //         setClearError(false);
+    //       } else {
+    //         console.log("No data available");
+    //         setIsCheckingLoginDetails(false);
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       setIsCheckingLoginDetails(false);
+    //       console.error(error);
+    //     });
+
+    //   console.log(userExist);
+    // }, 5000);
   };
 
   return (
@@ -302,10 +337,8 @@ export default function Login(props) {
             <LoginCard>
               {isCheckingLoginDetails ? (
                 ""
-              ) : userExist ? (
-                ""
               ) : clearError ? (
-                performLogin()
+                ""
               ) : (
                 <p className="mb-1 text-sm text-red-500 font-semibold">
                   Account does not exist
@@ -331,7 +364,7 @@ export default function Login(props) {
                     Logging in
                   </button>
                 ) : (
-                  <LoginButton onClick="submit">Login</LoginButton>
+                  <LoginButton type="submit">Login</LoginButton>
                 )}
               </Form>
 
