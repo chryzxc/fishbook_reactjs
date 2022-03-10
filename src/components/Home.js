@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import fish from "../assets/fish.png";
 import logo from "../assets/logo.png";
@@ -7,7 +7,8 @@ import CreatePost from "./CreatePost";
 import Stories from "./Stories";
 import AddStory from "./AddStory";
 import Posts from "./Posts";
-import { useParams } from "react-router-dom";
+//import { useParams } from "react-router-dom";
+import UserContextProvider, { UserContext } from "../context/UserContext";
 
 const Main = styled.div`
   height: 100%;
@@ -155,25 +156,13 @@ const PostsContainer = styled.div`
   padding-right: 100px;
 `;
 
+const Home = () => {
+  const { user } = useContext(UserContext);
+  console.log(user);
 
- 
-
-
-class Home extends Component {
-  state = {};
-
-
-
-  componentDidMount() {
-    
-    const { userId } = useParams();
-    console.log("here " + userId);
-  }
-  
-
-  render() {
- 
-    return (
+  return (
+   
+      
       <Main>
         <NavBar>
           <Container>
@@ -190,7 +179,7 @@ class Home extends Component {
                 fontWeight: "bold",
               }}
             >
-              Fishbook
+           Fishbook
             </h1>
           </Container>
           <Container>asdwqe</Container>
@@ -204,7 +193,7 @@ class Home extends Component {
                 imageWidth="40"
                 imageHeight="40"
               />
-              <UserDisplayName>Christian Villablanca</UserDisplayName>
+              <UserDisplayName>{user.firstname + user.lastname}</UserDisplayName>
             </Row>
             <ul>
               <List></List>
@@ -237,8 +226,8 @@ class Home extends Component {
           <RightNav></RightNav>
         </Body>
       </Main>
-    );
-  }
+   
+  );
 }
 
 export default Home;

@@ -203,7 +203,7 @@ export default function Login(props) {
   const [loginPassword, setLoginPassword] = useState("");
 
   const [isCheckingLoginDetails, setIsCheckingLoginDetails] = useState(false);
-  const [error,setError] = useState("");
+  const [error, setError] = useState("");
   const [clearError, setClearError] = useState(true);
 
   const handleOpenCreateModal = () => {
@@ -216,26 +216,27 @@ export default function Login(props) {
 
   let navigate = useNavigate();
 
-  const performLogin = ({userId , loginEmail , loginPassword}) => {
-   
+  const performLogin = ({ userId, loginEmail, loginPassword }) => {
     const dbRef = ref(db);
-    get(child(dbRef, 'users/' + userId)).then((snapshot) => {
-      if (snapshot.exists()) {
-       if(loginEmail === snapshot.val().email && loginPassword !== snapshot.val().password){
-         setError("Incorrect password. Please try again");
-       
-        }else if(loginEmail === snapshot.val().email && loginPassword === snapshot.val().password){
-        
-         navigate("/Home/" + userId);
+    get(child(dbRef, "users/" + userId))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          if (
+            loginEmail === snapshot.val().email &&
+            loginPassword !== snapshot.val().password
+          ) {
+            setError("Incorrect password. Please try again");
+          } else if (
+            loginEmail === snapshot.val().email &&
+            loginPassword === snapshot.val().password
+          ) {
+            navigate("/Home/" + userId);
+          }
         }
-      } 
-    }).catch((error) => {
-      console.error(error);
-    });
-    
-
-
-   
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const LoginUser = (e) => {
@@ -257,10 +258,7 @@ export default function Login(props) {
       let userId = "";
 
       const data = await snapshot.forEach((child) => {
-        if (
-          loginEmail === child.val().email
-        
-        ) {
+        if (loginEmail === child.val().email) {
           userExist = true;
           userId = child.key;
         }
@@ -269,11 +267,12 @@ export default function Login(props) {
 
       await setIsCheckingLoginDetails(false);
       await setClearError(false);
+
       if (userExist) {
-        setError("");
-        performLogin({userId , loginEmail , loginPassword});
-      }else{
-        setError("Account does not exist");
+        await setError("");
+        await performLogin({ userId, loginEmail, loginPassword });
+      } else {
+        await setError("Account does not exist");
       }
     };
 
@@ -356,7 +355,7 @@ export default function Login(props) {
                 ""
               ) : (
                 <p className="mb-1 text-sm text-red-500 font-semibold">
-                 {error}
+                  {error}
                 </p>
               )}
               <Form onSubmit={LoginUser}>
