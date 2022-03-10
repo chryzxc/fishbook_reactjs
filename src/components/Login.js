@@ -240,12 +240,12 @@ export default function Login(props) {
       let userId = "";
 
       const data = await snapshot.forEach((child) => {
-        console.log("loop");
+    
         if (
           loginEmail === child.val().email &&
           loginPassword === child.val().password
         ) {
-          console.log("exist");
+       
           userExist = true;
           userId = child.key;
         }
