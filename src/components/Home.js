@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import styled from "styled-components";
 import fish from "../assets/fish.png";
 import logo from "../assets/logo.png";
@@ -129,10 +129,8 @@ const StoriesContainer = styled.div`
   padding-bottom: 10px;
   padding-left: 100px;
   padding-right: 100px;
- 
-  //overflow-y: hidden;
 
-  
+  //overflow-y: hidden;
 `;
 
 const CreatePostContainer = styled.div`
@@ -157,77 +155,90 @@ const PostsContainer = styled.div`
   padding-right: 100px;
 `;
 
-function Home(props) {
-  const {userId} = useParams();
-  console.log("here " + userId);
+
+ 
 
 
-  return (
-    <Main>
-      <NavBar>
-        <Container>
-          <FishbookIcon src={logo}></FishbookIcon>
-          <SearchBar>
-            <Search placeholder="Search fish" />
-          </SearchBar>
-        </Container>
-        <Container>
-          <h1 style={{
-            fontSize:"35px",
-            color: "#1877f2",
-            fontWeight:"bold"
-          }}>Fishbook</h1>
-        </Container>
-        <Container>asdwqe</Container>
-      </NavBar>
-      <Body>
-        <LeftNav>
-          <Row>
-            <ReactRoundedImage
-              image={fish}
-              roundedSize="0"
-              imageWidth="40"
-              imageHeight="40"
-            />
-            <UserDisplayName>Christian Villablanca</UserDisplayName>
-          </Row>
-          <ul>
-            <List></List>
-            <List>Friends</List>
-            <List>Most Recent</List>
-            <List>Watch</List>
-            <List>Groups</List>
-            <List>Marketplace</List>
-            <List>Memories</List>
-            <List>Saved</List>
-          </ul>
-        </LeftNav>
-        <Feeds>
-          <StoriesContainer>
-            <AddStory />
-            <Stories />
-            <Stories />
-            <Stories />
-            <Stories />
-          
+class Home extends Component {
+  state = {};
 
-            
 
-         
-          </StoriesContainer>
-          <CreatePostContainer>
-            <CreatePost />
-          </CreatePostContainer>
 
-          <PostsContainer>
-            <Posts />
-            <Posts />
-          </PostsContainer>
-        </Feeds>
-        <RightNav></RightNav>
-      </Body>
-    </Main>
-  );
+  componentDidMount() {
+    
+    const { userId } = useParams();
+    console.log("here " + userId);
+  }
+  
+
+  render() {
+ 
+    return (
+      <Main>
+        <NavBar>
+          <Container>
+            <FishbookIcon src={logo}></FishbookIcon>
+            <SearchBar>
+              <Search placeholder="Search fish" />
+            </SearchBar>
+          </Container>
+          <Container>
+            <h1
+              style={{
+                fontSize: "35px",
+                color: "#1877f2",
+                fontWeight: "bold",
+              }}
+            >
+              Fishbook
+            </h1>
+          </Container>
+          <Container>asdwqe</Container>
+        </NavBar>
+        <Body>
+          <LeftNav>
+            <Row>
+              <ReactRoundedImage
+                image={fish}
+                roundedSize="0"
+                imageWidth="40"
+                imageHeight="40"
+              />
+              <UserDisplayName>Christian Villablanca</UserDisplayName>
+            </Row>
+            <ul>
+              <List></List>
+              <List>Friends</List>
+              <List>Most Recent</List>
+              <List>Watch</List>
+              <List>Groups</List>
+              <List>Marketplace</List>
+              <List>Memories</List>
+              <List>Saved</List>
+            </ul>
+          </LeftNav>
+          <Feeds>
+            <StoriesContainer>
+              <AddStory />
+              <Stories />
+              <Stories />
+              <Stories />
+              <Stories />
+            </StoriesContainer>
+            <CreatePostContainer>
+              <CreatePost />
+            </CreatePostContainer>
+
+            <PostsContainer>
+              <Posts />
+              <Posts />
+            </PostsContainer>
+          </Feeds>
+          <RightNav></RightNav>
+        </Body>
+      </Main>
+    );
+  }
 }
 
 export default Home;
