@@ -30,7 +30,7 @@ const UserContextProvider = (props) => {
         .then((snapshot) => {
           if (snapshot.exists()) {
             setUser({
-              id: snapshot.id,
+              id: snapshot.key,
               firstname: snapshot.val().firstname,
               lastname: snapshot.val().lastname,
               email: snapshot.val().email,

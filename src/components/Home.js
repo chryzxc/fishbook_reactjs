@@ -10,6 +10,19 @@ import Posts from "./Posts";
 //import { useParams } from "react-router-dom";
 import UserContextProvider, { UserContext } from "../context/UserContext";
 import { useParams } from "react-router-dom";
+import useFetchPost from "../hooks/useFetchPost";
+import db from "../others/firebase";
+import {
+  ref,
+  set,
+  push,
+  getDatabase,
+  child,
+  get,
+  equalTo,
+  orderByChild,
+  onValue,
+} from "firebase/database";
 
 const Main = styled.div`
   height: 100%;
@@ -82,6 +95,9 @@ const LeftNav = styled.div`
 const Feeds = styled.div`
   height: auto;
   width: 60%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 
   align-items: center;
   justify-content: center;
@@ -162,6 +178,10 @@ const Home = () => {
   const { user, FetchData } = useContext(UserContext);
   FetchData(userId);
 
+  const dbRef = ref(db, "posts/");
+  const { fetchedData, isStillFetching } = useFetchPost(dbRef);
+ 
+
   return (
     <Main>
       <NavBar>
@@ -182,7 +202,9 @@ const Home = () => {
             Fishbook
           </h1>
         </Container>
-        <Container className="text-gray-600">{user.firstname + "  " + user.lastname}</Container>
+        <Container className="text-gray-600 font-bold">
+          {user.firstname + "  " + user.lastname}
+        </Container>
       </NavBar>
       <Body>
         <LeftNav>
@@ -193,7 +215,7 @@ const Home = () => {
               imageWidth="40"
               imageHeight="40"
             />
-            <UserDisplayName className="text-gray-600">
+            <UserDisplayName className="text-gray-600 font-bold">
               {user.firstname + "  " + user.lastname}
             </UserDisplayName>
           </Row>
@@ -225,8 +247,11 @@ const Home = () => {
           </CreatePostContainer>
 
           <PostsContainer>
-            <Posts />
-            <Posts />
+           
+            {fetchedData &&
+              fetchedData.map((post) => 
+                <Posts post={post}/>
+              )}
           </PostsContainer>
         </Feeds>
         <RightNav></RightNav>

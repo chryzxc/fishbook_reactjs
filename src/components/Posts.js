@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import storyimage from "../assets/2.jpg";
 import profile from "../assets/1.jpg";
 import ReactRoundedImage from "react-rounded-image";
-
 import { AiOutlineLike, AiTwotoneLike } from "react-icons/ai";
-
-import { TiThumbsUp} from "react-icons/ti";
+import { TiThumbsUp } from "react-icons/ti";
+import db from "../others/firebase";
+import {
+  ref,
+  set,
+  push,
+  getDatabase,
+  child,
+  get,
+  equalTo,
+  orderByChild,
+  onValue,
+} from "firebase/database";
 
 const Post = styled.div`
   background-color: white;
@@ -47,18 +57,22 @@ const Name = styled.p`
 `;
 
 const Time = styled.p`
-  margin-left: 10px;
+align-self: flex-start;
+text-align:start;
+margin-left:10px
+  
 `;
 
 const Caption = styled.p`
   margin-left: 20px;
   margin-right: 20px;
-  margin-top: -5px;
+  margin-top: 15px;
   text-align: justify;
 `;
 
 const PostImage = styled.img`
   height: auto;
+  width: 100%;
   max-width: 100%;
   max-height: 100%;
   object-fit: cover;
@@ -69,7 +83,26 @@ const NumberOfLikes = styled.p`
   justify-self: end;
 `;
 
-export default function Posts() {
+const Posts = ({ post }) => {
+  const dbRef = ref(db);
+  const [firstname,setFirstname] = useState("");
+  const [lastname,setLastname] = useState("");
+  
+
+  get(child(dbRef, `users/${post.user_id}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        setFirstname(snapshot.val().firstname);
+        setLastname(snapshot.val().lastname);
+       
+      } else {
+        console.log("No data available");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
   return (
     <Post>
       <Row>
@@ -82,26 +115,15 @@ export default function Posts() {
           ></ReactRoundedImage>
         </div>
         <div>
-          <Name>Test</Name>
+          <Name>{firstname + " " +lastname}</Name>
           <Time className="text-gray-600">49 mins ·</Time>
         </div>
       </Row>
-      <Caption className="text-gray-600 mb-3">
-        We are greatly saddened to report that the famed Ukrainian Air Force
-        Flanker air show display pilot, and national hero of Ukraine, Colonel
-        Oleksandr “Grey Wolf” Oksanchenko, was shot down over the capital Kyiv
-        last Friday night shortly after his seventh air to air kill against the
-        Russian Air Force (RAF) by a Russian S-400 Triumph Air Defence Missile
-        System . The famed Ukrainian Colonel from 831st Tactical Aviation
-        Brigade was better known as “Grey Wolf”, and aside from bein…
-      </Caption>
+      <Caption className="text-gray-600 mb-3">{post.caption}</Caption>
 
       <PostImage src={storyimage} alt="post"></PostImage>
       <RowBottom className="mt-3">
-        <button
-          className=" text-medium text-gray-600 p-1.5"
-          disabled
-        >
+        <button className=" text-medium text-gray-600 p-1.5" disabled>
           <div className="flex flex-row">
             {" "}
             <AiOutlineLike className="h-5 w-5"> </AiOutlineLike>
@@ -109,9 +131,13 @@ export default function Posts() {
           </div>
         </button>
         <div className="self-center mr-3">
-          <NumberOfLikes className=" text-gray-600 text-medium">0 likes</NumberOfLikes>
+          <NumberOfLikes className=" text-gray-600 text-medium">
+            0 likes
+          </NumberOfLikes>
         </div>
       </RowBottom>
     </Post>
   );
-}
+};
+
+export default Posts;
