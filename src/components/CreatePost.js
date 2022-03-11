@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import ReactRoundedImage from "react-rounded-image";
 import profile from "../assets/1.jpg";
+import { UserContext } from "../context/UserContext";
+import storyimage from "../assets/2.jpg";
+import { FaRegImages, FaRegSmile, FaVideo, FcGallery } from "react-icons/fa";
 
 const CreatePostCard = styled.div`
   overflow-y: hidden;
@@ -21,6 +24,7 @@ const Divider = styled.hr`
   border-top: 1pt solid #bbb;
   margin-left: 20px;
   margin-right: 20px;
+  margin-top: 10px;
 `;
 
 const Row = styled.div`
@@ -47,7 +51,7 @@ const WritePost = styled.div`
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: 150px;
+  height: auto;
   padding: 12px 20px;
   box-sizing: border-box;
   border: none;
@@ -56,33 +60,77 @@ const TextArea = styled.textarea`
   resize: none;
 `;
 
-export default function CreatePost() {
+const CreatePost = () => {
+  const { user, FetchData } = useContext(UserContext);
+
   return (
     <CreatePostCard>
-      <h2>Create a post</h2>
-      <div>
+      <div className="mt-5">
         <Row>
-          <ReactRoundedImage
-            image={profile}
-            roundedSize="0"
-            imageWidth="40"
-            imageHeight="40"
-          ></ReactRoundedImage>
+          <div className="mt-3">
+            <ReactRoundedImage
+              image={profile}
+              roundedSize="0"
+              imageWidth="40"
+              imageHeight="40"
+            ></ReactRoundedImage>
+          </div>
 
           <WritePost>
-            <TextArea placeholder="What's on your mind, Christian?"></TextArea>
+            <TextArea
+              placeholder={"What's on your mind, " + user.firstname + "?"}
+            ></TextArea>
           </WritePost>
         </Row>
       </div>
       <div>
         <Divider />
       </div>
-      <div>
-        <Row>
-          <button>Test</button>
-          <button>Test</button>
-        </Row>
+      <div className="ml-10 mr-10 mb-2 mt-4">
+        <div className="flex flex-row justify-around">
+          <div
+            className="flex flex-row justify-between"
+            onClick={() => {
+              console.log("clicked");
+            }}
+          >
+            <FaVideo
+              className="self-center h-6 w-6"
+              style={{ color: "#F4556F", fontSize: "1.5em" }}
+            ></FaVideo>
+            <p className="self-center ml-2 font-bold text-sm text-gray-600">
+              Live video
+            </p>
+          </div>
+
+          <div className="flex flex-row justify-between">
+            <FaRegImages
+              className="self-center h-6 w-6"
+              style={{ color: "#45BD61", fontSize: "1.5em" }}
+            ></FaRegImages>
+            <p className="self-center ml-2 font-bold text-sm text-gray-600">
+              Photos/Videos
+            </p>
+          </div>
+
+          <div className="flex flex-row justify-between">
+            <FaRegSmile
+              className="self-center h-6 w-6"
+              style={{ color: "#F7B927", fontSize: "1.5em" }}
+            ></FaRegSmile>
+            <p className="self-center ml-2 font-bold text-sm text-gray-600">
+              Feeling/activity
+            </p>
+          </div>
+        </div>
+        <div className="w-full">
+          <button className="m-auto self-center border-none bg-[#1877f2] text-white rounded-[6px] font-light mt-3 p-2 w-full mb-2">
+            Post
+          </button>
+        </div>
       </div>
     </CreatePostCard>
   );
-}
+};
+
+export default CreatePost;

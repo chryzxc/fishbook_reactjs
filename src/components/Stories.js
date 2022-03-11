@@ -8,10 +8,10 @@ const Story = styled.div`
 margin: auto;
   background-color: white;
   position: relative;
-  height: 30vh;
-  width: 20vh;
-  min-height: 30vh;
-  min-width: 20vh;
+  height: 32vh;
+  width: 18vh;
+  min-height: 32vh;
+  min-width: 18vh;
   margin-top: 20px;
   margin-left: 10px;
   border-radius: 20px;
@@ -23,7 +23,7 @@ margin: auto;
 const StoryImage = styled.img`
   height: 100%;
   max-width: 100%;
-  max-height: 100%;s
+  max-height: 100%;
   object-fit: cover;
   border-radius: 20px;
 `;

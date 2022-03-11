@@ -9,6 +9,7 @@ import AddStory from "./AddStory";
 import Posts from "./Posts";
 //import { useParams } from "react-router-dom";
 import UserContextProvider, { UserContext } from "../context/UserContext";
+import { useParams } from "react-router-dom";
 
 const Main = styled.div`
   height: 100%;
@@ -157,47 +158,51 @@ const PostsContainer = styled.div`
 `;
 
 const Home = () => {
-  const { user } = useContext(UserContext);
-  console.log(user);
+  const { userId } = useParams();
+  const { user, FetchData } = useContext(UserContext);
+  FetchData(userId);
 
   return (
-   
-      
-      <Main>
-        <NavBar>
-          <Container>
-            <FishbookIcon src={logo}></FishbookIcon>
-            <SearchBar>
-              <Search placeholder="Search fish" />
-            </SearchBar>
-          </Container>
-          <Container>
-            <h1
-              style={{
-                fontSize: "35px",
-                color: "#1877f2",
-                fontWeight: "bold",
-              }}
-            >
-           Fishbook
-            </h1>
-          </Container>
-          <Container>asdwqe</Container>
-        </NavBar>
-        <Body>
-          <LeftNav>
-            <Row>
-              <ReactRoundedImage
-                image={fish}
-                roundedSize="0"
-                imageWidth="40"
-                imageHeight="40"
-              />
-              <UserDisplayName>{user.firstname + user.lastname}</UserDisplayName>
-            </Row>
+    <Main>
+      <NavBar>
+        <Container>
+          <FishbookIcon src={logo}></FishbookIcon>
+          <SearchBar>
+            <Search placeholder="Search fish" />
+          </SearchBar>
+        </Container>
+        <Container>
+          <h1
+            style={{
+              fontSize: "35px",
+              color: "#1877f2",
+              fontWeight: "bold",
+            }}
+          >
+            Fishbook
+          </h1>
+        </Container>
+        <Container className="text-gray-600">{user.firstname + "  " + user.lastname}</Container>
+      </NavBar>
+      <Body>
+        <LeftNav>
+          <Row>
+            <ReactRoundedImage
+              image={fish}
+              roundedSize="0"
+              imageWidth="40"
+              imageHeight="40"
+            />
+            <UserDisplayName className="text-gray-600">
+              {user.firstname + "  " + user.lastname}
+            </UserDisplayName>
+          </Row>
+
+          <div className="ml-3 mt-5">
             <ul>
+              <p>Friends · 0</p>
+
               <List></List>
-              <List>Friends</List>
               <List>Most Recent</List>
               <List>Watch</List>
               <List>Groups</List>
@@ -205,29 +210,29 @@ const Home = () => {
               <List>Memories</List>
               <List>Saved</List>
             </ul>
-          </LeftNav>
-          <Feeds>
-            <StoriesContainer>
-              <AddStory />
-              <Stories />
-              <Stories />
-              <Stories />
-              <Stories />
-            </StoriesContainer>
-            <CreatePostContainer>
-              <CreatePost />
-            </CreatePostContainer>
+          </div>
+        </LeftNav>
+        <Feeds>
+          <StoriesContainer>
+            <AddStory />
+            <Stories />
+            <Stories />
+            <Stories />
+            <Stories />
+          </StoriesContainer>
+          <CreatePostContainer>
+            <CreatePost />
+          </CreatePostContainer>
 
-            <PostsContainer>
-              <Posts />
-              <Posts />
-            </PostsContainer>
-          </Feeds>
-          <RightNav></RightNav>
-        </Body>
-      </Main>
-   
+          <PostsContainer>
+            <Posts />
+            <Posts />
+          </PostsContainer>
+        </Feeds>
+        <RightNav></RightNav>
+      </Body>
+    </Main>
   );
-}
+};
 
 export default Home;

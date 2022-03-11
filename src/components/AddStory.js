@@ -4,20 +4,21 @@ import storyimage from "../assets/2.jpg";
 import profile from "../assets/profile.jpg";
 import ReactRoundedImage from "react-rounded-image";
 
+import { AiTwotonePlusCircle } from "react-icons/ai";
+
 const Story = styled.div`
-margin: auto;
+  margin: auto;
   background-color: white;
   position: relative;
-  height: 30vh;
-  width: 20vh;
-  min-height: 30vh;
-  min-width: 20vh;
+  height: 32vh;
+  width: 18vh;
+  min-height: 32vh;
+  min-width: 18vh;
   margin-top: 20px;
   margin-left: 10px;
   border-radius: 20px;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
   text-align: center;
-  
 `;
 
 const StoryImage = styled.img`
@@ -26,6 +27,7 @@ const StoryImage = styled.img`
   max-height: 100%;
   object-fit: cover;
   border-radius: 20px;
+  padding-bottom: 50%;
 `;
 
 const ProfileContainer = styled.div`
@@ -35,25 +37,22 @@ const ProfileContainer = styled.div`
 `;
 
 const StoryOwner = styled.p`
+ 
   position: absolute;
   font-weight: bold;
-  bottom: 1px;
+  bottom: -7px;
   left: 50%;
   transform: translate(-50%, -50%);
- 
-  color: white;
 `;
 
 export default function AddStory() {
   return (
     <Story>
       <StoryImage src={storyimage} alt="story"></StoryImage>
-      <div className="text-center justify-center align-content-center">
-        <StoryOwner>Add story</StoryOwner>
+      <div className="text-center justify-center align-content-center bg-white">
+       
+        <StoryOwner className="text-gray-600">Create story</StoryOwner>
       </div>
-      
     </Story>
-
-    
   );
 }

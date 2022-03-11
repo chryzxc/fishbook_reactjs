@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import db from "../others/firebase";
 import {
   ref,
@@ -9,6 +9,7 @@ import {
   get,
   equalTo,
   orderByChild,
+  onValue,
 } from "firebase/database";
 
 export const UserContext = createContext();
@@ -16,29 +17,36 @@ export const UserContext = createContext();
 const UserContextProvider = (props) => {
   const [user, setUser] = useState({
     id: "",
-    firstname: "CHristian",
-    middlename: "",
+    firstname: "",
     lastname: "",
     email: "",
+    date_registered: "",
   });
 
-  const fetchData = (userId) => {
+  const FetchData = (userId) => {
     const dbRef = ref(db);
-    get(child(dbRef, "users/" + userId))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-         
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    useEffect(() => {
+      get(child(dbRef, "users/" + userId))
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            setUser({
+              id: snapshot.id,
+              firstname: snapshot.val().firstname,
+              lastname: snapshot.val().lastname,
+              email: snapshot.val().email,
+              date_registered: snapshot?.val().date_registered,
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }, []);
+    console.log("updated");
   };
 
-  fetchData();
-
   return (
-    <UserContext.Provider value={{ user }}>
+    <UserContext.Provider value={{ user, FetchData }}>
       {props.children}
     </UserContext.Provider>
   );

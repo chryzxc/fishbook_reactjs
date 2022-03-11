@@ -4,6 +4,10 @@ import storyimage from "../assets/2.jpg";
 import profile from "../assets/1.jpg";
 import ReactRoundedImage from "react-rounded-image";
 
+import { AiOutlineLike, AiTwotoneLike } from "react-icons/ai";
+
+import { TiThumbsUp} from "react-icons/ti";
+
 const Post = styled.div`
   background-color: white;
   margin: auto;
@@ -29,7 +33,9 @@ const RowBottom = styled.div`
   flex-direction: row;
   height: auto;
   width: auto;
-  padding: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 10px;
   justify-content: space-between;
 `;
 
@@ -37,11 +43,11 @@ const Name = styled.p`
   font-weight: bold;
   margin-top: -2px;
   font-size: medium;
+  margin-left: 10px;
 `;
 
 const Time = styled.p`
-  margin-top: -15px;
-  margin-left: 15px;
+  margin-left: 10px;
 `;
 
 const Caption = styled.p`
@@ -59,8 +65,8 @@ const PostImage = styled.img`
 `;
 
 const NumberOfLikes = styled.p`
-text-align: end;
-justify-self: end;
+  text-align: end;
+  justify-self: end;
 `;
 
 export default function Posts() {
@@ -77,10 +83,10 @@ export default function Posts() {
         </div>
         <div>
           <Name>Test</Name>
-          <Time>49 mins ·</Time>
+          <Time className="text-gray-600">49 mins ·</Time>
         </div>
       </Row>
-      <Caption>
+      <Caption className="text-gray-600 mb-3">
         We are greatly saddened to report that the famed Ukrainian Air Force
         Flanker air show display pilot, and national hero of Ukraine, Colonel
         Oleksandr “Grey Wolf” Oksanchenko, was shot down over the capital Kyiv
@@ -91,9 +97,20 @@ export default function Posts() {
       </Caption>
 
       <PostImage src={storyimage} alt="post"></PostImage>
-      <RowBottom>
-        <button>Like</button>
-        <NumberOfLikes>0 likes</NumberOfLikes>
+      <RowBottom className="mt-3">
+        <button
+          className=" text-medium text-gray-600 p-1.5"
+          disabled
+        >
+          <div className="flex flex-row">
+            {" "}
+            <AiOutlineLike className="h-5 w-5"> </AiOutlineLike>
+            <p className="text-sm ml-1">Like</p>
+          </div>
+        </button>
+        <div className="self-center mr-3">
+          <NumberOfLikes className=" text-gray-600 text-medium">0 likes</NumberOfLikes>
+        </div>
       </RowBottom>
     </Post>
   );

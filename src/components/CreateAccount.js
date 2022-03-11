@@ -38,6 +38,8 @@ export default function CreateAccount({
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+  
+  
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [hasError, setHasError] = useState(false);
@@ -53,7 +55,8 @@ export default function CreateAccount({
         lastname: lastname,
         email: email,
         password: password,
-        date_registered: new Date(),
+        date_registered: new Date().getTime(),
+       
       };
 
       //  const dbRef = ref(db, "users/");
