@@ -181,6 +181,7 @@ const Home = () => {
   const dbRef = ref(db, "posts/");
   const { fetchedData, isStillFetching } = useFetchPost(dbRef);
  
+  console.log("fetched data: " + fetchedData);
 
   return (
     <Main>
@@ -250,7 +251,7 @@ const Home = () => {
            
             {fetchedData &&
               fetchedData.map((post) => 
-                <Posts post={post}/>
+                <Posts key={post.post_id} post={post}/>
               )}
           </PostsContainer>
         </Feeds>

@@ -32,14 +32,11 @@ const Divider = styled.hr`
 const Row = styled.div`
   display: flex;
   flex-direction: row;
- 
- 
-  height: auto;
-  
- padding-bottom:5px;
- justify-content: center ;
 
- 
+  height: auto;
+
+  padding-bottom: 5px;
+  justify-content: center;
 
   //padding: 5px;
 `;
@@ -58,7 +55,7 @@ const WritePost = styled.div`
 const TextArea = styled.textarea`
   width: 100%;
   height: auto;
-  padding: 12px 20px;
+  padding: 5px;
   box-sizing: border-box;
   border: none;
   border-radius: none;
@@ -71,20 +68,20 @@ const CreatePost = () => {
 
   const [caption, setCaption] = useState("");
 
- 
- 
+  const handleCaptionListener = (e) => {
+    setCaption(e.target.value);
+  };
 
   const submitPost = (e) => {
     e.preventDefault();
-    
+
     const post = {
       user_id: user.id,
       caption: caption,
-      date_posted: Date.now(),
-      likes: 0,
-      contents: ["adqwe","adqwewqe"],
-      liked_users: ["Maria","Juan"],
-      
+      date_posted: new Date().getTime(),
+
+      contents: ["adqwe", "adqwewqe"],
+      // liked_users: {[{name:"adwwasdw"}]}
     };
 
     const dbRef = ref(db, "posts/");
@@ -94,11 +91,9 @@ const CreatePost = () => {
       .then(() => {
         setCaption("");
         console.log("post submitted");
-
       })
       .catch((error) => {
         console.log(error);
-
       });
   };
 
@@ -118,9 +113,10 @@ const CreatePost = () => {
 
             <WritePost>
               <TextArea
-                placeholder={"What's on your mind, " + user.firstname + "?"} value={caption}
+                placeholder={"What's on your mind, " + user.firstname + "?"}
+                value={caption}
                 onChange={(e) => {
-                  setCaption(e.target.value);
+                  handleCaptionListener(e);
                 }}
               ></TextArea>
             </WritePost>
@@ -129,7 +125,7 @@ const CreatePost = () => {
         <div>
           <Divider />
         </div>
-        <div className="ml-4 mr-4 mb-2 mt-5">
+        <div className="ml-4 mr-4 mb-5 mt-5">
           <div className="flex flex-row justify-around">
             <div
               className="flex flex-row justify-between"
@@ -166,14 +162,19 @@ const CreatePost = () => {
               </p>
             </div>
           </div>
-          <div className="w-full">
-            <button
-              className="m-auto self-center border-none bg-[#1877f2] text-white rounded-[6px] font-light mt-5 p-2 w-full mb-2"
-              type="submit"
-            >
-              Post
-            </button>
-          </div>
+
+          {caption ? (
+            <div className="w-full">
+              <button
+                className="m-auto self-center border-none bg-[#1877f2] text-white rounded-[6px] font-light mt-5 p-2 w-full "
+                type="submit"
+              >
+                Post
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </CreatePostCard>
     </form>

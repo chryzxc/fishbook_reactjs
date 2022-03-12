@@ -276,7 +276,9 @@ export default function Login(props) {
       }
     };
 
-    console.log(getData());
+    getData();
+
+    // console.log(getData());
 
     // setTimeout(() => {
     //   get(child(dbRef, "users"), orderByChild("email"), equalTo(loginEmail))
