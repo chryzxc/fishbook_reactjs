@@ -42,7 +42,7 @@ const Row = styled.div`
   flex-direction: row;
   height: auto;
   width: auto;
-  padding: 15px;
+ 
 `;
 
 const RowBottom = styled.div`
@@ -98,7 +98,7 @@ const Posts = ({ post }) => {
   const [reacted, setReacted] = useState(false);
   const { user } = useContext(UserContext);
 
-  const [postUpdate,setPostUpdate] =useState(0);
+  const [postUpdate, setPostUpdate] = useState(0);
 
   console.log("post displayed");
 
@@ -162,7 +162,7 @@ const Posts = ({ post }) => {
           setReacted(reactors.includes(user.id));
           console.log("reactors : " + reactors);
           console.log("reacted : " + reacted);
-        }else{
+        } else {
           setReacted(false);
           setNumOfReacts(0);
         }
@@ -184,42 +184,45 @@ const Posts = ({ post }) => {
         date_reacted: new Date().getTime(),
       });
     }
-    setPostUpdate(postUpdate+1);
-    console.log(postUpdate)
-
+    setPostUpdate(postUpdate + 1);
+    console.log(postUpdate);
   };
 
   return (
     <Post>
-      <Row>
+      <RowBottom className="pt-4">
+        <Row>
+          <div>
+            <ReactRoundedImage
+              image={profile}
+              roundedSize="0"
+              imageWidth="40"
+              imageHeight="40"
+            ></ReactRoundedImage>
+          </div>
+          <div>
+            <Name>{firstname + " " + lastname}</Name>
+            <Time className="text-gray-600">49 mins ·</Time>
+          </div>
+        </Row>
+
         <div>
-          <ReactRoundedImage
-            image={profile}
-            roundedSize="0"
-            imageWidth="40"
-            imageHeight="40"
-          ></ReactRoundedImage>
+          <h1>Not friends</h1>
         </div>
-        <div>
-          <Name>{firstname + " " + lastname}</Name>
-          <Time className="text-gray-600">49 mins ·</Time>
-        </div>
-      </Row>
+      </RowBottom>
       <Caption className="text-gray-600 mb-3">{post.caption}</Caption>
 
       <PostImage src={storyimage} alt="post"></PostImage>
-      <RowBottom className="mt-3" onClick={handleReactPost} >
+      <RowBottom className="mt-3" onClick={handleReactPost}>
         <button className=" text-medium text-[#1877f2] p-1.5" disabled>
           {reacted ? (
             <div className="flex flex-row">
-              <AiTwotoneLike className="h-5 w-5"/>
-              <p className="text-sm ml-1 font-semibold">
-                Liked
-              </p>
+              <AiTwotoneLike className="h-5 w-5" />
+              <p className="text-sm ml-1 font-semibold">Liked</p>
             </div>
           ) : (
             <div className="flex flex-row">
-              <AiOutlineLike className="h-5 w-5"/>
+              <AiOutlineLike className="h-5 w-5" />
               <p className="text-sm ml-1 font-semibold">Like</p>
             </div>
           )}
