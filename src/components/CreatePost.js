@@ -43,13 +43,17 @@ const Row = styled.div`
 
 const WritePost = styled.div`
   width: 85%;
-  background-color: #e4e6e9;
+  background-color: #F0F2F5;
   border-radius: 25px;
   height: auto;
   padding: 10px;
   font-size: large;
   color: #65676b;
   margin-left: 15px;
+  
+  &:hover {
+    background-color: #E4E6E9;
+  }
 `;
 
 const TextArea = styled.textarea`
@@ -63,9 +67,8 @@ const TextArea = styled.textarea`
   resize: none;
 `;
 
-const CreatePost = () => {
+const CreatePost = ({handleRefresh}) => {
   const { user } = useContext(UserContext);
-
   const [caption, setCaption] = useState("");
 
   const handleCaptionListener = (e) => {
@@ -79,9 +82,8 @@ const CreatePost = () => {
       user_id: user.id,
       caption: caption,
       date_posted: new Date().getTime(),
-
       contents: ["adqwe", "adqwewqe"],
-      // liked_users: {[{name:"adwwasdw"}]}
+   
     };
 
     const dbRef = ref(db, "posts/");
@@ -91,6 +93,7 @@ const CreatePost = () => {
       .then(() => {
         setCaption("");
         console.log("post submitted");
+        handleRefresh();
       })
       .catch((error) => {
         console.log(error);
@@ -128,7 +131,7 @@ const CreatePost = () => {
         <div className="ml-4 mr-4 mb-5 mt-5">
           <div className="flex flex-row justify-around">
             <div
-              className="flex flex-row justify-between"
+              className="flex flex-row justify-center w-[100%] hover:bg-[#E4E6E9] rounded-xl p-2"
               onClick={() => {
                 console.log("clicked");
               }}
@@ -137,12 +140,12 @@ const CreatePost = () => {
                 className="self-center h-6 w-6"
                 style={{ color: "#F4556F", fontSize: "1.5em" }}
               ></FaVideo>
-              <p className="self-center ml-2 font-bold text-sm text-gray-600">
+              <p className="self-center ml-2 font-bold text-sm text-gray-600 ">
                 Live video
               </p>
             </div>
 
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2">
               <FaRegImages
                 className="self-center h-6 w-6"
                 style={{ color: "#45BD61", fontSize: "1.5em" }}
@@ -152,7 +155,7 @@ const CreatePost = () => {
               </p>
             </div>
 
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2">
               <FaRegSmile
                 className="self-center h-6 w-6"
                 style={{ color: "#F7B927", fontSize: "1.5em" }}

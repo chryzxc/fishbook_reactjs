@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { onValue, get, child } from "firebase/database";
+import { onValue, get, child, orderByChild } from "firebase/database";
 
-const useFetchPost = (dbRef) => {
+const useFetchPost = (dbRef,updateHome) => {
   const [fetchedData, setFetchedData] = useState(null);
   const [isStillFetching, setIsStillFetching] = useState(true);
 
   useEffect(() => {
-    get(dbRef)
+    get(dbRef,orderByChild('date_posted'))
       .then((snapshot) => {
         if (snapshot.exists()) {
           const fetchedData = [];
@@ -23,6 +23,8 @@ const useFetchPost = (dbRef) => {
             });
           });
 
+          fetchedData.reverse();
+
           setIsStillFetching(false);
           setFetchedData(fetchedData);
         } else {
@@ -32,7 +34,7 @@ const useFetchPost = (dbRef) => {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [updateHome]);
 
   // useEffect(() => {
   //   onValue(dbRef, (snapshot) => {

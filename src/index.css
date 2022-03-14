@@ -27,6 +27,10 @@ select {
   
 }
 
+textarea:focus, input:focus{
+  outline: none;
+}
+
 input{
 
   border-color: #babfc4;
@@ -34,6 +38,7 @@ input{
   font-size: medium;
   padding: 10px;
   border-radius: 5px;
+  
 }
 
 button{

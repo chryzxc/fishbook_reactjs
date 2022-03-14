@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import fish from "../assets/fish.png";
 import logo from "../assets/logo.png";
@@ -176,12 +176,15 @@ const PostsContainer = styled.div`
 const Home = () => {
   const { userId } = useParams();
   const { user, FetchData } = useContext(UserContext);
+  const [updateHome, setUpdateHome] = useState(0);
   FetchData(userId);
 
   const dbRef = ref(db, "posts/");
-  const { fetchedData, isStillFetching } = useFetchPost(dbRef);
- 
-  console.log("fetched data: " + fetchedData);
+  const { fetchedData, isStillFetching } = useFetchPost(dbRef, updateHome);
+
+  const handleRefresh = () => {
+    setUpdateHome(updateHome + 1);
+  };
 
   return (
     <Main>
@@ -244,15 +247,14 @@ const Home = () => {
             <Stories />
           </StoriesContainer>
           <CreatePostContainer>
-            <CreatePost />
+            <CreatePost handleRefresh={handleRefresh} />
           </CreatePostContainer>
 
           <PostsContainer>
-           
             {fetchedData &&
-              fetchedData.map((post) => 
-                <Posts key={post.post_id} post={post}/>
-              )}
+              fetchedData.map((post) => (
+                <Posts key={post.post_id} post={post} />
+              ))}
           </PostsContainer>
         </Feeds>
         <RightNav></RightNav>
