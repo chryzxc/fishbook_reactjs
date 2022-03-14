@@ -120,6 +120,7 @@ const Posts = ({ post }) => {
   const [showCommentBox, setShowCommentBox] = useState(false);
 
   const [postUpdate, setPostUpdate] = useState(0);
+ 
 
   const postRef = ref(db, "posts/" + post.post_id);
 
@@ -187,40 +188,63 @@ const Posts = ({ post }) => {
       .catch((error) => {
         console.error(error);
       });
-
-    //Comments
-    get(child(dbRef, `posts/${post.post_id}/comments`))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          let comments = [];
-          let numOfComments = 0;
-          snapshot.forEach((data) => {
-            const commentDetails = {
-              comment_id: data.key,
-              comment: data.val().comment,
-              date_posted: data.val().date_posted,
-              user_id: data.val().user_id,
-            };
-
-            comments.push(commentDetails);
-            numOfComments +=1;
-          });
-          setComments(comments);
-          setNumOfComments(numOfComments);
-          console.log("comments" +comments);
-
-        } else {
-          setNumOfComments(0);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
   }, [postUpdate]);
 
-  const UpdatePost = () => {
-    const postRef = ref(db, "posts/" + post.post_id);
-  };
+  //Comments
+  useEffect(() => {
+    onValue(child(dbRef, `posts/${post.post_id}/comments`), (snapshot) => {
+      const data = snapshot.val();
+      if (snapshot.exists()) {
+        let comments = [];
+        let numOfComments = 0;
+        snapshot.forEach((data) => {
+          const commentDetails = {
+            comment_id: data.key,
+            comment: data.val().comment,
+            date_posted: data.val().date_posted,
+            user_id: data.val().user_id,
+          };
+
+          comments.push(commentDetails);
+          comments.reverse();
+          numOfComments += 1;
+        });
+        setComments(comments);
+        setNumOfComments(numOfComments);
+        console.log("comments" + comments);
+      } else {
+        setNumOfComments(0);
+      }
+    });
+
+    // get(child(dbRef, `posts/${post.post_id}/comments`))
+    //   .then((snapshot) => {
+    //     if (snapshot.exists()) {
+    //       let comments = [];
+    //       let numOfComments = 0;
+    //       snapshot.forEach((data) => {
+    //         const commentDetails = {
+    //           comment_id: data.key,
+    //           comment: data.val().comment,
+    //           date_posted: data.val().date_posted,
+    //           user_id: data.val().user_id,
+    //         };
+
+    //         comments.push(commentDetails);
+    //         comments.reverse();
+    //         numOfComments += 1;
+    //       });
+    //       setComments(comments);
+    //       setNumOfComments(numOfComments);
+    //       console.log("comments" + comments);
+    //     } else {
+    //       setNumOfComments(0);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+  }, [commentUpdate]);
 
   const handleReactPost = () => {
     if (reacted) {
@@ -327,6 +351,13 @@ const Posts = ({ post }) => {
               {/* <NumberOfLikes className=" text-gray-600 text-medium">
             {numOfReacts} likes
           </NumberOfLikes> */}
+              <p>
+                {numOfComments
+                  ? numOfComments == 1
+                    ? numOfComments + " comment"
+                    : numOfComments + " comments"
+                  : ""}
+              </p>
             </div>
           </RowBottom>
 
@@ -392,16 +423,16 @@ const Posts = ({ post }) => {
               </div>
 
               {myComment ? (
-                <div className="ml-3 w-[100%] pr-3 flex flex-row rounded-3xl bg-[#F0F2F5] border-transparent">
+                <div className="ml-3 pl-1 w-[100%] pr-3 flex flex-row rounded-3xl bg-[#F0F2F5] border-transparent">
                   <input
-                    className="ml-3 w-[100%] rounded-3xl bg-[#F0F2F5] border-transparent placeholder-neutral-500 "
+                    className=" w-[100%] rounded-3xl bg-[#F0F2F5] border-transparent placeholder-neutral-500 "
                     onChange={(e) => {
                       handleCommentListener(e);
                     }}
                     value={myComment}
                   ></input>
                   <div
-                    className="flex flex-row p-2 self-center mr-[-5px]  text-neutral-600 rounded-full"
+                    className="flex flex-row p-2 self-center mr-[-5px]  text-neutral-600 rounded-full hover:bg-[#E4E6E9]"
                     onClick={submitComment}
                   >
                     <p className="self-center mr-1 font-bold">Send</p>
@@ -411,7 +442,7 @@ const Posts = ({ post }) => {
               ) : (
                 <div className="w-[100%] pr-3">
                   <input
-                    className="pl-5 ml-3 w-[100%] rounded-3xl bg-[#F0F2F5] border-transparent placeholder-neutral-500 hover:bg-[#E4E6E9]"
+                    className="pl-3 ml-3 w-[100%] rounded-3xl bg-[#F0F2F5] border-transparent placeholder-neutral-500 hover:bg-[#E4E6E9]"
                     placeholder="Write a comment..."
                     onChange={(e) => {
                       handleCommentListener(e);
@@ -422,9 +453,10 @@ const Posts = ({ post }) => {
               )}
             </div>
           </div>
-          {comments && comments.map((comment) =>  <Comments comment={comment}></Comments>)}
-      
-      
+          {comments &&
+            comments.map((commentData) => (
+              <Comments commentData={commentData}></Comments>
+            ))}
         </div>
       ) : (
         ""
