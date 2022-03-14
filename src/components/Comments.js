@@ -56,13 +56,16 @@ export default function Comments({ commentData }) {
           imageWidth="40"
           imageHeight="40"
         ></ReactRoundedImage>
-        <div className="w-[100%] ">
+        <div className=" ">
           <div className="text-[14px] pt-2 pb-2 pr-3 ml-3 mr-3 h-auto bg-[#F0F2F5] text-left pl-3 rounded-3xl">
             <p className="font-bold">{firstname + " " + lastname}</p>
             <p className="mt-0.5">{comment}</p>
           </div>
-       
-          <p className="text-left">10 hrs</p>
+          <div className="flex flex-row text-left ml-5 text-xs">
+            <p>Like</p>
+            <p className="ml-1">Reply</p>
+            <p className="ml-1">10 hrs</p>
+          </div>
         </div>
       </div>
     </div>

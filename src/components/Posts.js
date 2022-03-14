@@ -244,7 +244,7 @@ const Posts = ({ post }) => {
     //   .catch((error) => {
     //     console.error(error);
     //   });
-  }, [commentUpdate]);
+  }, []);
 
   const handleReactPost = () => {
     if (reacted) {
