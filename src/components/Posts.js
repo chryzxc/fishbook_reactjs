@@ -199,6 +199,7 @@ const Posts = ({ post }) => {
         let numOfComments = 0;
         snapshot.forEach((data) => {
           const commentDetails = {
+            post_id:post.post_id,
             comment_id: data.key,
             comment: data.val().comment,
             date_posted: data.val().date_posted,
@@ -308,7 +309,7 @@ const Posts = ({ post }) => {
             ></ReactRoundedImage>
           </div>
           <div>
-            <Name>{firstname + " " + lastname}</Name>
+            <Name className="clickable-text">{firstname + " " + lastname}</Name>
             <Time className="text-gray-600">
               {" "}
               {format(
@@ -373,8 +374,8 @@ const Posts = ({ post }) => {
             className="flex flex-row text-[#1877f2] justify-center w-[100%] hover:bg-[#E4E6E9] rounded-xl p-2"
             onClick={handleReactPost}
           >
-            <AiFillLike className="h-7 w-7" />
-            <label className="ml-1 self-center text-[15px] font-semibold  text-[#1877f2]">
+            <AiFillLike className="h-6 w-6 self-center" />
+            <label className="ml-1 self-center text-[14px] font-semibold  text-[#1877f2]">
               Liked
             </label>
           </div>
@@ -383,8 +384,8 @@ const Posts = ({ post }) => {
             className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9]  rounded-xl p-2"
             onClick={handleReactPost}
           >
-            <AiOutlineLike className="h-7 w-7" />
-            <label className="ml-1 self-center text-[15px] font-semibold">
+            <AiOutlineLike className="h-6 w-6 self-center" />
+            <label className="ml-1 self-center text-[14px] font-semibold">
               Like
             </label>
           </div>
@@ -394,15 +395,15 @@ const Posts = ({ post }) => {
           className="flex flex-row justify-center w-[100%] hover:bg-[#E4E6E9]  rounded-xl p-2"
           onClick={handleCommentPost}
         >
-          <AiOutlineMessage className="h-7 w-7" />
-          <label className="ml-1 self-center text-[15px] font-semibold">
+          <AiOutlineMessage className="h-6 w-6 self-center" />
+          <label className="ml-1 self-center text-[14px] font-semibold">
             Comment
           </label>
         </div>
 
         <div className="flex flex-row justify-center w-[100%] hover:bg-[#E4E6E9]  rounded-2xl p-2 ">
-          <AiOutlineRetweet className="h-7 w-7" />
-          <label className="ml-1 self-center text-[15px] font-semibold">
+          <AiOutlineRetweet className="h-6 w-6 self-center" />
+          <label className="ml-1 self-center text-[14px] font-semibold">
             Share
           </label>
         </div>

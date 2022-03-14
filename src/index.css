@@ -20,6 +20,11 @@ code {
   */  
 }
 
+.clickable-text:hover {
+  text-decoration: underline;
+}
+
+
 textarea,
 input,
 select {
@@ -35,7 +40,7 @@ input{
 
   border-color: #babfc4;
   border-width: 1pt;
-  font-size: medium;
+  
   padding: 10px;
   border-radius: 5px;
   
