@@ -23,6 +23,9 @@ import {
   orderByChild,
   onValue,
 } from "firebase/database";
+import SponsorsSection from "./SponsorsSection";
+import ContactsSection from "./ContactsSection";
+import FeedsFriendSuggestionList from "./FeedsFriendSuggestionList";
 
 const Main = styled.div`
   height: 100%;
@@ -72,6 +75,7 @@ const Body = styled.div`
   justify-content: space-between;
   margin-top: 10px;
   background-color: #f0f2f5;
+  overflow:hidden;
 `;
 
 const RightNav = styled.div`
@@ -141,10 +145,10 @@ const StoriesContainer = styled.div`
   margin: auto;
   height: auto;
   width: auto;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   flex-direction: row;
-  padding-bottom: 10px;
+  /* padding-bottom: 10px; */
   padding-left: 100px;
   padding-right: 100px;
 
@@ -157,7 +161,7 @@ const CreatePostContainer = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-  padding-bottom: 10px;
+  /* padding-bottom: 10px; */
   padding-left: 100px;
   padding-right: 100px;
 `;
@@ -171,6 +175,13 @@ const PostsContainer = styled.div`
   padding-bottom: 10px;
   padding-left: 100px;
   padding-right: 100px;
+`;
+
+const Divider = styled.hr`
+  border-top: 1pt solid #bbb;
+  /* margin-left: 20px;
+  margin-right: 20px; */
+  margin-top: 10px;
 `;
 
 const Home = () => {
@@ -246,9 +257,12 @@ const Home = () => {
             <Stories />
             <Stories />
           </StoriesContainer>
+        
           <CreatePostContainer>
             <CreatePost handleRefresh={handleRefresh} />
           </CreatePostContainer>
+
+          <FeedsFriendSuggestionList />
 
           <PostsContainer>
             {fetchedData &&
@@ -257,7 +271,11 @@ const Home = () => {
               ))}
           </PostsContainer>
         </Feeds>
-        <RightNav></RightNav>
+        <RightNav>
+          <SponsorsSection />
+          <Divider className="w-[100%]" />
+          <ContactsSection />
+        </RightNav>
       </Body>
     </Main>
   );

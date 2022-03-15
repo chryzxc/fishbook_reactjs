@@ -107,7 +107,7 @@ const PasswordInput = styled.input`
     border-color:#1877f2;
 
   }
-  inpu
+
 `;
 
 const LoginButton = styled.button`

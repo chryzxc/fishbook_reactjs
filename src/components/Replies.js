@@ -46,7 +46,7 @@ export default function Replies({ replyData }) {
 
   return (
     <div>
-      <div className="flex flex-row pl-5 pr-5 pt-2 pb-4">
+      <div className="flex flex-row pl-5 pr-5 pt-2 mt-[5px] ml-5">
         <div className="w-auto mt-1">
           <ReactRoundedImage
             image={profile}
@@ -61,18 +61,18 @@ export default function Replies({ replyData }) {
             <p className="clickable-text font-bold">
               {firstname + " " + lastname}
             </p>
-            <lab className="mt-0.5 ml-0.5 mb-2">{reply}</lab>
+            <p className="mt-0.5 ml-0.5 mb-2">{reply}</p>
           </div>
           <div className="flex flex-row text-left ml-5 text-xs font-semibold">
             <p className="clickable-text ml-2">Like</p>
-            <p
+            {/* <p
               className="clickable-text ml-4"
               onClick={() => {
                 //  handleReplyComment();
               }}
             >
               Reply
-            </p>
+            </p> */}
             <p className="ml-4">10 hrs</p>
           </div>
         </div>

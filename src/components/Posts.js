@@ -30,8 +30,9 @@ import {
   remove,
 } from "firebase/database";
 import { UserContext } from "../context/UserContext";
-import { format } from "date-fns";
+import { format, formatDistance, subDays } from "date-fns";
 import Comments from "./Comments";
+import DateFormat from "../utils/DateFormat";
 
 const Post = styled.div`
   background-color: white;
@@ -120,24 +121,19 @@ const Posts = ({ post }) => {
   const [showCommentBox, setShowCommentBox] = useState(false);
 
   const [postUpdate, setPostUpdate] = useState(0);
- 
 
   const postRef = ref(db, "posts/" + post.post_id);
-
- 
 
   useEffect(() => {
     // USER INFO
     get(child(dbRef, `users/${post.user_id}`))
       .then((snapshot) => {
-
         if (snapshot.exists()) {
           setFirstname(snapshot.val().firstname);
           setLastname(snapshot.val().lastname);
         } else {
           console.log("No data available");
         }
-
       })
       .catch((error) => {
         console.error(error);
@@ -169,31 +165,54 @@ const Posts = ({ post }) => {
 
   //Comments
   useEffect(() => {
-    onValue(child(dbRef, `posts/${post.post_id}/comments`), (snapshot) => {
-      const data = snapshot.val();
-      if (snapshot.exists()) {
-        let comments = [];
-        let numOfComments = 0;
-        snapshot.forEach((data) => {
-          const commentDetails = {
-            post_id:post.post_id,
-            comment_id: data.key,
-            comment: data.val().comment,
-            date_posted: data.val().date_posted,
-            user_id: data.val().user_id,
-          };
+    function fetchData() {
+      onValue(
+        child(dbRef, `posts/${post.post_id}/comments`),
+        async (snapshot) => {
+          const data = snapshot.val();
+          if (snapshot.exists()) {
+            let comments = [];
+            let numOfComments = 0;
 
-          comments.push(commentDetails);
-          comments.reverse();
-          numOfComments += 1;
-        });
-        setComments(comments);
-        setNumOfComments(numOfComments);
-        console.log("comments" + comments);
-      } else {
-        setNumOfComments(0);
-      }
-    });
+            await snapshot.forEach((data) => {
+              // Get number of replies inside comments //
+              get(
+                child(
+                  dbRef,
+                  `posts/${post.post_id}/comments/${data.key}/replies/`
+                )
+              ).then((snapshot) => {
+                if (snapshot.exists()) {
+                  snapshot.forEach((data) => {
+                    numOfComments += 1;
+                  });
+                } else {
+                  return;
+                }
+              });
+
+              const commentDetails = {
+                post_id: post.post_id,
+                comment_id: data.key,
+                comment: data.val().comment,
+                date_posted: data.val().date_posted,
+                user_id: data.val().user_id,
+              };
+
+              comments.push(commentDetails);
+              comments.reverse();
+              numOfComments += 1;
+            });
+            await setComments(comments);
+            await setNumOfComments(numOfComments);
+          } else {
+            setNumOfComments(0);
+          }
+        }
+      );
+    }
+
+    fetchData();
 
     // get(child(dbRef, `posts/${post.post_id}/comments`))
     //   .then((snapshot) => {
@@ -233,17 +252,15 @@ const Posts = ({ post }) => {
       });
     }
     setPostUpdate(postUpdate + 1);
-   
   };
 
   const handleCommentPost = () => {
     if (!showCommentBox) {
       setShowCommentBox(!showCommentBox);
-    
     }
     //  else {
     //   setShowCommentBox(!showCommentBox);
-    
+
     // }
   };
 
@@ -289,11 +306,11 @@ const Posts = ({ post }) => {
           <div>
             <Name className="clickable-text">{firstname + " " + lastname}</Name>
             <TimeLabel className="text-gray-600">
-             
-              {format(
+              {/* {format(
                 new Date(post.date_posted),
                 "hh:m a • MMM dd • eee"
-              ).toString()}
+              ).toString()} */}
+              <DateFormat date={post.date_posted} /> •
             </TimeLabel>
           </div>
         </Row>
@@ -302,11 +319,51 @@ const Posts = ({ post }) => {
           <h1>Not friends</h1>
         </div>
       </RowBottom>
-      <Caption className="text-gray-600 mb-3">{post.caption}</Caption>
+      <Caption className="text-gray-600 mb-3 text-sm">{post.caption}</Caption>
 
       <PostImage src={storyimage} alt="post"></PostImage>
 
-      {numOfReacts ? (
+      <div>
+        <RowBottom className="mt-2">
+
+          {numOfReacts ? (
+            <button className=" text-medium text-[#1877f2] p-1.5" disabled>
+              {reacted ? (
+                <div className="flex flex-row">
+                  <AiFillLike className="h-5 w-5" />
+                  <p className="text-sm ml-1 font-semibold">
+                    You and {numOfReacts - 1} others
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-row">
+                  <AiFillLike className="h-5 w-5" />
+                  <p className="text-sm ml-1 font-semibold text-center self-center">
+                    {numOfReacts}
+                  </p>
+                </div>
+              )}
+            </button>
+          ) : (
+            ""
+          )}
+
+          {numOfComments? <div className="self-center mr-3 text-neutral-500 font-semibold">
+            <p>
+              {numOfComments
+                ? numOfComments == 1
+                  ? numOfComments + " Comment"
+                  : numOfComments + " Comments"
+                : ""}
+            </p>
+          </div>: ""}
+
+          
+        </RowBottom>
+        <Divider/>
+      </div>
+
+      {/* {numOfReacts ? (
         <div>
           <RowBottom className="mt-1">
             <button className=" text-medium text-[#1877f2] p-1.5" disabled>
@@ -327,14 +384,12 @@ const Posts = ({ post }) => {
               )}
             </button>
             <div className="self-center mr-3 ">
-              {/* <NumberOfLikes className=" text-gray-600 text-medium">
-            {numOfReacts} likes
-          </NumberOfLikes> */}
+         
               <p>
                 {numOfComments
                   ? numOfComments == 1
-                    ? numOfComments + " comment"
-                    : numOfComments + " comments"
+                    ? numOfComments + " Comment"
+                    : numOfComments + " Comments"
                   : ""}
               </p>
             </div>
@@ -344,7 +399,7 @@ const Posts = ({ post }) => {
         </div>
       ) : (
         ""
-      )}
+      )} */}
 
       <div className="flex flex-row justify-around  ml-5 mr-5 mt-1 mb-1 text-neutral-500 ">
         {reacted ? (
@@ -434,7 +489,10 @@ const Posts = ({ post }) => {
           </div>
           {comments &&
             comments.map((commentData) => (
-              <Comments commentData={commentData}></Comments>
+              <Comments
+                key={commentData.comment_id}
+                commentData={commentData}
+              ></Comments>
             ))}
         </div>
       ) : (

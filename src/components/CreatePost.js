@@ -167,9 +167,9 @@ const CreatePost = ({handleRefresh}) => {
           </div>
 
           {caption ? (
-            <div className="w-full">
+            <div className="w-full h-auto">
               <button
-                className="m-auto self-center border-none bg-[#1877f2] text-white rounded-[6px] font-light mt-5 p-2 w-full "
+                className="m-auto self-center border-none bg-[#1877f2] text-white rounded-[6px] font-light mt-1 p-2 w-full "
                 type="submit"
               >
                 Post
