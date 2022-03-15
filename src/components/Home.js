@@ -199,7 +199,7 @@ const Home = () => {
 
   return (
     <Main>
-      <NavBar>
+      {/* <NavBar>
         <Container>
           <FishbookIcon src={logo}></FishbookIcon>
           <SearchBar>
@@ -220,7 +220,7 @@ const Home = () => {
         <Container className="text-gray-600 font-bold">
           {user.firstname + "  " + user.lastname}
         </Container>
-      </NavBar>
+      </NavBar> */}
       <Body>
         <LeftNav>
           <Row>
@@ -273,7 +273,7 @@ const Home = () => {
         </Feeds>
         <RightNav>
           <SponsorsSection />
-          <Divider className="w-[100%]" />
+          <Divider className="w-[100%] ml-3" />
           <ContactsSection />
         </RightNav>
       </Body>

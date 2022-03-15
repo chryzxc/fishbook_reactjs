@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import FeedsFriendSuggestionRow from "./FeedsFriendSuggestionRow";
+import useFetchSuggestedFriends from "../hooks/useFetchSuggestedFriends";
 
 const Container = styled.div`
   background-color: white;
@@ -15,17 +16,22 @@ const Container = styled.div`
 `;
 
 export default function FeedsFriendSuggestion() {
+
+  const { fetchedData } = useFetchSuggestedFriends();
+  
   return (
     <div className="pl-[100px] pr-[100px] m-auto p-1 overflow-hidden">
       <Container className="overflow-hidden">
-        <p className="text-left text-neutral-500 font-semibold text-[15px] m-3">
+        <p className="text-left text-neutral-500 font-semibold text-[15px] m-4">
           People you may know
         </p>
-        <div className="inline-flex pl-2 mb-2">
-          <FeedsFriendSuggestionRow />
-          <FeedsFriendSuggestionRow />
-          <FeedsFriendSuggestionRow />
-          <FeedsFriendSuggestionRow />
+        <div className="inline-flex pl-2 mb-2 w-full">
+
+          {fetchedData && fetchedData.map((users)=>  <FeedsFriendSuggestionRow users={users}/>)}
+
+
+         
+         
         </div>
       </Container>
     </div>

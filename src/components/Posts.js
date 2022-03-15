@@ -10,6 +10,8 @@ import {
   AiOutlineRetweet,
   AiOutlineSend,
 } from "react-icons/ai";
+import { FaGlobeAsia } from "react-icons/fa";
+
 import { TiThumbsUp } from "react-icons/ti";
 import db from "../others/firebase";
 import {
@@ -305,13 +307,19 @@ const Posts = ({ post }) => {
           </div>
           <div>
             <Name className="clickable-text">{firstname + " " + lastname}</Name>
-            <TimeLabel className="text-gray-600">
+            <div className="flex flex-row text-gray-600">
+            <TimeLabel >
               {/* {format(
                 new Date(post.date_posted),
                 "hh:m a • MMM dd • eee"
               ).toString()} */}
-              <DateFormat date={post.date_posted} /> •
+              {formatDistance(new Date(post.date_posted), new Date(), {
+                addSuffix: true,
+              })} • {/* <DateFormat date={post.date_posted} /> • */}
             </TimeLabel>
+            <FaGlobeAsia className="self-center ml-1"/>
+            </div>
+           
           </div>
         </Row>
 
@@ -325,7 +333,6 @@ const Posts = ({ post }) => {
 
       <div>
         <RowBottom className="mt-2">
-
           {numOfReacts ? (
             <button className=" text-medium text-[#1877f2] p-1.5" disabled>
               {reacted ? (
@@ -348,19 +355,21 @@ const Posts = ({ post }) => {
             ""
           )}
 
-          {numOfComments? <div className="self-center mr-3 text-neutral-500 font-semibold">
-            <p>
-              {numOfComments
-                ? numOfComments == 1
-                  ? numOfComments + " Comment"
-                  : numOfComments + " Comments"
-                : ""}
-            </p>
-          </div>: ""}
-
-          
+          {numOfComments ? (
+            <div className="self-center mr-3 text-neutral-500 font-semibold">
+              <p>
+                {numOfComments
+                  ? numOfComments == 1
+                    ? numOfComments + " Comment"
+                    : numOfComments + " Comments"
+                  : ""}
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
         </RowBottom>
-        <Divider/>
+        <Divider />
       </div>
 
       {/* {numOfReacts ? (

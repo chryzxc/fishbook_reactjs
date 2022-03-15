@@ -10,7 +10,7 @@ const useFetchPost = (dbRef,updateHome) => {
       .then((snapshot) => {
         if (snapshot.exists()) {
           const fetchedData = [];
-          console.log("to be fetched : " + snapshot);
+    
           snapshot.forEach((data) => {
             const dataVal = data.val();
 

@@ -232,7 +232,7 @@ export default function Comments({ commentData }) {
     };
 
     return (
-      <div className="w-[100%] ml-3 mb-[-20px] mt-[-5px]">
+      <div className="w-[100%] ml-3 mb-[-10px] mt-[-5px]">
         <div className="p-4 flex flex-row ">
           <div className="self-center">
             <ReactRoundedImage

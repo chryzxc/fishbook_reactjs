@@ -19,6 +19,7 @@ import {
   remove,
 } from "firebase/database";
 import db from "../others/firebase";
+import DateFormat from "../utils/DateFormat";
 
 export default function Replies({ replyData }) {
   const postId = replyData.post_id;
@@ -63,8 +64,8 @@ export default function Replies({ replyData }) {
             </p>
             <p className="mt-0.5 ml-0.5 mb-2">{reply}</p>
           </div>
-          <div className="flex flex-row text-left ml-5 text-xs font-semibold">
-            <p className="clickable-text ml-2">Like</p>
+          <div className="flex flex-row text-left ml-2 text-xs font-semibold">
+            {/* <p className="clickable-text ml-2">Like</p> */}
             {/* <p
               className="clickable-text ml-4"
               onClick={() => {
@@ -73,7 +74,7 @@ export default function Replies({ replyData }) {
             >
               Reply
             </p> */}
-            <p className="ml-4">10 hrs</p>
+            <p className="ml-4"><DateFormat date={datePosted}/></p>
           </div>
         </div>
       </div>
