@@ -81,7 +81,7 @@ const CreatePost = ({handleRefresh}) => {
     const post = {
       user_id: user.id,
       caption: caption,
-      date_posted: new Date().getTime(),
+      date_posted: Date.now(),
       contents: ["adqwe", "adqwewqe"],
    
     };

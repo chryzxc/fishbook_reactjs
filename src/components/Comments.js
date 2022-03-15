@@ -44,14 +44,46 @@ export default function Comments({ commentData }) {
   const datePosted = commentData.date_posted;
   const userId = commentData.user_id;
 
+  const [numOfReacts, setNumOfReacts] = useState(0);
+  const [reactors, setReactors] = useState([]);
+  const [reacted, setReacted] = useState(false);
+
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
 
+  const [showReplies, setShowReplies] = useState(false);
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [replies, setReplies] = useState([]);
   const [numberOfReplies, setNumberOfReplies] = useState(0);
 
-  get(child(dbRef, `users/${userId}`))
+ 
+  const handleReplyComment = () => {
+    if (showReplyBox) {
+      setShowReplyBox(!showReplyBox);
+    } else {
+      setShowReplyBox(!showReplyBox);
+    }
+  };
+
+  const handleReactComment = () => {
+    console.log("reacting");
+    if (reacted) {
+      console.log("removed");
+      remove(ref(db, "posts/" + postId + "/comments/reacted_users/" + userId));
+    } else {
+      console.log("added");
+       update(ref(db, "posts/" + postId+ "/comments/reacted_users/" + userId), {
+         date_reacted: Date.now(),
+       });
+    }
+    
+   // setPostUpdate(postUpdate + 1);
+   
+  };
+
+  useEffect(() => {
+
+    get(child(dbRef, `users/${userId}`))
     .then((snapshot) => {
       if (snapshot.exists()) {
         setFirstname(snapshot.val().firstname);
@@ -64,15 +96,30 @@ export default function Comments({ commentData }) {
       console.error(error);
     });
 
-  const handleReplyComment = () => {
-    if (showReplyBox) {
-      setShowReplyBox(!showReplyBox);
-    } else {
-      setShowReplyBox(!showReplyBox);
-    }
-  };
 
-  useEffect(() => {
+    // get(child(dbRef, `posts/${post.post_id}/liked_users`))
+    // .then((snapshot) => {
+    //   if (snapshot.exists()) {
+    //     let reacts = 0;
+    //     let reactors = [];
+    //     snapshot.forEach((data) => {
+    //       reactors.push(data.key);
+    //       reacts += 1;
+    //     });
+    //     setReactors(reactors);
+    //     setNumOfReacts(reacts);
+
+    //     setReacted(reactors.includes(user.id));
+    //   } else {
+    //     setReacted(false);
+    //     setNumOfReacts(0);
+    //   }
+    // })
+    // .catch((error) => {
+    //   console.error(error);
+    // });
+
+
     onValue(
       child(dbRef, `posts/${postId}/comments/${commentId}/replies`),
       (snapshot) => {
@@ -102,6 +149,14 @@ export default function Comments({ commentData }) {
     );
   }, []);
 
+  const handleShowReplies = () => {
+    if (showReplies) {
+      setShowReplies(!showReplies);
+    } else {
+      setShowReplies(!showReplies);
+    }
+  };
+
   const ShowReplyBox = () => {
     const [myReply, setMyReply] = useState("");
     const handleReplyListener = (e) => {
@@ -110,11 +165,11 @@ export default function Comments({ commentData }) {
 
     const submitReply = (e) => {
       e.preventDefault();
-
+    
       const replyData = {
         user_id: user.id,
         reply: myReply,
-        date_posted: new Date().getTime(),
+        date_posted: Date.now(),
       };
 
       const dbRef = ref(db, `posts/${postId}/comments/${commentId}/replies`);
@@ -123,7 +178,8 @@ export default function Comments({ commentData }) {
       set(newReply, replyData)
         .then(() => {
           setMyReply("");
-          console.log("reply submitted");
+          setShowReplies(true);
+
           //handleRefresh();
         })
         .catch((error) => {
@@ -197,7 +253,7 @@ export default function Comments({ commentData }) {
             <lab className="mt-0.5 ml-0.5 mb-2">{comment}</lab>
           </div>
           <div className="flex flex-row text-left ml-5 text-xs font-semibold">
-            <p className="clickable-text ml-2">Like</p>
+            <p className="clickable-text ml-2" >Like</p>
             <p
               className="clickable-text ml-4"
               onClick={() => {
@@ -209,17 +265,28 @@ export default function Comments({ commentData }) {
             <p className="ml-4">10 hrs</p>
           </div>
 
-          {numberOfReplies ?  <div className="ml-10 mt-3 text-left flex flex-row items-center font-semibold">
-            <ImForward className="h-4 w-4" />
-            <p className="clickable-text text-center self-center mt-0.5 ml-1">  {numberOfReplies && numberOfReplies + " Replies"}</p>
-          </div> : "" }
+          {numberOfReplies ? (
+            <div className="ml-10 mt-3 text-left flex flex-row items-center font-semibold ">
+              <ImForward className="h-4 w-4 text-neutral-800" />
+              <p
+                className="clickable-text text-center self-center mt-0.5 ml-1 "
+                onClick={handleShowReplies}
+              >
+                {" "}
+                {numberOfReplies && numberOfReplies + " Replies"}
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
 
           {/* List of replies */}
-
-          {replies && replies.map((replyData)=> <Replies replyData={replyData}></Replies>)}
-        
-
-         
+          {showReplies
+            ? replies &&
+              replies.map((replyData) => (
+                <Replies replyData={replyData}></Replies>
+              ))
+            : ""}
 
           {/* Reply Box*/}
           {showReplyBox ? <ShowReplyBox /> : ""}

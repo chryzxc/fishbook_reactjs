@@ -55,7 +55,7 @@ export default function CreateAccount({
         lastname: lastname,
         email: email,
         password: password,
-        date_registered: new Date().getTime(),
+        date_registered: Date.now(),
        
       };
 

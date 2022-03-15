@@ -88,6 +88,10 @@ const EmailInput = styled.input`
   outline-style: none;
   border-color: #babfc4;
   border-width: 1pt;
+  &:focus{
+    border-color:#1877f2;
+
+  }
 `;
 
 const PasswordInput = styled.input`
@@ -99,6 +103,11 @@ const PasswordInput = styled.input`
   outline-style: none;
   border-color: #babfc4;
   border-width: 1pt;
+  &:focus{
+    border-color:#1877f2;
+
+  }
+  inpu
 `;
 
 const LoginButton = styled.button`
@@ -369,7 +378,7 @@ export default function Login(props) {
                 <PasswordInput
                   placeholder="Password"
                   required
-                  onChange={(e) => setLoginPassword(e.target.value)}
+                  onChange={(e) => setLoginPassword(e.target.value)} type="password"
                 ></PasswordInput>
 
                 {isCheckingLoginDetails ? (

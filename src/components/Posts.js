@@ -71,7 +71,7 @@ const Name = styled.p`
   text-align: left;
 `;
 
-const Time = styled.p`
+const TimeLabel = styled.p`
   align-self: flex-start;
   text-align: start;
   margin-left: 10px;
@@ -124,50 +124,27 @@ const Posts = ({ post }) => {
 
   const postRef = ref(db, "posts/" + post.post_id);
 
-  // onChildAdded(postRef, (data) => {
-  //   get(child(dbRef, `posts/${post.post_id}`))
-  //     .then((snapshot) => {
-  //       console.log("listening");
-  //       if (snapshot.exists()) {
-  //         likes=0;
-  //         snapshot.val().liked_users.forEach((child) => {
-  //           likes += 1;
-  //         });
-
-  //       } else {
-  //         console.log("No data available");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // });
-
-  // onChildChanged(postRef, (data) => {
-  //   // setCommentValues(postElement, data.key, data.val().text, data.val().author);
-  // });
-
-  // onChildRemoved(postRef, (data) => {
-  //   // deleteComment(postElement, data.key);
-  // });
+ 
 
   useEffect(() => {
     // USER INFO
     get(child(dbRef, `users/${post.user_id}`))
       .then((snapshot) => {
+
         if (snapshot.exists()) {
           setFirstname(snapshot.val().firstname);
           setLastname(snapshot.val().lastname);
         } else {
           console.log("No data available");
         }
+
       })
       .catch((error) => {
         console.error(error);
       });
 
     //INDIVIDUAL POST DATA
-    get(child(dbRef, `posts/${post.post_id}/liked_users`))
+    get(child(dbRef, `posts/${post.post_id}/reacted_users`))
       .then((snapshot) => {
         if (snapshot.exists()) {
           let reacts = 0;
@@ -249,24 +226,25 @@ const Posts = ({ post }) => {
 
   const handleReactPost = () => {
     if (reacted) {
-      remove(ref(db, "posts/" + post.post_id + "/liked_users/" + user.id));
+      remove(ref(db, "posts/" + post.post_id + "/reacted_users/" + user.id));
     } else {
-      update(ref(db, "posts/" + post.post_id + "/liked_users/" + user.id), {
-        date_reacted: new Date().getTime(),
+      update(ref(db, "posts/" + post.post_id + "/reacted_users/" + user.id), {
+        date_reacted: Date.now(),
       });
     }
     setPostUpdate(postUpdate + 1);
-    console.log(postUpdate);
+   
   };
 
   const handleCommentPost = () => {
-    if (showCommentBox) {
+    if (!showCommentBox) {
       setShowCommentBox(!showCommentBox);
-      console.log("comment box hidden");
-    } else {
-      setShowCommentBox(!showCommentBox);
-      console.log("comment box displayed");
+    
     }
+    //  else {
+    //   setShowCommentBox(!showCommentBox);
+    
+    // }
   };
 
   const handleCommentListener = (e) => {
@@ -279,7 +257,7 @@ const Posts = ({ post }) => {
     const commentData = {
       user_id: user.id,
       comment: myComment,
-      date_posted: new Date().getTime(),
+      date_posted: Date.now(),
     };
 
     const dbRef = ref(db, `posts/${post.post_id}/comments`);
@@ -310,13 +288,13 @@ const Posts = ({ post }) => {
           </div>
           <div>
             <Name className="clickable-text">{firstname + " " + lastname}</Name>
-            <Time className="text-gray-600">
-              {" "}
+            <TimeLabel className="text-gray-600">
+             
               {format(
                 new Date(post.date_posted),
                 "hh:m a • MMM dd • eee"
               ).toString()}
-            </Time>
+            </TimeLabel>
           </div>
         </Row>
 
