@@ -69,10 +69,10 @@ export default function Comments({ commentData }) {
     console.log("reacting");
     if (reacted) {
       console.log("removed");
-      remove(ref(db, "posts/" + postId + "/comments/reacted_users/" + userId));
+      remove(ref(db, "posts/" + postId + "/comments/"+commentId+"/reacted_users/" + userId));
     } else {
       console.log("added");
-       update(ref(db, "posts/" + postId+ "/comments/reacted_users/" + userId), {
+       update(ref(db, "posts/" + postId+ "/comments/"+commentId+"/reacted_users/" + userId), {
          date_reacted: Date.now(),
        });
     }
@@ -253,7 +253,7 @@ export default function Comments({ commentData }) {
             <lab className="mt-0.5 ml-0.5 mb-2">{comment}</lab>
           </div>
           <div className="flex flex-row text-left ml-5 text-xs font-semibold">
-            <p className="clickable-text ml-2" >Like</p>
+            <p className="clickable-text ml-2" onClick={() =>handleReactComment()}>Like</p>
             <p
               className="clickable-text ml-4"
               onClick={() => {
