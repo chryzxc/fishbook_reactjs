@@ -18,6 +18,7 @@ const useFetchSuggestedFriends = () => {
               user_id: data.key,
               firstname: dataVal.firstname,
               lastname: dataVal.lastname,
+              date_registered: dataVal.date_registered,
             });
           });
 

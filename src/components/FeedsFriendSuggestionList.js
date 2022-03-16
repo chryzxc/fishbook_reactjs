@@ -25,7 +25,7 @@ export default function FeedsFriendSuggestion() {
         <p className="text-left text-neutral-500 font-semibold text-[15px] m-4">
           People you may know
         </p>
-        <div className="inline-flex pl-2 mb-2 w-full">
+        <div className="inline-flex pl-2 mb-2 ">
 
           {fetchedData && fetchedData.map((users)=>  <FeedsFriendSuggestionRow users={users}/>)}
 
