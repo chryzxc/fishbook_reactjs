@@ -14,9 +14,9 @@ const CreatePostCard = styled.div`
   background-color: white;
   margin: auto;
   height: auto;
-  width: 80vh;
+  width: 37vw;
   min-height: auto;
-  min-width: 80vh;
+  min-width: 37vw;
   margin-top: 20px;
   border-radius: 10px;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
@@ -49,7 +49,7 @@ const WritePost = styled.div`
   padding: 10px;
   font-size: large;
   color: #65676b;
-  margin-left: 15px;
+  margin-left: 10px;
   
   &:hover {
     background-color: #E4E6E9;

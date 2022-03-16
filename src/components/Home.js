@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import fish from "../assets/fish.png";
-import logo from "../assets/logo.png";
+import logo from "../assets/facebook.png";
 import ReactRoundedImage from "react-rounded-image";
 import CreatePost from "./CreatePost";
 import Stories from "./Stories";
@@ -26,6 +26,8 @@ import {
 import SponsorsSection from "./SponsorsSection";
 import ContactsSection from "./ContactsSection";
 import FeedsFriendSuggestionList from "./FeedsFriendSuggestionList";
+import SideNav from "./SideNav";
+import SideMenu from "./SideMenu";
 
 const Main = styled.div`
   height: 100%;
@@ -73,39 +75,50 @@ const Body = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 10px;
+
   background-color: #f0f2f5;
-  overflow:hidden;
 `;
 
 const RightNav = styled.div`
   // background-color: blue;
   float: left;
   display: block;
-  overflow: auto;
+
   //height: 20vh;
-  width: 20%;
+  width: 280px;
+  position: fixed;
+
+  right: 0;
+  top: 0;
 `;
 
 const LeftNav = styled.div`
   // background-color: brown;
+  display: fixed;
   float: left;
   display: block;
   overflow: auto;
-  //height: 90vh;
-  width: 20%;
+  height: 100%;
+  width: 400px;
+  position: fixed;
+
+
+  left: 0;
+  top: 0;
 `;
 
 const Feeds = styled.div`
   height: auto;
-  width: 60%;
+  width: auto;
+  max-width:auto;
   display: flex;
   flex-direction: column;
   text-align: center;
-
+  margin: auto;
   align-items: center;
   justify-content: center;
   padding-bottom: 50px;
+ // margin-left: 350px;
 `;
 
 const FishbookIcon = styled.img`
@@ -149,8 +162,8 @@ const StoriesContainer = styled.div`
   justify-content: center;
   flex-direction: row;
   /* padding-bottom: 10px; */
-  padding-left: 100px;
-  padding-right: 100px;
+  padding-left: 30px;
+  padding-right: 30px;
 
   //overflow-y: hidden;
 `;
@@ -211,7 +224,7 @@ const Home = () => {
             style={{
               fontSize: "35px",
               color: "#1877f2",
-              fontWeight: "bold",
+              fontWeight: "bolder",
             }}
           >
             Fishbook
@@ -223,7 +236,13 @@ const Home = () => {
       </NavBar> */}
       <Body>
         <LeftNav>
-          <Row>
+          <div className="flex flex-row h-[100%]">
+            <SideNav />
+            <SideMenu />
+          </div>
+
+          {/* <Row>
+
             <ReactRoundedImage
               image={fish}
               roundedSize="0"
@@ -247,7 +266,7 @@ const Home = () => {
               <List>Memories</List>
               <List>Saved</List>
             </ul>
-          </div>
+          </div> */}
         </LeftNav>
         <Feeds>
           <StoriesContainer>
@@ -257,7 +276,7 @@ const Home = () => {
             <Stories />
             <Stories />
           </StoriesContainer>
-        
+
           <CreatePostContainer>
             <CreatePost handleRefresh={handleRefresh} />
           </CreatePostContainer>
