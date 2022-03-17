@@ -215,7 +215,7 @@ const Text06 = styled("span")({
   const [isCheckingLoginDetails, setIsCheckingLoginDetails] = useState(false);
   const [error, setError] = useState("");
   const [clearError, setClearError] = useState(true);
-  const { FetchData } = useContext(UserContext);
+  const { LoginUser } = useContext(UserContext);
 
   const handleOpenCreateModal = () => {
     setOpenModal(true);
@@ -227,7 +227,7 @@ const Text06 = styled("span")({
 
   let navigate = useNavigate();
 
-  const performLogin = ({ userId, loginEmail, loginPassword }) => {
+  const PerformLogin = ({ userId, loginEmail, loginPassword }) => {
     const dbRef = ref(db);
     get(child(dbRef, "users/" + userId))
       .then((snapshot) => {
@@ -241,8 +241,8 @@ const Text06 = styled("span")({
             loginEmail === snapshot.val().email &&
             loginPassword === snapshot.val().password
           ) {
-            FetchData(userId);
-          
+         
+            LoginUser(userId, navigate);
           }
         }
       })
@@ -251,7 +251,9 @@ const Text06 = styled("span")({
       });
   };
 
-  const LoginUser = (e) => {
+ 
+
+  const CheckUser = (e) => {
     e.preventDefault();
 
     setIsCheckingLoginDetails(true);
@@ -282,7 +284,7 @@ const Text06 = styled("span")({
 
       if (userExist) {
         await setError("");
-        await performLogin({ userId, loginEmail, loginPassword });
+        await PerformLogin({ userId, loginEmail, loginPassword });
       } else {
         await setError("Account does not exist");
       }
@@ -372,7 +374,7 @@ const Text06 = styled("span")({
                   {error}
                 </p>
               )}
-              <Form onSubmit={LoginUser}>
+              <Form onSubmit={CheckUser}>
                 <EmailInput
                   placeholder="Email or phone number"
                   required

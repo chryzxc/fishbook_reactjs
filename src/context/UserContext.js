@@ -16,7 +16,8 @@ import { useNavigate } from "react-router-dom";
 export const UserContext = createContext();
 
 const UserContextProvider = (props) => {
-  
+  const [userId, setUserId] = useState("");
+ 
   const [user, setUser] = useState({
     id: "",
     firstname: "",
@@ -25,8 +26,14 @@ const UserContextProvider = (props) => {
     date_registered: "",
   });
 
-  const FetchData = (userId) => {
-    let navigate = useNavigate();
+  const LoginUser = (userId,navigate) => {
+    setUserId(userId);
+   
+
+    navigate("/Home/");
+  };
+
+  const FetchData = () => {
     const dbRef = ref(db);
     useEffect(() => {
       get(child(dbRef, "users/" + userId))
@@ -44,13 +51,12 @@ const UserContextProvider = (props) => {
         .catch((error) => {
           console.error(error);
         });
-       
     }, []);
     console.log("updated");
   };
 
   return (
-    <UserContext.Provider value={{ user, FetchData }}>
+    <UserContext.Provider value={{ user, FetchData, LoginUser }}>
       {props.children}
     </UserContext.Provider>
   );
