@@ -11,9 +11,9 @@ const Story = styled.div`
   background-color: white;
   position: relative;
   height: 30vh;
-  width: 8.5vw;
+  width: 8vw;
   min-height: 30vh;
-  min-width: 8.5vw;
+  min-width: 8vw;
   margin-top: 20px;
   margin-left: 10px;
   border-radius: 20px;

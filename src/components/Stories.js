@@ -5,19 +5,18 @@ import profile from "../assets/profile.jpg";
 import ReactRoundedImage from "react-rounded-image";
 
 const Story = styled.div`
-margin: auto;
+  margin: auto;
   background-color: white;
   position: relative;
   height: 30vh;
-  width: 8.5vw;
+  width: 8vw;
   min-height: 30vh;
-  min-width: 8.5vw;
+  min-width:8vw;
   margin-top: 20px;
-  margin-left: 10px;
+  margin-left: 5px;
   border-radius: 20px;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
   text-align: center;
-  
 `;
 
 const StoryImage = styled.img`
@@ -41,7 +40,7 @@ const StoryOwner = styled.p`
   bottom: 10px;
   left: 16px;
   color: white;
-  margin-right: 16px
+  margin-right: 16px;
 `;
 
 export default function Stories() {
@@ -54,14 +53,12 @@ export default function Stories() {
       <ProfileContainer>
         <ReactRoundedImage
           image={profile}
-          imageWidth="50"
-          imageHeight="50"
+          imageWidth="40"
+          imageHeight="40"
           roundedColor="#166ADA"
           roundedSize="7"
         ></ReactRoundedImage>
       </ProfileContainer>
     </Story>
-
-    
   );
 }

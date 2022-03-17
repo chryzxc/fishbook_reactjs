@@ -11,10 +11,12 @@ import {
   orderByChild,
   onValue,
 } from "firebase/database";
+import { useNavigate } from "react-router-dom";
 
 export const UserContext = createContext();
 
 const UserContextProvider = (props) => {
+  
   const [user, setUser] = useState({
     id: "",
     firstname: "",
@@ -24,6 +26,7 @@ const UserContextProvider = (props) => {
   });
 
   const FetchData = (userId) => {
+    let navigate = useNavigate();
     const dbRef = ref(db);
     useEffect(() => {
       get(child(dbRef, "users/" + userId))
@@ -41,6 +44,7 @@ const UserContextProvider = (props) => {
         .catch((error) => {
           console.error(error);
         });
+       
     }, []);
     console.log("updated");
   };

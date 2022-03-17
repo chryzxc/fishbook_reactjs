@@ -198,10 +198,10 @@ const Divider = styled.hr`
 `;
 
 const Home = () => {
-  const { userId } = useParams();
+  //const { userId } = useParams();
   const { user, FetchData } = useContext(UserContext);
   const [updateHome, setUpdateHome] = useState(0);
-  FetchData(userId);
+  //FetchData(userId);
 
   const dbRef = ref(db, "posts/");
   const { fetchedData, isStillFetching } = useFetchPost(dbRef, updateHome);

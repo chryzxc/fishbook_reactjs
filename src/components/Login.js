@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import db from "../others/firebase";
@@ -16,6 +16,7 @@ import {
 } from "firebase/database";
 import { clear } from "@testing-library/user-event/dist/clear";
 import { propTypes } from "react-bootstrap/esm/Image";
+import { UserContext } from "../context/UserContext";
 
 const Column = styled.div`
   background-color: #f0f2f5;
@@ -206,7 +207,7 @@ const Text06 = styled("span")({
   },
 });
 
-export default function Login(props) {
+ const Login=(props) => {
   const [openModal, setOpenModal] = useState(false);
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -214,6 +215,7 @@ export default function Login(props) {
   const [isCheckingLoginDetails, setIsCheckingLoginDetails] = useState(false);
   const [error, setError] = useState("");
   const [clearError, setClearError] = useState(true);
+  const { FetchData } = useContext(UserContext);
 
   const handleOpenCreateModal = () => {
     setOpenModal(true);
@@ -239,7 +241,8 @@ export default function Login(props) {
             loginEmail === snapshot.val().email &&
             loginPassword === snapshot.val().password
           ) {
-            navigate("/Home/" + userId);
+            FetchData(userId);
+          
           }
         }
       })
@@ -422,3 +425,5 @@ export default function Login(props) {
     </>
   );
 }
+
+export default Login;
