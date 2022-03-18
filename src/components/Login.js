@@ -241,7 +241,7 @@ const Text06 = styled("span")({
             loginEmail === snapshot.val().email &&
             loginPassword === snapshot.val().password
           ) {
-            dispatch
+           
          
             LoginUser(userId, navigate);
           }

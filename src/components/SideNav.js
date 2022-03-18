@@ -10,31 +10,45 @@ import {
 } from "react-icons/ri";
 import styled from "styled-components";
 
-const NavButtons =
-  "h-5 w-5 absolute top-[25%] left-[25%] translate-[-25%,-25%]";
+
+
 const spaceAbove = "mt-5";
 
 const icon =
   "p-1 m-auto rounded-full bg-[#E4E6E9] h-10 w-10 relative hover:bg-[#C1C1C1]";
 
-  const iconPressed = ""
+const Container = styled.div`
+  position: fixed;
 
-  
+  background-color: white;
+  margin: auto;
+  height: auto;
+  width: 300px;
+  margin-left: 65px;
+  min-height: auto;
+  min-width: 300px;
+  margin-top: 5px;
+  border-radius: 7px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`;
+
+const iconPressed = "";
 
 export default function SideNav() {
   const [showContainer, setShowContainer] = useState("");
 
-  useEffect(()=>{
-
-   
-
-
-  },[showContainer]);
-
- 
-
+  const NavButtons= (props) =>{
+    if(props === showContainer){
+    return "h-5 w-5 absolute top-[25%] left-[25%] translate-[-25%,-25%]";
+    }else{
+      return "h-5 w-5 absolute top-[25%] left-[25%] translate-[-25%,-25%]";
+    }
   
+  
+  
+  }
 
+  useEffect(() => {}, [showContainer]);
 
   const navigationListener = (id) => {
     switch (id) {
@@ -62,48 +76,84 @@ export default function SideNav() {
   };
 
   return (
-    <div className="bg-white w-auto shadow-md text-[#050505] ">
-      <ul className="m-1 p-2 items-center justify-center">
-        <li>
-          <div className="m-0.5">
-            <ReactRoundedImage
-              image={logo}
-              roundedSize="0"
-              imageWidth="40"
-              imageHeight="40"
-            />
-          </div>
-        </li>
+    <div className="p-0 m-0 overflow-hidden">
+      {showContainer === "messenger" ? (
+        <div>
+          <Container>
+            <div className="p-3">
+              <div className="flex flex-row ">
+                <p className="font-extrabold text-black text-xl">Chats</p>
+              </div>
+            </div>
+          </Container>
+        </div>
+      ) : (
+        ""
+      )}
 
-        <li className={spaceAbove}>
-          <div className={icon} onClick={() => navigationListener("home")}>
-            <RiHome3Fill className={NavButtons} />
-          </div>
-        </li>
-        <li className={spaceAbove}>
-          <div className={icon} onClick={() => navigationListener("search")}>
-            <RiSearch2Line className={NavButtons} />
-          </div>
-        </li>
-        <li className={spaceAbove}>
-          <div
-            className={icon}
-            onClick={() => navigationListener("notification")}
-          >
-            <RiNotification2Fill className={NavButtons} />
-          </div>
-        </li>
-        <li className={spaceAbove}>
-          <div className={icon} onClick={() => navigationListener("messenger")}>
-            <RiMessengerFill className={NavButtons} />
-          </div>
-        </li>
-        <li className={spaceAbove}>
-          <div className={icon} onClick={() => navigationListener("settings")}>
-            <RiApps2Fill className={NavButtons} />
-          </div>
-        </li>
-      </ul>
+      {showContainer === "notification" ? (
+        <div>
+          <Container>
+            <div className="p-3">
+              <div className="flex flex-row ">
+                <p className="font-extrabold text-black text-xl">Notifications</p>
+              </div>
+            </div>
+          </Container>
+        </div>
+      ) : (
+        ""
+      )}
+
+      <div className="bg-white w-auto shadow-md text-[#050505] h-full overflow-hidden">
+        <ul className="m-1 p-2 items-center justify-center">
+          <li>
+            <div className="m-0.5">
+              <ReactRoundedImage
+                image={logo}
+                roundedSize="0"
+                imageWidth="40"
+                imageHeight="40"
+              />
+            </div>
+          </li>
+
+          <li className={spaceAbove}>
+            <div className={icon} onClick={() => navigationListener("home")}>
+              <RiHome3Fill className={NavButtons} />
+            </div>
+          </li>
+          <li className={spaceAbove}>
+            <div className={icon} onClick={() => navigationListener("search")}>
+              <RiSearch2Line className={NavButtons} />
+            </div>
+          </li>
+          <li className={spaceAbove}>
+            <div
+              className={icon}
+              onClick={() => navigationListener("notification")}
+            >
+              <RiNotification2Fill className={NavButtons} />
+            </div>
+          </li>
+          <li className={spaceAbove}>
+            <div
+              className={icon}
+              onClick={() => navigationListener("messenger")}
+            >
+              <RiMessengerFill className={NavButtons} />
+            </div>
+          </li>
+          <li className={spaceAbove}>
+            <div
+              className={icon}
+              onClick={() => navigationListener("settings")}
+            >
+              <RiApps2Fill className={NavButtons("settings")} />
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }
