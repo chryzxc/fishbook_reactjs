@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import ReactRoundedImage from "react-rounded-image";
 import profile from "../assets/1.jpg";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../contexts/UserContext";
 import storyimage from "../assets/2.jpg";
 import { FaRegImages, FaRegSmile, FaVideo, FcGallery } from "react-icons/fa";
 import { ref, set, push } from "firebase/database";
@@ -70,6 +70,8 @@ const TextArea = styled.textarea`
 const CreatePost = ({handleRefresh}) => {
   const { user } = useContext(UserContext);
   const [caption, setCaption] = useState("");
+
+ 
 
   const handleCaptionListener = (e) => {
     setCaption(e.target.value);

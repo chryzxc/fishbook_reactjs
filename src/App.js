@@ -1,7 +1,7 @@
 import Login from "./components/Login.js";
 import Home from "./components/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import UserContextProvider from "./context/UserContext.js";
+import UserContextProvider from "./contexts/UserContext.js";
 
 function App() {
   return (

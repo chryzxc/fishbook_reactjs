@@ -31,7 +31,7 @@ import {
   updateChildren,
   remove,
 } from "firebase/database";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../contexts/UserContext";
 import { format, formatDistance, subDays } from "date-fns";
 import Comments from "./Comments";
 import DateFormat from "../utils/DateFormat";

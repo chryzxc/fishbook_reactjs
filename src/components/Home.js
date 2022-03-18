@@ -8,7 +8,7 @@ import Stories from "./Stories";
 import AddStory from "./AddStory";
 import Posts from "./Posts";
 //import { useParams } from "react-router-dom";
-import UserContextProvider, { UserContext } from "../context/UserContext";
+import UserContextProvider, { UserContext } from "../contexts/UserContext";
 import { useParams } from "react-router-dom";
 import useFetchPost from "../hooks/useFetchPost";
 import db from "../others/firebase";

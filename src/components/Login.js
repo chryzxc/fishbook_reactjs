@@ -16,7 +16,7 @@ import {
 } from "firebase/database";
 import { clear } from "@testing-library/user-event/dist/clear";
 import { propTypes } from "react-bootstrap/esm/Image";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../contexts/UserContext";
 
 const Column = styled.div`
   background-color: #f0f2f5;
@@ -241,6 +241,7 @@ const Text06 = styled("span")({
             loginEmail === snapshot.val().email &&
             loginPassword === snapshot.val().password
           ) {
+            dispatch
          
             LoginUser(userId, navigate);
           }

@@ -15,7 +15,7 @@ import {
 import { RiArrowDownSLine } from "react-icons/ri";
 import profile from "../assets/1.jpg";
 import ReactRoundedImage from "react-rounded-image";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../contexts/UserContext";
 
 export default function SideMenu() {
   const font = "ml-2 font-bold text-sm self-center";
