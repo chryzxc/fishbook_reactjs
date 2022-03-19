@@ -7,6 +7,7 @@ import storyimage from "../assets/2.jpg";
 import { FaRegImages, FaRegSmile, FaVideo, FcGallery } from "react-icons/fa";
 import { ref, set, push } from "firebase/database";
 import db from "../others/firebase";
+import FileBase64 from "react-file-base64";
 
 const CreatePostCard = styled.div`
   overflow-y: hidden;
@@ -43,16 +44,16 @@ const Row = styled.div`
 
 const WritePost = styled.div`
   width: 85%;
-  background-color: #F0F2F5;
+  background-color: #f0f2f5;
   border-radius: 25px;
   height: auto;
   padding: 10px;
   font-size: large;
   color: #65676b;
   margin-left: 10px;
-  
+
   &:hover {
-    background-color: #E4E6E9;
+    background-color: #e4e6e9;
   }
 `;
 
@@ -67,11 +68,9 @@ const TextArea = styled.textarea`
   resize: none;
 `;
 
-const CreatePost = ({handleRefresh}) => {
+const CreatePost = ({ handleRefresh }) => {
   const { user } = useContext(UserContext);
   const [caption, setCaption] = useState("");
-
- 
 
   const handleCaptionListener = (e) => {
     setCaption(e.target.value);
@@ -85,7 +84,6 @@ const CreatePost = ({handleRefresh}) => {
       caption: caption,
       date_posted: Date.now(),
       contents: ["adqwe", "adqwewqe"],
-   
     };
 
     const dbRef = ref(db, "posts/");
@@ -101,6 +99,8 @@ const CreatePost = ({handleRefresh}) => {
         console.log(error);
       });
   };
+
+  const uploadContent = () => {};
 
   return (
     <form onSubmit={submitPost}>
@@ -129,6 +129,7 @@ const CreatePost = ({handleRefresh}) => {
         </div>
         <div>
           <Divider />
+          <FileBase64 type="file" multiple={false} />
         </div>
         <div className="ml-4 mr-4 mb-5 mt-5">
           <div className="flex flex-row justify-around">

@@ -35,11 +35,11 @@ const Container = styled.div`
 const iconPressed = "";
 
 export default function SideNav() {
-  const [showContainer, setShowContainer] = useState("");
+  const [showContainer, setShowContainer] = useState("home");
 
   const NavButtons= (props) =>{
     if(props === showContainer){
-    return "h-5 w-5 absolute top-[25%] left-[25%] translate-[-25%,-25%]";
+    return "h-5 w-5 absolute top-[25%] left-[25%] translate-[-25%,-25%] text-[#1877F2]";
     }else{
       return "h-5 w-5 absolute top-[25%] left-[25%] translate-[-25%,-25%]";
     }
@@ -82,7 +82,7 @@ export default function SideNav() {
           <Container>
             <div className="p-3">
               <div className="flex flex-row ">
-                <p className="font-extrabold text-black text-xl">Chats</p>
+                <p className="font-extrabold text-black text-xl ">Chats</p>
               </div>
             </div>
           </Container>
@@ -120,12 +120,12 @@ export default function SideNav() {
 
           <li className={spaceAbove}>
             <div className={icon} onClick={() => navigationListener("home")}>
-              <RiHome3Fill className={NavButtons} />
+              <RiHome3Fill className={NavButtons("home")} />
             </div>
           </li>
           <li className={spaceAbove}>
             <div className={icon} onClick={() => navigationListener("search")}>
-              <RiSearch2Line className={NavButtons} />
+              <RiSearch2Line className={NavButtons("search")} />
             </div>
           </li>
           <li className={spaceAbove}>
@@ -133,7 +133,7 @@ export default function SideNav() {
               className={icon}
               onClick={() => navigationListener("notification")}
             >
-              <RiNotification2Fill className={NavButtons} />
+              <RiNotification2Fill  className={NavButtons("notification")} />
             </div>
           </li>
           <li className={spaceAbove}>
@@ -141,7 +141,7 @@ export default function SideNav() {
               className={icon}
               onClick={() => navigationListener("messenger")}
             >
-              <RiMessengerFill className={NavButtons} />
+              <RiMessengerFill  className={NavButtons("messenger")} />
             </div>
           </li>
           <li className={spaceAbove}>
