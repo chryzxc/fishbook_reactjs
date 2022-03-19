@@ -7,6 +7,7 @@ import storyimage from "../assets/2.jpg";
 import { FaRegImages, FaRegSmile, FaVideo, FcGallery } from "react-icons/fa";
 import { ref, set, push } from "firebase/database";
 import db from "../others/firebase";
+import FileBase64 from "react-file-base64";
 
 const CreatePostCard = styled.div`
   overflow-y: hidden;
@@ -71,6 +72,7 @@ const CreatePost = ({ handleRefresh }) => {
   const { user } = useContext(UserContext);
   const [caption, setCaption] = useState("");
 
+<<<<<<< HEAD
   const [selectedFile, setSelectedFile] = useState();
   const [isFilePicked, setIsFilePicked] = useState(false);
   let inputContent = "";
@@ -80,6 +82,8 @@ const CreatePost = ({ handleRefresh }) => {
     return false;
   };
 
+=======
+>>>>>>> f1363d52ef51b9394b7f3c1d21bd6b188070ffda
   const handleCaptionListener = (e) => {
     setCaption(e.target.value);
   };
@@ -108,6 +112,8 @@ const CreatePost = ({ handleRefresh }) => {
       });
   };
 
+  const uploadContent = () => {};
+
   return (
     <form onSubmit={submitPost}>
       <CreatePostCard>
@@ -135,6 +141,7 @@ const CreatePost = ({ handleRefresh }) => {
         </div>
         <div>
           <Divider />
+          <FileBase64 type="file" multiple={false} />
         </div>
         <div className="ml-4 mr-4 mb-5 mt-5">
           <div className="flex flex-row justify-around">

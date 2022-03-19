@@ -82,7 +82,7 @@ export default function SideNav() {
           <Container>
             <div className="p-3">
               <div className="flex flex-row ">
-                <p className="font-extrabold text-black text-xl">Chats</p>
+                <p className="font-extrabold text-black text-xl ">Chats</p>
               </div>
             </div>
           </Container>
@@ -133,7 +133,11 @@ export default function SideNav() {
               className={icon}
               onClick={() => navigationListener("notification")}
             >
+<<<<<<< HEAD
               <RiNotification2Fill className={NavButtons("notification")} />
+=======
+              <RiNotification2Fill  className={NavButtons("notification")} />
+>>>>>>> f1363d52ef51b9394b7f3c1d21bd6b188070ffda
             </div>
           </li>
           <li className={spaceAbove}>
@@ -141,7 +145,11 @@ export default function SideNav() {
               className={icon}
               onClick={() => navigationListener("messenger")}
             >
+<<<<<<< HEAD
               <RiMessengerFill className={NavButtons("messenger")} />
+=======
+              <RiMessengerFill  className={NavButtons("messenger")} />
+>>>>>>> f1363d52ef51b9394b7f3c1d21bd6b188070ffda
             </div>
           </li>
           <li className={spaceAbove}>
