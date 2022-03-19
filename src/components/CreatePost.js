@@ -43,16 +43,16 @@ const Row = styled.div`
 
 const WritePost = styled.div`
   width: 85%;
-  background-color: #F0F2F5;
+  background-color: #f0f2f5;
   border-radius: 25px;
   height: auto;
   padding: 10px;
   font-size: large;
   color: #65676b;
   margin-left: 10px;
-  
+
   &:hover {
-    background-color: #E4E6E9;
+    background-color: #e4e6e9;
   }
 `;
 
@@ -67,11 +67,18 @@ const TextArea = styled.textarea`
   resize: none;
 `;
 
-const CreatePost = ({handleRefresh}) => {
+const CreatePost = ({ handleRefresh }) => {
   const { user } = useContext(UserContext);
   const [caption, setCaption] = useState("");
 
- 
+  const [selectedFile, setSelectedFile] = useState();
+  const [isFilePicked, setIsFilePicked] = useState(false);
+  let inputContent = "";
+
+  const handleContent = e => {
+    inputContent.click();
+    return false;
+  };
 
   const handleCaptionListener = (e) => {
     setCaption(e.target.value);
@@ -85,7 +92,6 @@ const CreatePost = ({handleRefresh}) => {
       caption: caption,
       date_posted: Date.now(),
       contents: ["adqwe", "adqwewqe"],
-   
     };
 
     const dbRef = ref(db, "posts/");
@@ -147,7 +153,10 @@ const CreatePost = ({handleRefresh}) => {
               </p>
             </div>
 
-            <div className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2">
+            <div
+              className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2"
+              onClick={(e) =>handleContent(e.target)}
+            >
               <FaRegImages
                 className="self-center h-6 w-6"
                 style={{ color: "#45BD61", fontSize: "1.5em" }}
@@ -155,6 +164,14 @@ const CreatePost = ({handleRefresh}) => {
               <p className="self-center ml-2 font-bold text-sm text-gray-600">
                 Photos/Videos
               </p>
+              <input
+                ref={(input) => {
+                  inputContent = input;
+                }}
+                type="file"
+                name="file"
+                className="hidden"
+              />
             </div>
 
             <div className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2">
