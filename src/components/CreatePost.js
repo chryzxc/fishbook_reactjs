@@ -72,7 +72,6 @@ const CreatePost = ({ handleRefresh }) => {
   const { user } = useContext(UserContext);
   const [caption, setCaption] = useState("");
 
-<<<<<<< HEAD
   const [selectedFile, setSelectedFile] = useState();
   const [isFilePicked, setIsFilePicked] = useState(false);
   let inputContent = "";
@@ -82,8 +81,6 @@ const CreatePost = ({ handleRefresh }) => {
     return false;
   };
 
-=======
->>>>>>> f1363d52ef51b9394b7f3c1d21bd6b188070ffda
   const handleCaptionListener = (e) => {
     setCaption(e.target.value);
   };

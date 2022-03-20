@@ -10,8 +10,6 @@ import {
 } from "react-icons/ri";
 import styled from "styled-components";
 
-
-
 const spaceAbove = "mt-5";
 
 const icon =
@@ -37,16 +35,13 @@ const iconPressed = "";
 export default function SideNav() {
   const [showContainer, setShowContainer] = useState("home");
 
-  const NavButtons= (props) =>{
-    if(props === showContainer){
-    return "h-5 w-5 absolute top-[25%] left-[25%] translate-[-25%,-25%] text-[#0371EE]";
-    }else{
+  const NavButtons = (props) => {
+    if (props === showContainer) {
+      return "h-5 w-5 absolute top-[25%] left-[25%] translate-[-25%,-25%] text-[#0371EE]";
+    } else {
       return "h-5 w-5 absolute top-[25%] left-[25%] translate-[-25%,-25%]";
     }
-  
-  
-  
-  }
+  };
 
   useEffect(() => {}, [showContainer]);
 
@@ -96,7 +91,9 @@ export default function SideNav() {
           <Container>
             <div className="p-3">
               <div className="flex flex-row ">
-                <p className="font-extrabold text-black text-xl">Notifications</p>
+                <p className="font-extrabold text-black text-xl">
+                  Notifications
+                </p>
               </div>
             </div>
           </Container>
@@ -133,11 +130,7 @@ export default function SideNav() {
               className={icon}
               onClick={() => navigationListener("notification")}
             >
-<<<<<<< HEAD
               <RiNotification2Fill className={NavButtons("notification")} />
-=======
-              <RiNotification2Fill  className={NavButtons("notification")} />
->>>>>>> f1363d52ef51b9394b7f3c1d21bd6b188070ffda
             </div>
           </li>
           <li className={spaceAbove}>
@@ -145,14 +138,9 @@ export default function SideNav() {
               className={icon}
               onClick={() => navigationListener("messenger")}
             >
-<<<<<<< HEAD
               <RiMessengerFill className={NavButtons("messenger")} />
-=======
-              <RiMessengerFill  className={NavButtons("messenger")} />
->>>>>>> f1363d52ef51b9394b7f3c1d21bd6b188070ffda
             </div>
-          </li>
-          <li className={spaceAbove}>
+
             <div
               className={icon}
               onClick={() => navigationListener("settings")}
