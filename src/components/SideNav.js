@@ -140,7 +140,9 @@ export default function SideNav() {
             >
               <RiMessengerFill className={NavButtons("messenger")} />
             </div>
+          </li>
 
+          <li className={spaceAbove}>
             <div
               className={icon}
               onClick={() => navigationListener("settings")}

@@ -13,7 +13,7 @@ import {
 import { FaGlobeAsia } from "react-icons/fa";
 
 import { TiThumbsUp } from "react-icons/ti";
-import db from "../others/firebase";
+import { db , storage} from "../others/firebase";
 import {
   ref,
   set,
@@ -35,6 +35,11 @@ import { UserContext } from "../contexts/UserContext";
 import { format, formatDistance, subDays } from "date-fns";
 import Comments from "./Comments";
 import DateFormat from "../utils/DateFormat";
+import {
+  uploadBytes,
+  ref as storageRef,
+  getDownloadURL,
+} from "firebase/storage";
 
 const Post = styled.div`
   background-color: white;
@@ -123,6 +128,7 @@ const Posts = ({ post }) => {
   const [showCommentBox, setShowCommentBox] = useState(false);
 
   const [postUpdate, setPostUpdate] = useState(0);
+  const [content , setContent] = useState();
 
   const postRef = ref(db, "posts/" + post.post_id);
 
@@ -140,6 +146,31 @@ const Posts = ({ post }) => {
       .catch((error) => {
         console.error(error);
       });
+    // post.contents?.forEach((content)=>{
+    //   console.log(content.file_path);
+
+    // })
+
+    //CONTENT
+    if (post.contents) {
+      const content = Object.keys(post.contents);
+      // console.log(`CONTENTS of: ${post.post_id} = ${list}`);
+
+      //console.log(`CONTENTS of: ${post.post_id} = ${content}`);
+      // list.forEach((row)=>{
+      //   console.log(`ROW of: ${row.key}`);
+      // })
+      getDownloadURL(storageRef(storage, `posts/${post.post_id}/${content}.jpeg`))
+        .then((url) => {
+          
+          setContent(url);
+        //   const img = document.getElementById("postContent");
+        //  img.setAttribute("src", url);
+        })
+        .catch((error) => {
+          console.log("IMAGEG ERROR : " + error)
+        });
+    }
 
     //INDIVIDUAL POST DATA
     get(child(dbRef, `posts/${post.post_id}/reacted_users`))
@@ -308,18 +339,18 @@ const Posts = ({ post }) => {
           <div>
             <Name className="clickable-text">{firstname + " " + lastname}</Name>
             <div className="flex flex-row text-gray-600">
-            <TimeLabel >
-              {/* {format(
+              <TimeLabel>
+                {/* {format(
                 new Date(post.date_posted),
                 "hh:m a • MMM dd • eee"
               ).toString()} */}
-              {formatDistance(new Date(post.date_posted), new Date(), {
-                addSuffix: true,
-              })} • {/* <DateFormat date={post.date_posted} /> • */}
-            </TimeLabel>
-            <FaGlobeAsia className="self-center ml-1"/>
+                {formatDistance(new Date(post.date_posted), new Date(), {
+                  addSuffix: true,
+                })}{" "}
+                • {/* <DateFormat date={post.date_posted} /> • */}
+              </TimeLabel>
+              <FaGlobeAsia className="self-center ml-1" />
             </div>
-           
           </div>
         </Row>
 
@@ -329,7 +360,9 @@ const Posts = ({ post }) => {
       </RowBottom>
       <Caption className="text-gray-600 mb-3 text-sm">{post.caption}</Caption>
 
-      <PostImage src={storyimage} alt="post"></PostImage>
+      {post.contents ?  <PostImage  alt="post" src={content}></PostImage> : ""}
+
+     
 
       <div>
         <RowBottom className="mt-2">

@@ -18,7 +18,7 @@ import {
   updateChildren,
   remove,
 } from "firebase/database";
-import db from "../others/firebase";
+import {db} from "../others/firebase";
 import DateFormat from "../utils/DateFormat";
 
 export default function Replies({ replyData }) {

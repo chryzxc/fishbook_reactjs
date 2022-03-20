@@ -3,8 +3,7 @@ import storyimage from "../assets/2.jpg";
 import DateFormat from "../utils/DateFormat";
 
 export default function FeedsFriendSuggestionList({users}) {
-  console.log("data"+users.date_registered);
-
+ 
   return (
     <div className="relative m-[3px] mt-[-5px] w-[12vw] h-auto border-neutral-300 border-[0.5px] rounded-lg  text-neutral-500 mb-3">
       <img src={storyimage} className="w-[20vw] h-[150px] rounded-t-lg" alt=""></img>

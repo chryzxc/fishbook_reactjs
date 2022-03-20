@@ -5,9 +5,13 @@ import profile from "../assets/1.jpg";
 import { UserContext } from "../contexts/UserContext";
 import storyimage from "../assets/2.jpg";
 import { FaRegImages, FaRegSmile, FaVideo, FcGallery } from "react-icons/fa";
-import { ref, set, push } from "firebase/database";
-import db from "../others/firebase";
-import FileBase64 from "react-file-base64";
+import { ref, set, push, update } from "firebase/database";
+import { db, storage } from "../others/firebase";
+import { RiCloseFill } from "react-icons/ri";
+
+import { uploadBytes, ref as storageRef } from "firebase/storage";
+
+// Create a root reference
 
 const CreatePostCard = styled.div`
   overflow-y: hidden;
@@ -74,11 +78,24 @@ const CreatePost = ({ handleRefresh }) => {
 
   const [selectedFile, setSelectedFile] = useState();
   const [isFilePicked, setIsFilePicked] = useState(false);
+
+  const [contents, setContents] = useState();
+  const [contentName, setContentName] = useState();
+
   let inputContent = "";
 
-  const handleContent = e => {
+  const handleContent = (e) => {
     inputContent.click();
     return false;
+  };
+
+  const updateContents = (e) => {
+    setContents({
+      file_path: e.target.files[0],
+      date_uploaded: Date.now(),
+    });
+
+    setContentName(e.target.files[0].name);
   };
 
   const handleCaptionListener = (e) => {
@@ -92,16 +109,36 @@ const CreatePost = ({ handleRefresh }) => {
       user_id: user.id,
       caption: caption,
       date_posted: Date.now(),
-      contents: ["adqwe", "adqwewqe"],
     };
 
     const dbRef = ref(db, "posts/");
     const newPost = push(dbRef);
 
     set(newPost, post)
-      .then(() => {
+      .then(async () => {
         setCaption("");
-        console.log("post submitted");
+        
+
+        await contents.forEach(async (content) => {
+          const dbRef = ref(db, `posts/${newPost.key}/contents`);
+          const newContent = push(dbRef);
+
+          update(newContent, content).then(async () => {
+            const contentRef = storageRef(
+              storage,
+              `posts/${newPost.key}/${newContent.key}.jpeg`
+            );
+
+            await uploadBytes(contentRef, content.file_path)
+              .then((snapshot) => {
+                console.log("Uploaded a blob or file!" + content.file_path);
+              })
+              .catch((error) => {
+                console.log("upload error : " + error);
+              });
+          });
+        });
+
         handleRefresh();
       })
       .catch((error) => {
@@ -133,12 +170,20 @@ const CreatePost = ({ handleRefresh }) => {
                   handleCaptionListener(e);
                 }}
               ></TextArea>
+              {contents?<div className="ml-1 flex flex-row bg-[#e0e1e4] rounded-full w-fit pl-2 pr-2 pt-1 pb-1 hover:bg-[#fff]">
+                <p className=" text-xs font-bold text-left">
+                  Attachment: {contentName}
+                </p>
+                <div className="ml-1 bg-[#F4556F] text-white rounded-full" onClick={() => setContents()}>
+                  <RiCloseFill className="h-4 w-4"/>
+                </div>
+              </div> : "" }
+              
             </WritePost>
           </Row>
         </div>
         <div>
           <Divider />
-          <FileBase64 type="file" multiple={false} />
         </div>
         <div className="ml-4 mr-4 mb-5 mt-5">
           <div className="flex flex-row justify-around">
@@ -159,7 +204,7 @@ const CreatePost = ({ handleRefresh }) => {
 
             <div
               className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2"
-              onClick={(e) =>handleContent(e.target)}
+              onClick={(e) => handleContent(e.target)}
             >
               <FaRegImages
                 className="self-center h-6 w-6"
@@ -169,6 +214,7 @@ const CreatePost = ({ handleRefresh }) => {
                 Photos/Videos
               </p>
               <input
+                onChange={(e) => updateContents(e)}
                 ref={(input) => {
                   inputContent = input;
                 }}

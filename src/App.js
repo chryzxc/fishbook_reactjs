@@ -1,4 +1,4 @@
-import Login from "./components/Login.js";
+import Login from "./components/Login";
 import Home from "./components/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserContextProvider from "./contexts/UserContext.js";
@@ -9,7 +9,7 @@ function App() {
       <Router>
         <div className="App">
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
 
             <Route path="/Home/" element={<Home />} />
           </Routes>

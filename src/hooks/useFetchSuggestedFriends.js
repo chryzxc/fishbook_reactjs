@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { onValue, ref,get, child, orderByChild ,limitToFirst} from "firebase/database";
-import db from "../others/firebase";
+import {db} from "../others/firebase";
 
 const useFetchSuggestedFriends = () => {
   const [fetchedData, setFetchedData] = useState(null);

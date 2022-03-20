@@ -1,7 +1,7 @@
-import React, { useEffect, useState ,useContext} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import db from "../others/firebase";
+import { db } from "../others/firebase";
 import Button from "react-bootstrap/Button";
 import CreateAccount from "./CreateAccount";
 import {
@@ -89,9 +89,8 @@ const EmailInput = styled.input`
   outline-style: none;
   border-color: #babfc4;
   border-width: 1pt;
-  &:focus{
-    border-color:#1877f2;
-
+  &:focus {
+    border-color: #1877f2;
   }
 `;
 
@@ -104,11 +103,9 @@ const PasswordInput = styled.input`
   outline-style: none;
   border-color: #babfc4;
   border-width: 1pt;
-  &:focus{
-    border-color:#1877f2;
-
+  &:focus {
+    border-color: #1877f2;
   }
-
 `;
 
 const LoginButton = styled.button`
@@ -207,226 +204,233 @@ const Text06 = styled("span")({
   },
 });
 
- const Login=(props) => {
-  const [openModal, setOpenModal] = useState(false);
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
+const Login = (props) => {
+  localStorage.setItem("user-token", "");
+  console.log("login");
 
-  const [isCheckingLoginDetails, setIsCheckingLoginDetails] = useState(false);
-  const [error, setError] = useState("");
-  const [clearError, setClearError] = useState(true);
-  const { LoginUser } = useContext(UserContext);
+  const LoginForm = () => {
+    const [openModal, setOpenModal] = useState(false);
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
 
-  const handleOpenCreateModal = () => {
-    setOpenModal(true);
-  };
+    const [isCheckingLoginDetails, setIsCheckingLoginDetails] = useState(false);
+    const [error, setError] = useState("");
+    const [clearError, setClearError] = useState(true);
+    const { LoginUser } = useContext(UserContext);
 
-  const handleCloseCreateModal = () => {
-    setOpenModal(false);
-  };
-
-  let navigate = useNavigate();
-
-  const PerformLogin = ({ userId, loginEmail, loginPassword }) => {
-    const dbRef = ref(db);
-    get(child(dbRef, "users/" + userId))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          if (
-            loginEmail === snapshot.val().email &&
-            loginPassword !== snapshot.val().password
-          ) {
-            setError("Incorrect password. Please try again");
-          } else if (
-            loginEmail === snapshot.val().email &&
-            loginPassword === snapshot.val().password
-          ) {
-           
-         
-            LoginUser(userId, navigate);
-          }
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
- 
-
-  const CheckUser = (e) => {
-    e.preventDefault();
-
-    setIsCheckingLoginDetails(true);
-    setClearError(true);
-
-    const dbRef = ref(db);
-
-    const getData = async () => {
-      const snapshot = await get(
-        child(dbRef, "users"),
-        orderByChild("email"),
-        equalTo(loginEmail)
-      );
-
-      let userExist = false;
-      let userId = "";
-
-      const data = await snapshot.forEach((child) => {
-        if (loginEmail === child.val().email) {
-          userExist = true;
-          userId = child.key;
-        }
-        return userExist;
-      });
-
-      await setIsCheckingLoginDetails(false);
-      await setClearError(false);
-
-      if (userExist) {
-        await setError("");
-        await PerformLogin({ userId, loginEmail, loginPassword });
-      } else {
-        await setError("Account does not exist");
-      }
+    const handleOpenCreateModal = () => {
+      setOpenModal(true);
     };
 
-    getData();
+    const handleCloseCreateModal = () => {
+      setOpenModal(false);
+    };
 
-    // console.log(getData());
+    let navigate = useNavigate();
 
-    // setTimeout(() => {
-    //   get(child(dbRef, "users"), orderByChild("email"), equalTo(loginEmail))
-    //     .then((snapshot) => {
-    //       if (snapshot.exists()) {
-    //         setUserExist(false);
-    //         console.log(snapshot.val());
+    const PerformLogin = ({ userId, loginEmail, loginPassword }) => {
+      const dbRef = ref(db);
+      get(child(dbRef, "users/" + userId))
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            if (
+              loginEmail === snapshot.val().email &&
+              loginPassword !== snapshot.val().password
+            ) {
+              setError("Incorrect password. Please try again");
+            } else if (
+              loginEmail === snapshot.val().email &&
+              loginPassword === snapshot.val().password
+            ) {
+              LoginUser(userId, navigate);
+            }
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
 
-    //         let asdw = snapshot.forEach((child) => {
-    //           if (
-    //             loginEmail === child.val().email &&
-    //             loginPassword === child.val().password
-    //           ) {
-    //             setUserExist(true);
-    //             setIsCheckingLoginDetails(false);
-    //             //   console.log("exist");
-    //           }
-    //         }).then(() => {
+    const CheckUser = (e) => {
+      e.preventDefault();
 
-    //         });
-    //         setIsCheckingLoginDetails(false);
-    //         setClearError(false);
-    //       } else {
-    //         console.log("No data available");
-    //         setIsCheckingLoginDetails(false);
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       setIsCheckingLoginDetails(false);
-    //       console.error(error);
-    //     });
+      setIsCheckingLoginDetails(true);
+      setClearError(true);
 
-    //   console.log(userExist);
-    // }, 5000);
+      const dbRef = ref(db);
+
+      const getData = async () => {
+        const snapshot = await get(
+          child(dbRef, "users"),
+          orderByChild("email"),
+          equalTo(loginEmail)
+        );
+
+        let userExist = false;
+        let userId = "";
+
+        const data = await snapshot.forEach((child) => {
+          if (loginEmail === child.val().email) {
+            userExist = true;
+            userId = child.key;
+          }
+          return userExist;
+        });
+
+        await setIsCheckingLoginDetails(false);
+        await setClearError(false);
+
+        if (userExist) {
+          await setError("");
+          await PerformLogin({ userId, loginEmail, loginPassword });
+        } else {
+          await setError("Account does not exist");
+        }
+      };
+
+      getData();
+
+      // console.log(getData());
+
+      // setTimeout(() => {
+      //   get(child(dbRef, "users"), orderByChild("email"), equalTo(loginEmail))
+      //     .then((snapshot) => {
+      //       if (snapshot.exists()) {
+      //         setUserExist(false);
+      //         console.log(snapshot.val());
+
+      //         let asdw = snapshot.forEach((child) => {
+      //           if (
+      //             loginEmail === child.val().email &&
+      //             loginPassword === child.val().password
+      //           ) {
+      //             setUserExist(true);
+      //             setIsCheckingLoginDetails(false);
+      //             //   console.log("exist");
+      //           }
+      //         }).then(() => {
+
+      //         });
+      //         setIsCheckingLoginDetails(false);
+      //         setClearError(false);
+      //       } else {
+      //         console.log("No data available");
+      //         setIsCheckingLoginDetails(false);
+      //       }
+      //     })
+      //     .catch((error) => {
+      //       setIsCheckingLoginDetails(false);
+      //       console.error(error);
+      //     });
+
+      //   console.log(userExist);
+      // }, 5000);
+    };
+
+    return (
+      <>
+        {openModal ? (
+          <CreateAccount
+            handleOpenCreateModal={handleOpenCreateModal}
+            handleCloseCreateModal={handleCloseCreateModal}
+          />
+        ) : (
+          ""
+        )}
+        <Column>
+          <Row>
+            <div
+              style={{
+                textAlign: "left",
+                margin: "auto",
+                marginTop: "15px",
+                paddingLeft: "80px",
+                paddingRight: "100px",
+
+                justifyContent: "center",
+              }}
+            >
+              <Text01>Fishbook</Text01>
+              <Text02>
+                Connect with fish and the ocean around you on Fishbook.
+              </Text02>
+            </div>
+            <div
+              style={{
+                textAlign: "left",
+                margin: "auto",
+              }}
+            >
+              <LoginCard>
+                {isCheckingLoginDetails ? (
+                  ""
+                ) : clearError ? (
+                  ""
+                ) : (
+                  <p className="mb-1 text-sm text-red-500 font-semibold">
+                    {error}
+                  </p>
+                )}
+                <Form onSubmit={CheckUser}>
+                  <EmailInput
+                    placeholder="Email or phone number"
+                    required
+                    onChange={(e) => setLoginEmail(e.target.value)}
+                  ></EmailInput>
+                  <PasswordInput
+                    placeholder="Password"
+                    required
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    type="password"
+                  ></PasswordInput>
+
+                  {isCheckingLoginDetails ? (
+                    <button
+                      className="mt-3.5 text-medium text-white bg-blue-400"
+                      disabled
+                    >
+                      Logging in
+                    </button>
+                  ) : (
+                    <LoginButton type="submit">Login</LoginButton>
+                  )}
+                </Form>
+
+                <Divider />
+                <p className="mt-5 mb-2">Don't have an account?</p>
+
+                <CreateButton onClick={handleOpenCreateModal}>
+                  Create an account
+                </CreateButton>
+              </LoginCard>
+            </div>
+          </Row>
+
+          <Banner>
+            <Text03>
+              <Text04>Swim, Swim, Swim</Text04>
+            </Text03>
+            <Text>Discover the ocean</Text>
+            <Text06>
+              <span className="font-semibold">
+                A fish is an amazing animal which lives and breathes in water.
+                Fish have been on the Earth for over 500 million years. All fish
+                have a backbone and most breathe through gills and have fins and
+                scales. Fish have excellent senses of sight, touch, taste and
+                many possess a good sense of smell and 'hearing'.
+              </span>
+            </Text06>
+          </Banner>
+        </Column>
+      </>
+    );
   };
 
   return (
     <>
-      {openModal ? (
-        <CreateAccount
-          handleOpenCreateModal={handleOpenCreateModal}
-          handleCloseCreateModal={handleCloseCreateModal}
-        />
-      ) : (
-        ""
-      )}
-
-      <Column>
-        <Row>
-          <div
-            style={{
-              textAlign: "left",
-              margin: "auto",
-              marginTop: "15px",
-              paddingLeft: "80px",
-              paddingRight: "100px",
-
-              justifyContent: "center",
-            }}
-          >
-            <Text01>Fishbook</Text01>
-            <Text02>
-              Connect with fish and the ocean around you on Fishbook.
-            </Text02>
-          </div>
-          <div
-            style={{
-              textAlign: "left",
-              margin: "auto",
-            }}
-          >
-            <LoginCard>
-              {isCheckingLoginDetails ? (
-                ""
-              ) : clearError ? (
-                ""
-              ) : (
-                <p className="mb-1 text-sm text-red-500 font-semibold">
-                  {error}
-                </p>
-              )}
-              <Form onSubmit={CheckUser}>
-                <EmailInput
-                  placeholder="Email or phone number"
-                  required
-                  onChange={(e) => setLoginEmail(e.target.value)}
-                ></EmailInput>
-                <PasswordInput
-                  placeholder="Password"
-                  required
-                  onChange={(e) => setLoginPassword(e.target.value)} type="password"
-                ></PasswordInput>
-
-                {isCheckingLoginDetails ? (
-                  <button
-                    className="mt-3.5 text-medium text-white bg-blue-400"
-                    disabled
-                  >
-                    Logging in
-                  </button>
-                ) : (
-                  <LoginButton type="submit">Login</LoginButton>
-                )}
-              </Form>
-
-              <Divider />
-              <p className="mt-5 mb-2">Don't have an account?</p>
-
-              <CreateButton onClick={handleOpenCreateModal}>
-                Create an account
-              </CreateButton>
-            </LoginCard>
-          </div>
-        </Row>
-
-        <Banner>
-          <Text03>
-            <Text04>Swim, Swim, Swim</Text04>
-          </Text03>
-          <Text>Discover the ocean</Text>
-          <Text06>
-            <span className="font-semibold">
-              A fish is an amazing animal which lives and breathes in water.
-              Fish have been on the Earth for over 500 million years. All fish
-              have a backbone and most breathe through gills and have fins and
-              scales. Fish have excellent senses of sight, touch, taste and many
-              possess a good sense of smell and 'hearing'.
-            </span>
-          </Text06>
-        </Banner>
-      </Column>
+      <LoginForm />
     </>
   );
-}
+};
 
 export default Login;

@@ -1,7 +1,7 @@
 import React, { useReducer, useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
-import db from "../others/firebase";
+import {db} from "../others/firebase";
 import { ref, set, push } from "firebase/database";
 import { toast } from "react-toastify";
 

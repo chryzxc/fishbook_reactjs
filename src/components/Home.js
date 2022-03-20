@@ -9,9 +9,9 @@ import AddStory from "./AddStory";
 import Posts from "./Posts";
 //import { useParams } from "react-router-dom";
 import UserContextProvider, { UserContext } from "../contexts/UserContext";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import useFetchPost from "../hooks/useFetchPost";
-import db from "../others/firebase";
+import { db } from "../others/firebase";
 import {
   ref,
   set,
@@ -102,7 +102,6 @@ const LeftNav = styled.div`
   width: 400px;
   position: fixed;
 
-
   left: 0;
   top: 0;
 `;
@@ -110,7 +109,7 @@ const LeftNav = styled.div`
 const Feeds = styled.div`
   height: auto;
   width: auto;
-  max-width:auto;
+  max-width: auto;
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -118,7 +117,7 @@ const Feeds = styled.div`
   align-items: center;
   justify-content: center;
   padding-bottom: 50px;
- // margin-left: 350px;
+  // margin-left: 350px;
 `;
 
 const FishbookIcon = styled.img`
@@ -199,9 +198,26 @@ const Divider = styled.hr`
 
 const Home = () => {
   //const { userId } = useParams();
-  const { user, FetchData } = useContext(UserContext);
-  const [updateHome, setUpdateHome] = useState(0);
+
   FetchData();
+
+  let navigate = useNavigate();
+  //console.log("token: " + localStorage.getItem("user-token"))
+
+  const { user, FetchData } = useContext(UserContext);
+  const token = localStorage.getItem("user-token");
+
+  
+
+  if (token) {
+    console.log("hastoken" + user.firstname);
+  } else {
+    console.log("notoken");
+  }
+  const [updateHome, setUpdateHome] = useState(0);
+  
+
+ 
 
   const dbRef = ref(db, "posts/");
   const { fetchedData, isStillFetching } = useFetchPost(dbRef, updateHome);

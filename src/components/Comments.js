@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import storyimage from "../assets/2.jpg";
 import profile from "../assets/1.jpg";
 import ReactRoundedImage from "react-rounded-image";
-import db from "../others/firebase";
+import {db} from "../others/firebase";
 import {
   AiOutlineLike,
   AiFillLike,

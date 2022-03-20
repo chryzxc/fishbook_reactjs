@@ -25,7 +25,6 @@ export default function SideMenu() {
   const { user } = useContext(UserContext);
 
 
-  
 
   return (
     <div className="w-[auto] text-left ml-2 m-2 w-[60%]">
@@ -69,7 +68,6 @@ export default function SideMenu() {
         <p className={font}>Not available</p>
       </div>
 
-
       <div className={row}>
         <FcSettings className={icon} />
         <p className={font}>Not available</p>
@@ -82,9 +80,9 @@ export default function SideMenu() {
 
       <div className={row}>
         <div className="p-1 bg-[#E4E6EB] rounded-full">
-        <RiArrowDownSLine className="h-5 w-5 self-center m-auto" />
+          <RiArrowDownSLine className="h-5 w-5 self-center m-auto" />
         </div>
-      
+
         <p className={font}>See more</p>
       </div>
     </div>
