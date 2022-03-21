@@ -199,15 +199,15 @@ const Divider = styled.hr`
 const Home = () => {
   //const { userId } = useParams();
 
-  FetchData();
-
   let navigate = useNavigate();
   //console.log("token: " + localStorage.getItem("user-token"))
 
   const { user, FetchData } = useContext(UserContext);
   const token = localStorage.getItem("user-token");
 
-  
+  console.log("run home");
+
+  FetchData();
 
   if (token) {
     console.log("hastoken" + user.firstname);
@@ -215,9 +215,6 @@ const Home = () => {
     console.log("notoken");
   }
   const [updateHome, setUpdateHome] = useState(0);
-  
-
- 
 
   const dbRef = ref(db, "posts/");
   const { fetchedData, isStillFetching } = useFetchPost(dbRef, updateHome);

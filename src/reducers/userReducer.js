@@ -4,6 +4,7 @@ export const userReducer = (state, action) => {
   switch (action.type) {
 
     case "SET_USER":
+     
       return  {
         id: action.user.id,
         firstname: action.user.firstname,

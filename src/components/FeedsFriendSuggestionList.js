@@ -27,7 +27,7 @@ export default function FeedsFriendSuggestion() {
         </p>
         <div className="inline-flex pl-2 mb-2 ">
 
-          {fetchedData && fetchedData.map((users)=>  <FeedsFriendSuggestionRow users={users}/>)}
+          {fetchedData && fetchedData.map((users)=>  <FeedsFriendSuggestionRow key={users.user_id} users={users}/>)}
 
 
          
