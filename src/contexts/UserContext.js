@@ -17,48 +17,77 @@ import { userReducer } from "../reducers/userReducer";
 export const UserContext = createContext();
 
 const UserContextProvider = (props) => {
-  let token = localStorage.getItem("user-token");
-  const [contextUserId, setContextUserId] = useState(token);
-  console.log("contetxt: " + token);
-
-  const [user, setUser] = useState({
-    id: "",
-    firstname: "",
-    lastname: "",
-    email: "",
-    date_registered: "",
+  const [userContextId, setUserContextId] = useState(() => {
+    let token = localStorage.getItem("user-token");
+    if (token) {
+      return token;
+    }
   });
 
-  //  const [user, dispatch] = useReducer(userReducer, {});
+  // let token = localStorage.getItem("user-token");
+  // const [contextUserId, setContextUserId] = useState(token);
+  // console.log("contetxt: " + token);
 
-  const LoginUser = () => {
+  // const [user, setUser] = useState({
+  //   id: "",
+  //   firstname: "",
+  //   lastname: "",
+  //   email: "",
+  //   date_registered: "",
+  // });
 
-    const dbRef = ref(db);
-    useEffect(() => {
-      get(child(dbRef, "users/" ))
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            // setUser({
-            //   id: snapshot.key,
-            //   firstname: snapshot.val().firstname,
-            //   lastname: snapshot.val().lastname,
-            //   email: snapshot.val().email,
-            //   date_registered: snapshot?.val().date_registered,
-            // });
-         //   navigate("/Home/");
-          }
-        })
-        
-        .catch((error) => {
-          console.error(error);
-        });
-    }, []);
+  const [user, dispatch] = useReducer(userReducer, {});
 
+  // const LoginUser = () => {
+  //   const dbRef = ref(db);
+  //   useEffect(() => {
+  //     get(child(dbRef, "users/"))
+  //       .then((snapshot) => {
+  //         if (snapshot.exists()) {
+  //           // setUser({
+  //           //   id: snapshot.key,
+  //           //   firstname: snapshot.val().firstname,
+  //           //   lastname: snapshot.val().lastname,
+  //           //   email: snapshot.val().email,
+  //           //   date_registered: snapshot?.val().date_registered,
+  //           // });
+  //           //   navigate("/Home/");
+  //         }
+  //       })
 
-   // localStorage.setItem("user-token", userId);
-  //  console.log("set token");
-   // setContextUserId(userId);
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+  //   }, []);
+
+    // localStorage.setItem("user-token", userId);
+    //  console.log("set token");
+    // setContextUserId(userId);
     //navigate("/Home/");
+ // };
+
+  const FetchUserData = (userId, navigate) => {
+    const dbRef = ref(db);
+    get(child(dbRef, "users/" + userId))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          dispatch({
+            type: "SET_USER",
+            user: {
+              id: snapshot.key,
+              firstname: snapshot.val().firstname,
+              lastname: snapshot.val().lastname,
+              email: snapshot.val().email,
+              date_registered: snapshot?.val().date_registered,
+            },
+          });
+
+         // navigate("/Home/");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   // const FetchData = () => {
@@ -67,19 +96,14 @@ const UserContextProvider = (props) => {
   //     get(child(dbRef, "users/" + contextUserId))
   //       .then((snapshot) => {
   //         if (snapshot.exists()) {
-  //           dispatch({
-  //             type: "SET_USER",
-  //             user: {
-  //               id: snapshot.key,
-  //               firstname: snapshot.val().firstname,
-  //               lastname: snapshot.val().lastname,
-  //               email: snapshot.val().email,
-  //               date_registered: snapshot?.val().date_registered,
-  //             },
+  //           setUser({
+  //             id: snapshot.key,
+  //             firstname: snapshot.val().firstname,
+  //             lastname: snapshot.val().lastname,
+  //             email: snapshot.val().email,
+  //             date_registered: snapshot?.val().date_registered,
   //           });
   //         }
-  //         console.log("effect");
-  //         // console.log("user is : " + user.firstname);
   //       })
   //       .catch((error) => {
   //         console.error(error);
@@ -87,29 +111,8 @@ const UserContextProvider = (props) => {
   //   }, []);
   // };
 
-  const FetchData = () => {
-    const dbRef = ref(db);
-    useEffect(() => {
-      get(child(dbRef, "users/" + contextUserId))
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            setUser({
-              id: snapshot.key,
-              firstname: snapshot.val().firstname,
-              lastname: snapshot.val().lastname,
-              email: snapshot.val().email,
-              date_registered: snapshot?.val().date_registered,
-            });
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }, []);
-  };
-
   return (
-    <UserContext.Provider value={{ user, FetchData, LoginUser }}>
+    <UserContext.Provider value={{ user, setUserContextId,FetchUserData }}>
       {props.children}
     </UserContext.Provider>
   );

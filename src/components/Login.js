@@ -216,7 +216,7 @@ const Login = (props) => {
     const [isCheckingLoginDetails, setIsCheckingLoginDetails] = useState(false);
     const [error, setError] = useState("");
     const [clearError, setClearError] = useState(true);
-    const { LoginUser } = useContext(UserContext);
+    const { setUserContextId } = useContext(UserContext);
 
     const handleOpenCreateModal = () => {
       setOpenModal(true);
@@ -228,7 +228,7 @@ const Login = (props) => {
 
     let navigate = useNavigate();
 
-    const PerformLogin = ({ userId, loginEmail, loginPassword }) => {
+    const CheckCredentials = ({ userId, loginEmail, loginPassword }) => {
       const dbRef = ref(db);
       get(child(dbRef, "users/" + userId))
         .then((snapshot) => {
@@ -242,7 +242,13 @@ const Login = (props) => {
               loginEmail === snapshot.val().email &&
               loginPassword === snapshot.val().password
             ) {
-              LoginUser(userId, navigate);
+
+              localStorage.setItem("user-id", userId);
+              setUserContextId(userId);
+              navigate("/Home/");
+
+              
+           
             }
           }
         })
@@ -282,7 +288,7 @@ const Login = (props) => {
 
         if (userExist) {
           await setError("");
-          await PerformLogin({ userId, loginEmail, loginPassword });
+          await CheckCredentials({ userId, loginEmail, loginPassword });
         } else {
           await setError("Account does not exist");
         }

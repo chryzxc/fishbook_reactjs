@@ -197,30 +197,25 @@ const Divider = styled.hr`
 `;
 
 const Home = () => {
-  //const { userId } = useParams();
 
   let navigate = useNavigate();
-  //console.log("token: " + localStorage.getItem("user-token"))
 
-  const { user, FetchData } = useContext(UserContext);
-  const token = localStorage.getItem("user-token");
-
-  console.log("run home");
-
-  FetchData();
-
-  if (token) {
-    console.log("hastoken" + user.firstname);
-  } else {
-    console.log("notoken");
-  }
+  const { user,FetchUserData } = useContext(UserContext);
+ 
   const [updateHome, setUpdateHome] = useState(0);
 
   const dbRef = ref(db, "posts/");
+  
+  useEffect(()=>{
+    FetchUserData(localStorage.getItem("user-id"), navigate);
+  },[]);
+  
+
   const { fetchedData, isStillFetching } = useFetchPost(dbRef, updateHome);
 
   const handleRefresh = () => {
     setUpdateHome(updateHome + 1);
+    console.log("updated");
   };
 
   return (
