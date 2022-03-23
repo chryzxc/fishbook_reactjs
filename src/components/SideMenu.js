@@ -16,6 +16,7 @@ import { RiArrowDownSLine } from "react-icons/ri";
 import profile from "../assets/1.jpg";
 import ReactRoundedImage from "react-rounded-image";
 import { UserContext } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function SideMenu() {
   const font = "ml-2 font-bold text-sm self-center";
@@ -23,19 +24,37 @@ export default function SideMenu() {
   const icon = "h-7 w-7 self-center";
 
   const { user } = useContext(UserContext);
+  let navigate = useNavigate();
 
-
+  const handleVisitProfile = () => {
+    navigate("/Main/Profile");
+  };
+  
 
   return (
-    <div className="w-[auto] text-left ml-2 m-2 w-[60%]">
-      <div className={row}>
-        <ReactRoundedImage
-          image={profile}
-          roundedSize="0"
-          imageWidth="30"
-          imageHeight="30"
-        />
-        <p className={font}>{`${user.firstname} ${user.lastname}`}</p>
+    <div
+      className="w-[auto] text-left ml-[30px] m-1 "
+     
+    >
+      <div className={row}  onClick={() => handleVisitProfile()}>
+        <div className="self-center">
+          <ReactRoundedImage
+            image={profile}
+            roundedSize="0"
+            imageWidth="30"
+            imageHeight="30"
+          />
+        </div>
+
+        <div>
+          <p className={font}>{`${user.firstname} ${user.lastname}`}</p>
+          <p className="ml-[7px] text-neutral-600 text-[12px] font-semibold">
+            Not yet verified
+          </p>
+          <div className=" rounded-md p-[2px] ml-[5px] text-xs font-medium text-blue-500">
+            <p>● Email verification not available</p>
+          </div>
+        </div>
       </div>
 
       <div className={row}>

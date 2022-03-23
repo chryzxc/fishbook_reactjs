@@ -13,7 +13,7 @@ import {
 import { FaGlobeAsia } from "react-icons/fa";
 
 import { TiThumbsUp } from "react-icons/ti";
-import { db , storage} from "../others/firebase";
+import { db, storage } from "../others/firebase";
 import {
   ref,
   set,
@@ -128,7 +128,7 @@ const Posts = ({ post }) => {
   const [showCommentBox, setShowCommentBox] = useState(false);
 
   const [postUpdate, setPostUpdate] = useState(0);
-  const [content , setContent] = useState();
+  const [content, setContent] = useState();
 
   const postRef = ref(db, "posts/" + post.post_id);
 
@@ -160,15 +160,16 @@ const Posts = ({ post }) => {
       // list.forEach((row)=>{
       //   console.log(`ROW of: ${row.key}`);
       // })
-      getDownloadURL(storageRef(storage, `posts/${post.post_id}/${content}.jpeg`))
+      getDownloadURL(
+        storageRef(storage, `posts/${post.post_id}/${content}.jpeg`)
+      )
         .then((url) => {
-          
           setContent(url);
-        //   const img = document.getElementById("postContent");
-        //  img.setAttribute("src", url);
+          //   const img = document.getElementById("postContent");
+          //  img.setAttribute("src", url);
         })
         .catch((error) => {
-          console.log("IMAGEG ERROR : " + error)
+          console.log("IMAGEG ERROR : " + error);
         });
     }
 
@@ -337,7 +338,19 @@ const Posts = ({ post }) => {
             ></ReactRoundedImage>
           </div>
           <div>
-            <Name className="clickable-text">{firstname + " " + lastname}</Name>
+            {post.feeling ? (
+              <div className="flex flex-row">
+                <Name className="clickable-text">
+                  {firstname + " " + lastname}
+                </Name>
+                <p className="ml-1">{`is ${post.feeling}`}</p>
+              </div>
+            ) : (
+              <Name className="clickable-text">
+                {firstname + " " + lastname}
+              </Name>
+            )}
+
             <div className="flex flex-row text-gray-600">
               <TimeLabel>
                 {/* {format(
@@ -360,9 +373,7 @@ const Posts = ({ post }) => {
       </RowBottom>
       <Caption className="text-gray-600 mb-3 text-sm">{post.caption}</Caption>
 
-      {post.contents ?  <PostImage  alt="post" src={content}></PostImage> : ""}
-
-     
+      {post.contents ? <PostImage alt="post" src={content}></PostImage> : ""}
 
       <div>
         <RowBottom className="mt-2">

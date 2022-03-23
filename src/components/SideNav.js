@@ -9,6 +9,7 @@ import {
   RiApps2Fill,
 } from "react-icons/ri";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const spaceAbove = "mt-5";
 
@@ -20,9 +21,9 @@ const Container = styled.div`
 
   background-color: white;
   margin: auto;
-  height: auto;
-  width: 300px;
-  margin-left: 65px;
+  height: 100vh;
+  //width: 300px;
+ // margin-left: 65px;
   min-height: auto;
   min-width: 300px;
   margin-top: 5px;
@@ -32,8 +33,10 @@ const Container = styled.div`
 
 const iconPressed = "";
 
-export default function SideNav() {
-  const [showContainer, setShowContainer] = useState("home");
+ const SideNav = ({showContainer,setShowContainer}) => {
+  let navigate = useNavigate();
+ // const [showContainer, setShowContainer] = useState("home");
+
 
   const NavButtons = (props) => {
     if (props === showContainer) {
@@ -43,7 +46,7 @@ export default function SideNav() {
     }
   };
 
-  useEffect(() => {}, [showContainer]);
+  // useEffect(() => {}, [showContainer]);
 
   const navigationListener = (id) => {
     switch (id) {
@@ -71,8 +74,8 @@ export default function SideNav() {
   };
 
   return (
-    <div className="p-0 m-0 overflow-hidden">
-      {showContainer === "messenger" ? (
+    <div className="p-0 m-0 overflow-hidden h-[100vh]">
+      {/* {showContainer === "messenger" ? (
         <div>
           <Container>
             <div className="p-3">
@@ -100,12 +103,12 @@ export default function SideNav() {
         </div>
       ) : (
         ""
-      )}
+      )} */}
 
       <div className="bg-white w-auto shadow-md text-[#050505] h-full overflow-hidden">
         <ul className="m-1 p-2 items-center justify-center">
           <li>
-            <div className="m-0.5">
+            <div className="m-0.5" onClick={() => navigate("/Main")}>
               <ReactRoundedImage
                 image={logo}
                 roundedSize="0"
@@ -155,3 +158,4 @@ export default function SideNav() {
     </div>
   );
 }
+export default SideNav;

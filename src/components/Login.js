@@ -245,7 +245,7 @@ const Login = (props) => {
 
               localStorage.setItem("user-id", userId);
               setUserContextId(userId);
-              navigate("/Home/");
+              navigate("/Main/");
 
               
            

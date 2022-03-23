@@ -70,12 +70,12 @@ const Container = styled.div`
 `;
 
 const Body = styled.div`
-  width: 100%;
+  width: auto;
   height: auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
+ overflow:hidden;
   background-color: #f0f2f5;
 `;
 
@@ -97,27 +97,33 @@ const LeftNav = styled.div`
   display: fixed;
   float: left;
   display: block;
-  overflow: auto;
+  overflow: hidden;
   height: 100%;
-  width: 400px;
+  width:auto;
   position: fixed;
-
+  bottom:0px;
+  margin-left:50px;
   left: 0;
-  top: 0;
+
+  z-index: 0;
 `;
 
 const Feeds = styled.div`
   height: auto;
-  width: auto;
-  max-width: auto;
+  padding:auto;
   display: flex;
   flex-direction: column;
   text-align: center;
   margin: auto;
+  overflow: hidden;
+ 
+  
   align-items: center;
   justify-content: center;
   padding-bottom: 50px;
+ // padding-right: 50px;
   // margin-left: 350px;
+  z-index:0;
 `;
 
 const FishbookIcon = styled.img`
@@ -220,32 +226,10 @@ const Home = () => {
 
   return (
     <Main>
-      {/* <NavBar>
-        <Container>
-          <FishbookIcon src={logo}></FishbookIcon>
-          <SearchBar>
-            <Search placeholder="Search fish" />
-          </SearchBar>
-        </Container>
-        <Container>
-          <h1
-            style={{
-              fontSize: "35px",
-              color: "#1877f2",
-              fontWeight: "bolder",
-            }}
-          >
-            Fishbook
-          </h1>
-        </Container>
-        <Container className="text-gray-600 font-bold">
-          {user.firstname + "  " + user.lastname}
-        </Container>
-      </NavBar> */}
       <Body>
         <LeftNav>
           <div className="flex flex-row h-[100%]">
-            <SideNav />
+            {/* <SideNav /> */}
             <SideMenu />
           </div>
 

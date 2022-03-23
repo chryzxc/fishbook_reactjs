@@ -15,12 +15,15 @@ const useFetchPost = (dbRef,updateHome) => {
             const dataVal = data.val();
 
             fetchedData.push({
+
               post_id: data.key,
               user_id: dataVal.user_id,
               caption: dataVal.caption,
               
               contents: dataVal.contents,
               date_posted: dataVal.date_posted,
+              feeling: dataVal?.feeling,
+
             });
           });
 

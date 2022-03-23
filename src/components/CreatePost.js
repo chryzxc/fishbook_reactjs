@@ -107,9 +107,13 @@ const CreatePost = ({ handleRefresh }) => {
     return false;
   };
 
-  const handleFeeling = ({ icon, feeling }) => {
-    setFeeling(`${icon} feeling ${feeling}`);
-    
+  const handleFeeling = ({ postEmoji, postFeeling }) => {
+    if (feeling === `${postEmoji} feeling ${postFeeling}`) {
+      setFeeling("");
+    } else {
+      setFeeling(`${postEmoji} feeling ${postFeeling}`);
+    }
+
     setOpenModal(false);
   };
 
@@ -144,6 +148,7 @@ const CreatePost = ({ handleRefresh }) => {
       user_id: user.id,
       caption: caption,
       date_posted: Date.now(),
+      feeling: feeling,
     };
 
     const dbRef = ref(db, "posts/");
@@ -186,58 +191,74 @@ const CreatePost = ({ handleRefresh }) => {
 
   const FeelingModal = () => {
     const feelingList = [
-      { icon: "😀", feeling: "happy" },
-      { icon: "🥰", feeling: "loved" },
-      { icon: "😍", feeling: "lovely" },
-      { icon: "🤩", feeling: "excited" },
-      { icon: "😵", feeling: "crazy" },
-      { icon: "😌", feeling: "blissful" },
-      { icon: "😛", feeling: "blessed" },
-      { icon: "😔", feeling: "sad" },
-      { icon: "😊", feeling: "thankful" },
-      { icon: "😍", feeling: "in love" },
-      { icon: "😘", feeling: "grateful" },
-      { icon: "😇", feeling: "fantastic" },
-      { icon: "😛", feeling: "silly" },
-      { icon: "😊", feeling: "wonderful" },
-      { icon: "😅", feeling: "amused" },
-      { icon: "🤔", feeling: "positive" },
-      { icon: "😏", feeling: "hopeful" },
-      { icon: "🤗", feeling: "tired" },
-      { icon: "🤭", feeling: "festive" },
-      { icon: "😝", feeling: "cool" },
-      { icon: "😔", feeling: "relaxed" },
-      { icon: "😕", feeling: "chill" },
-      { icon: "🤧", feeling: "joyful" },
-      { icon: "😯", feeling: "motivated" },
-      { icon: "🥺", feeling: "proud" },
-      { icon: "🥺", feeling: "thoughtful" },
-      { icon: "🥺", feeling: "nostalgic" },
-      { icon: "🥺", feeling: "sick" },
-      { icon: "🥺", feeling: "drained" },
-      { icon: "🥺", feeling: "confident" },
-      { icon: "🥺", feeling: "motivated" },
-      { icon: "🥺", feeling: "alone" },
-      { icon: "🥺", feeling: "ok" },
-      { icon: "🥺", feeling: "angry" },
-      { icon: "🥺", feeling: "delighted" },
-      { icon: "🥺", feeling: "emotional" },
-      { icon: "🥺", feeling: "aweosme" },
-      { icon: "🥺", feeling: "aweosme" },
+      { postEmoji: "😀", postFeeling: "happy" },
+      { postEmoji: "🥰", postFeeling: "loved" },
+      { postEmoji: "😍", postFeeling: "lovely" },
+      { postEmoji: "🤩", postFeeling: "excited" },
+      { postEmoji: "😵", postFeeling: "crazy" },
+      { postEmoji: "😌", postFeeling: "blissful" },
+      { postEmoji: "😛", postFeeling: "blessed" },
+      { postEmoji: "😔", postFeeling: "sad" },
+      { postEmoji: "😊", postFeeling: "thankful" },
+      { postEmoji: "😍", postFeeling: "in love" },
+      { postEmoji: "😘", postFeeling: "grateful" },
+      { postEmoji: "😇", postFeeling: "fantastic" },
+      { postEmoji: "😛", postFeeling: "silly" },
+      { postEmoji: "😊", postFeeling: "wonderful" },
+      { postEmoji: "😅", postFeeling: "amused" },
+      { postEmoji: "🤔", postFeeling: "positive" },
+      { postEmoji: "😏", postFeeling: "hopeful" },
+      { postEmoji: "🤗", postFeeling: "tired" },
+      { postEmoji: "🤭", postFeeling: "festive" },
+      { postEmoji: "😝", postFeeling: "cool" },
+      { postEmoji: "😔", postFeeling: "relaxed" },
+      { postEmoji: "😕", postFeeling: "chill" },
+      { postEmoji: "🤧", postFeeling: "joyful" },
+      { postEmoji: "😯", postFeeling: "motivated" },
+      { postEmoji: "🥺", postFeeling: "proud" },
+      { postEmoji: "🥺", postFeeling: "thoughtful" },
+      { postEmoji: "🥺", postFeeling: "nostalgic" },
+      { postEmoji: "🥺", postFeeling: "sick" },
+      { postEmoji: "🥺", postFeeling: "drained" },
+      { postEmoji: "🥺", postFeeling: "confident" },
+      { postEmoji: "🥺", postFeeling: "motivated" },
+      { postEmoji: "🥺", postFeeling: "alone" },
+      { postEmoji: "🥺", postFeeling: "ok" },
+      { postEmoji: "🥺", postFeeling: "angry" },
+      { postEmoji: "🥺", postFeeling: "delighted" },
+      { postEmoji: "🥺", postFeeling: "emotional" },
+      { postEmoji: "🥺", postFeeling: "aweosme" },
+      { postEmoji: "🥺", postFeeling: "aweosme" },
     ];
 
-    const Feelings = ({ icon, feeling }) => {
+    const Feelings = ({ postEmoji, postFeeling }) => {
+      const selectedFeeling = `${postEmoji} feeling ${postFeeling}`;
       return (
-        <div
-          className="flex flex-row m-1 p-3 hover:bg-slate-200 rounded-2xl"
-          onClick={() => handleFeeling({ icon, feeling })}
-        >
-          <div className="p-2 bg-[#E4E6EB] rounded-full">
-            <p className="text-xl">{icon}</p>
-          </div>
+        <>
+          {feeling === selectedFeeling ? (
+            <div
+              className="flex flex-row mt-2 mb-2 mr-1 ml-1 p-3 rounded-2xl bg-slate-200 hover:bg-slate-200 "
+              onClick={() => handleFeeling({ postEmoji, postFeeling })}
+            >
+              <div className="p-2 bg-[#E4E6EB] rounded-full">
+                <p className="text-xl">{postEmoji}</p>
+              </div>
 
-          <li className="self-center ml-2">{feeling}</li>
-        </div>
+              <li className="self-center ml-2">{postFeeling}</li>
+            </div>
+          ) : (
+            <div
+              className="flex flex-row m-1 p-3 hover:bg-slate-200 rounded-2xl"
+              onClick={() => handleFeeling({ postEmoji, postFeeling })}
+            >
+              <div className="p-2 bg-[#E4E6EB] rounded-full">
+                <p className="text-xl">{postEmoji}</p>
+              </div>
+
+              <li className="self-center ml-2">{postFeeling}</li>
+            </div>
+          )}
+        </>
       );
     };
 
@@ -257,7 +278,10 @@ const CreatePost = ({ handleRefresh }) => {
             <Divider></Divider>
             <FeelingList className="p-2">
               {feelingList.map((feeling) => (
-                <Feelings icon={feeling.icon} feeling={feeling.feeling} />
+                <Feelings
+                  postEmoji={feeling.postEmoji}
+                  postFeeling={feeling.postFeeling}
+                />
               ))}
             </FeelingList>
           </div>
@@ -297,9 +321,9 @@ const CreatePost = ({ handleRefresh }) => {
                   <p className="font-semibold text-sm ml-1">{`${user.firstname} ${user.lastname}`}</p>
                 )}
 
-                <div className="rounded-lg bg-[#E4E6E9] p-1.5  w-fit h-auto text-xs font-medium flex flex-row justify-center">
-                  <FaGlobeAsia className="self-center"/>
-                  <p className="text-center ml-[3px]">Public</p>
+                <div className="mt-[2px] rounded-lg bg-[#E4E6E9] pt-1 pb-1 pl-2 pr-2  w-fit h-auto text-xs font-medium flex flex-row justify-center">
+                  <FaGlobeAsia className="self-center" />
+                  <p className="text-center ml-[3px] font-semibold">Public</p>
                 </div>
               </div>
             </div>
@@ -330,7 +354,7 @@ const CreatePost = ({ handleRefresh }) => {
             </WritePost>
           </div>
           <div>
-            <Divider />
+            <Divider className="ml-3 mr-3"/>
           </div>
           <div className="ml-4 mr-4 mb-5 mt-5">
             <div className="flex flex-row justify-around">
