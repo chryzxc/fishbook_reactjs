@@ -10,7 +10,7 @@ import { db, storage } from "../others/firebase";
 import { RiCloseFill } from "react-icons/ri";
 import Modal from "react-modal";
 import { uploadBytes, ref as storageRef } from "firebase/storage";
-
+import { FaGlobeAsia } from "react-icons/fa";
 // Create a root reference
 
 const CreatePostCard = styled.div`
@@ -41,20 +41,20 @@ const Row = styled.div`
   height: auto;
 
   padding-bottom: 5px;
-  justify-content: center;
+  // justify-content: center;
 
   //padding: 5px;
 `;
 
 const WritePost = styled.div`
-  width: 85%;
+  width: auto;
   background-color: #f0f2f5;
-  border-radius: 25px;
+  border-radius: 15px;
   height: auto;
   padding: 10px;
   font-size: large;
   color: #65676b;
-  margin-left: 10px;
+  margin: 10px;
 
   &:hover {
     background-color: #e4e6e9;
@@ -88,6 +88,8 @@ const CreatePost = ({ handleRefresh }) => {
   const [content, setContent] = useState();
   const [contentName, setContentName] = useState();
 
+  const [feeling, setFeeling] = useState();
+
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenFeelingModal = () => {
@@ -103,6 +105,12 @@ const CreatePost = ({ handleRefresh }) => {
   const handleContent = (e) => {
     inputContent.click();
     return false;
+  };
+
+  const handleFeeling = ({ icon, feeling }) => {
+    setFeeling(`${icon} feeling ${feeling}`);
+    
+    setOpenModal(false);
   };
 
   const updateContents = (e) => {
@@ -124,7 +132,7 @@ const CreatePost = ({ handleRefresh }) => {
       left: "50%",
       right: "20px",
       bottom: "20%",
-
+      ariaHideApp: false,
       transform: "translate(-50%, -30%)",
     },
   };
@@ -220,7 +228,10 @@ const CreatePost = ({ handleRefresh }) => {
 
     const Feelings = ({ icon, feeling }) => {
       return (
-        <div className="flex flex-row m-1 p-3 hover:bg-slate-200 rounded-2xl">
+        <div
+          className="flex flex-row m-1 p-3 hover:bg-slate-200 rounded-2xl"
+          onClick={() => handleFeeling({ icon, feeling })}
+        >
           <div className="p-2 bg-[#E4E6EB] rounded-full">
             <p className="text-xl">{icon}</p>
           </div>
@@ -229,6 +240,7 @@ const CreatePost = ({ handleRefresh }) => {
         </div>
       );
     };
+
     return (
       <div>
         <Modal
@@ -268,41 +280,54 @@ const CreatePost = ({ handleRefresh }) => {
       <form onSubmit={submitPost}>
         <CreatePostCard>
           <div className="mt-5">
-            <Row>
-              <div className="mt-3">
-                <ReactRoundedImage
-                  image={profile}
-                  roundedSize="0"
-                  imageWidth="40"
-                  imageHeight="40"
-                ></ReactRoundedImage>
-              </div>
-
-              <WritePost>
-                <TextArea
-                  placeholder={"What's on your mind, " + user.firstname + "?"}
-                  value={caption}
-                  onChange={(e) => {
-                    handleCaptionListener(e);
-                  }}
-                ></TextArea>
-                {content ? (
-                  <div className="ml-1 flex flex-row bg-[#e0e1e4] rounded-full w-fit pl-2 pr-2 pt-1 pb-1 hover:bg-[#fff]">
-                    <p className=" text-xs font-bold text-left">
-                      Attachment: {contentName}
-                    </p>
-                    <div
-                      className="ml-1 bg-[#F4556F] text-white rounded-full"
-                      onClick={() => setContent()}
-                    >
-                      <RiCloseFill className="h-4 w-4" />
-                    </div>
+            <div className="mt-3 ml-3 flex flex-row">
+              <ReactRoundedImage
+                image={profile}
+                roundedSize="0"
+                imageWidth="50"
+                imageHeight="50"
+              ></ReactRoundedImage>
+              <div className="ml-2">
+                {feeling ? (
+                  <div className="flex flex-row">
+                    <p className="font-semibold text-sm ml-1">{`${user.firstname} ${user.lastname}`}</p>
+                    <p className="ml-1 text-center text-sm">{`is ${feeling}`}</p>
                   </div>
                 ) : (
-                  ""
+                  <p className="font-semibold text-sm ml-1">{`${user.firstname} ${user.lastname}`}</p>
                 )}
-              </WritePost>
-            </Row>
+
+                <div className="rounded-lg bg-[#E4E6E9] p-1.5  w-fit h-auto text-xs font-medium flex flex-row justify-center">
+                  <FaGlobeAsia className="self-center"/>
+                  <p className="text-center ml-[3px]">Public</p>
+                </div>
+              </div>
+            </div>
+
+            <WritePost>
+              <TextArea
+                placeholder={"What's on your mind, " + user.firstname + "?"}
+                value={caption}
+                onChange={(e) => {
+                  handleCaptionListener(e);
+                }}
+              ></TextArea>
+              {content ? (
+                <div className="ml-1 flex flex-row bg-[#e0e1e4] rounded-full w-fit pl-2 pr-2 pt-1 pb-1 hover:bg-[#fff]">
+                  <p className=" text-xs font-bold text-left">
+                    Attachment: {contentName}
+                  </p>
+                  <div
+                    className="ml-1 bg-[#F4556F] text-white rounded-full"
+                    onClick={() => setContent()}
+                  >
+                    <RiCloseFill className="h-4 w-4" />
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+            </WritePost>
           </div>
           <div>
             <Divider />
