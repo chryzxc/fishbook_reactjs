@@ -74,7 +74,7 @@ export default function Replies({ replyData }) {
             >
               Reply
             </p> */}
-            <p className="ml-4"><DateFormat date={datePosted}/></p>
+            <p className="ml-4 font-normal text-gray-600"><DateFormat date={datePosted}/></p>
           </div>
         </div>
       </div>

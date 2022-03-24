@@ -56,7 +56,7 @@ const Main = () => {
             showContainer={showContainer}
           />
         </Float>
-        <div className="w-[auto]">
+        <div className="w-[100%]">
           {showContainer === "messenger" ? (
             <div>
               <Container>

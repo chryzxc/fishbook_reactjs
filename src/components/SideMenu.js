@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
-import logo from "../assets/facebook.png";
+
+
 import {
   FcBarChart,
   FcBearish,
@@ -13,7 +14,8 @@ import {
   FcBullish,
 } from "react-icons/fc";
 import { RiArrowDownSLine } from "react-icons/ri";
-import profile from "../assets/1.jpg";
+
+import profile from "../assets/github.jpg";
 import ReactRoundedImage from "react-rounded-image";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";

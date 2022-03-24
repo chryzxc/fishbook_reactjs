@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactRoundedImage from "react-rounded-image";
+
 import logo from "../assets/facebook.png";
 import {
   RiHome3Fill,
@@ -16,19 +17,15 @@ const spaceAbove = "mt-5";
 const icon =
   "p-1 m-auto rounded-full bg-[#E4E6E9] h-10 w-10 relative hover:bg-[#C1C1C1]";
 
+  // className="p-0 m-0 overflow-hidden h-[100vh]"
+
 const Container = styled.div`
   position: fixed;
-
   background-color: white;
-  margin: auto;
+  margin: 0;
   height: 100vh;
-  //width: 300px;
- // margin-left: 65px;
-  min-height: auto;
-  min-width: 300px;
-  margin-top: 5px;
-  border-radius: 7px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding:0;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 1px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const iconPressed = "";
@@ -74,7 +71,7 @@ const iconPressed = "";
   };
 
   return (
-    <div className="p-0 m-0 overflow-hidden h-[100vh]">
+    <Container >
       {/* {showContainer === "messenger" ? (
         <div>
           <Container>
@@ -155,7 +152,7 @@ const iconPressed = "";
           </li>
         </ul>
       </div>
-    </div>
+    </Container>
   );
 }
 export default SideNav;

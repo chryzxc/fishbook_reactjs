@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import storyimage from "../assets/2.jpg";
-import profile from "../assets/profile.jpg";
+import profile from "../assets/github.jpg";
+
 import ReactRoundedImage from "react-rounded-image";
 
 const Story = styled.div`
@@ -56,7 +57,7 @@ export default function Stories() {
           imageWidth="40"
           imageHeight="40"
           roundedColor="#166ADA"
-          roundedSize="7"
+          roundedSize="5"
         ></ReactRoundedImage>
       </ProfileContainer>
     </Story>

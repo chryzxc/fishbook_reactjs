@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import ReactRoundedImage from "react-rounded-image";
-import profile from "../assets/1.jpg";
+
+import profile from "../assets/github.jpg";
 import { UserContext } from "../contexts/UserContext";
 import storyimage from "../assets/2.jpg";
 import { FaRegImages, FaRegSmile, FaVideo, FcGallery } from "react-icons/fa";
@@ -13,16 +14,18 @@ import { uploadBytes, ref as storageRef } from "firebase/storage";
 import { FaGlobeAsia } from "react-icons/fa";
 // Create a root reference
 
-const CreatePostCard = styled.div`
+const CreatePostCard =  styled.div`
   overflow-y: hidden;
   overflow-x: hidden;
   background-color: white;
-  margin: auto;
+  margin: 5px;
   height: auto;
-  width: 37vw;
+  width:  ${props => props.data.width};
+
+ // width: 37vw;
   min-height: auto;
-  min-width: 37vw;
-  margin-top: 20px;
+
+  margin-top: 10px;
   border-radius: 10px;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
 `;
@@ -63,7 +66,7 @@ const WritePost = styled.div`
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: auto;
+  height: 40px;
   padding: 5px;
   box-sizing: border-box;
   border: none;
@@ -78,7 +81,12 @@ const FeelingList = styled.ul`
   -moz-columns: 2;
 `;
 
-const CreatePost = ({ handleRefresh }) => {
+const CreatePost = ({ handleRefresh , data} ) => {
+  
+  
+
+  
+
   const { user } = useContext(UserContext);
   const [caption, setCaption] = useState("");
 
@@ -302,10 +310,11 @@ const CreatePost = ({ handleRefresh }) => {
       )}
 
       <form onSubmit={submitPost}>
-        <CreatePostCard>
+        <CreatePostCard data={data}>
           <div className="mt-5">
             <div className="mt-3 ml-3 flex flex-row">
               <ReactRoundedImage
+              
                 image={profile}
                 roundedSize="0"
                 imageWidth="50"
@@ -321,9 +330,9 @@ const CreatePost = ({ handleRefresh }) => {
                   <p className="font-semibold text-sm ml-1">{`${user.firstname} ${user.lastname}`}</p>
                 )}
 
-                <div className="mt-[2px] rounded-lg bg-[#E4E6E9] pt-1 pb-1 pl-2 pr-2  w-fit h-auto text-xs font-medium flex flex-row justify-center">
+                <div className="text-neutral-700 mt-[2px] rounded-lg bg-[#E4E6E9] pt-1 pb-1 pl-2 pr-2  w-fit h-auto text-xs font-medium flex flex-row justify-center">
                   <FaGlobeAsia className="self-center" />
-                  <p className="text-center ml-[3px] font-semibold">Public</p>
+                  <p className="text-center ml-[3px] font-semibold ">Public</p>
                 </div>
               </div>
             </div>
@@ -427,5 +436,6 @@ const CreatePost = ({ handleRefresh }) => {
     </div>
   );
 };
+
 
 export default CreatePost;

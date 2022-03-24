@@ -12,7 +12,8 @@ export default function DateFormat({date}) {
 
       return formatDistanceStrict(new Date(date), new Date(), {
       
-        roundingMethod: 'ceil'
+        roundingMethod: 'ceil',
+    
       })
 
 }

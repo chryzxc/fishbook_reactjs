@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import storyimage from "../assets/2.jpg";
-import profile from "../assets/1.jpg";
+import profile from "../assets/github.jpg";
 import ReactRoundedImage from "react-rounded-image";
 import {
   AiOutlineLike,
@@ -32,7 +32,7 @@ import {
   remove,
 } from "firebase/database";
 import { UserContext } from "../contexts/UserContext";
-import { format, formatDistance, subDays } from "date-fns";
+import { format, formatDistance, subDays ,formatDistanceStrict} from "date-fns";
 import Comments from "./Comments";
 import DateFormat from "../utils/DateFormat";
 import {
@@ -73,7 +73,7 @@ const RowBottom = styled.div`
 
 const Name = styled.p`
   font-weight: bold;
-  margin-top: -2px;
+ // margin-top: -2px;
   font-size: 14px;
   margin-left: 10px;
   text-align: left;
@@ -129,6 +129,8 @@ const Posts = ({ post }) => {
 
   const [postUpdate, setPostUpdate] = useState(0);
   const [content, setContent] = useState();
+
+  
 
   const postRef = ref(db, "posts/" + post.post_id);
 
@@ -340,10 +342,10 @@ const Posts = ({ post }) => {
           <div>
             {post.feeling ? (
               <div className="flex flex-row">
-                <Name className="clickable-text">
+                <Name className="clickable-text justify-self-center">
                   {firstname + " " + lastname}
                 </Name>
-                <p className="ml-1">{`is ${post.feeling}`}</p>
+                <p className="ml-1 justify-self-center">{`is ${post.feeling}`}</p>
               </div>
             ) : (
               <Name className="clickable-text">
@@ -357,10 +359,16 @@ const Posts = ({ post }) => {
                 new Date(post.date_posted),
                 "hh:m a • MMM dd • eee"
               ).toString()} */}
-                {formatDistance(new Date(post.date_posted), new Date(), {
-                  addSuffix: true,
-                })}{" "}
-                • {/* <DateFormat date={post.date_posted} /> • */}
+              {formatDistanceStrict(new Date(post.date_posted), new Date(), {
+      
+      roundingMethod: 'ceil',
+      addSuffix: true,
+  
+    })}{" "}
+                {/* {formatDistance(new Date(post.date_posted), new Date(), {
+                  addSuffix: true
+                })}{" "} */}
+                •{/*  <DateFormat date={post.date_posted} /> • */}
               </TimeLabel>
               <FaGlobeAsia className="self-center ml-1" />
             </div>
@@ -371,7 +379,7 @@ const Posts = ({ post }) => {
           <h1>Not friends</h1>
         </div>
       </RowBottom>
-      <Caption className="text-gray-600 mb-3 text-sm">{post.caption}</Caption>
+      <Caption className="text-gray-600 mb-3 text-[16px]">{post.caption}</Caption>
 
       {post.contents ? <PostImage alt="post" src={content}></PostImage> : ""}
 
