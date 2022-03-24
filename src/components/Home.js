@@ -32,7 +32,8 @@ import SideMenu from "./SideMenu";
 const Main = styled.div`
   height: 100%;
   width: 100%;
-  font-size: small;
+  
+  font-size: 14px;
   background-color: #f0f2f5;
   position: absolute;
   min-width: 80vh;
@@ -75,7 +76,7 @@ const Body = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
- overflow:hidden;
+  overflow: hidden;
   background-color: #f0f2f5;
 `;
 
@@ -99,10 +100,10 @@ const LeftNav = styled.div`
   display: block;
   overflow: hidden;
   height: 100%;
-  width:auto;
+  width: auto;
   position: fixed;
-  bottom:0px;
-  margin-left:50px;
+  bottom: 0px;
+  margin-left: 50px;
   left: 0;
 
   z-index: 0;
@@ -110,20 +111,19 @@ const LeftNav = styled.div`
 
 const Feeds = styled.div`
   height: auto;
-  padding:auto;
+  padding: auto;
   display: flex;
   flex-direction: column;
   text-align: center;
   margin: auto;
   overflow: hidden;
- 
-  
+
   align-items: center;
   justify-content: center;
   padding-bottom: 50px;
- // padding-right: 50px;
+  // padding-right: 50px;
   // margin-left: 350px;
-  z-index:0;
+  z-index: 0;
 `;
 
 const FishbookIcon = styled.img`
@@ -182,6 +182,7 @@ const CreatePostContainer = styled.div`
   /* padding-bottom: 10px; */
   padding-left: 100px;
   padding-right: 100px;
+  margin-top:10px;
 `;
 
 const PostsContainer = styled.div`
@@ -203,26 +204,25 @@ const Divider = styled.hr`
 `;
 
 const Home = () => {
-
   let navigate = useNavigate();
 
-  const { user,FetchUserData } = useContext(UserContext);
- 
+  const { user, FetchUserData } = useContext(UserContext);
+
   const [updateHome, setUpdateHome] = useState(0);
 
   const dbRef = ref(db, "posts/");
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     FetchUserData(localStorage.getItem("user-id"), navigate);
-  },[]);
-  
+  }, []);
 
   const { fetchedData, isStillFetching } = useFetchPost(dbRef, updateHome);
 
   const handleRefresh = () => {
     setUpdateHome(updateHome + 1);
-    console.log("updated");
+   
   };
+
 
   return (
     <Main>
@@ -232,33 +232,6 @@ const Home = () => {
             {/* <SideNav /> */}
             <SideMenu />
           </div>
-
-          {/* <Row>
-
-            <ReactRoundedImage
-              image={fish}
-              roundedSize="0"
-              imageWidth="40"
-              imageHeight="40"
-            />
-            <UserDisplayName className="text-gray-600 font-bold">
-              {user.firstname + "  " + user.lastname}
-            </UserDisplayName>
-          </Row>
-
-          <div className="ml-3 mt-5">
-            <ul>
-              <p>Friends · 0</p>
-
-              <List></List>
-              <List>Most Recent</List>
-              <List>Watch</List>
-              <List>Groups</List>
-              <List>Marketplace</List>
-              <List>Memories</List>
-              <List>Saved</List>
-            </ul>
-          </div> */}
         </LeftNav>
         <Feeds>
           <StoriesContainer>
@@ -270,7 +243,13 @@ const Home = () => {
           </StoriesContainer>
 
           <CreatePostContainer>
-            <CreatePost handleRefresh={handleRefresh} />
+            <CreatePost
+              data={{
+                width: "37vw",
+                minWidth: "37vw",
+              }}
+              handleRefresh={handleRefresh}
+            />
           </CreatePostContainer>
 
           <FeedsFriendSuggestionList />
