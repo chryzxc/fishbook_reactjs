@@ -29,7 +29,7 @@ export default function SideMenu() {
   let navigate = useNavigate();
 
   const handleVisitProfile = () => {
-    navigate("/Main/Profile");
+    navigate("/Main/Profile/"+user.id);
   };
   
 

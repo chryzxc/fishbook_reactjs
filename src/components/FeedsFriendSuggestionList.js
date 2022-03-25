@@ -16,22 +16,20 @@ const Container = styled.div`
 `;
 
 export default function FeedsFriendSuggestion() {
-
   const { fetchedData } = useFetchSuggestedFriends();
-  
+
   return (
     <div className="pl-[100px] pr-[100px] m-auto p-1 overflow-hidden">
-      <Container className="overflow-hidden">
+      <Container className="overflow-y-hidden overflow-x-auto ">
         <p className="text-left text-neutral-500 font-semibold text-[15px] m-4">
           People you may know
         </p>
-        <div className="inline-flex pl-2 mb-2 ">
-
-          {fetchedData && fetchedData.map((users)=>  <FeedsFriendSuggestionRow key={users.user_id} users={users}/>)}
-
-
-         
-         
+       
+        <div className="inline-flex pl-2 mb-2 pr-2">
+          {fetchedData &&
+            fetchedData.map((users) => (
+              <FeedsFriendSuggestionRow key={users.user_id} users={users} />
+            ))}
         </div>
       </Container>
     </div>

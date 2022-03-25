@@ -6,8 +6,10 @@ import SideMenu from "./SideMenu";
 import Profile from "./Profile";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
+import MessengerSection from "./MessengerSection";
+import NotificationSection from "./NotificationSection";
 
-const Float = styled.div`
+const FloatingSideNav = styled.div`
   // background-color: brown;
   // display: fixed;
   float: left;
@@ -24,22 +26,26 @@ const Float = styled.div`
   // top: 0;
 `;
 
-const Container = styled.div`
+const FloatingContainer = styled.div`
   position: fixed;
-  width: auto;
-
+ 
   background-color: white;
   margin: auto;
-  height: auto;
-  //width: 300px;
+ 
+  height: 98%;
+  width: 380px;
   margin-left: 65px;
   min-height: auto;
-  min-width: 300px;
+  min-width: 350px;
   margin-top: 5px;
   border-radius: 7px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
+  padding: 5px;
   z-index: 2;
+  overflow: auto ;
+`;
+
+const FloatingMessageSection = styled.div`
 `;
 
 const Main = () => {
@@ -50,38 +56,30 @@ const Main = () => {
   return (
     <UserContextProvider>
       <div className="flex flex-row">
-        <Float>
+
+        <FloatingSideNav>
           <SideNav
             setShowContainer={setShowContainer}
             showContainer={showContainer}
           />
-        </Float>
+        </FloatingSideNav>
         <div className="w-[100%]">
           {showContainer === "messenger" ? (
-            <div>
-              <Container>
-                <div className="p-3">
-                  <div className="flex flex-row ">
-                    <p className="font-extrabold text-black text-xl ">Chatss</p>
-                  </div>
-                </div>
-              </Container>
-            </div>
+       
+           <FloatingContainer>
+              <MessengerSection/>
+         
+         </FloatingContainer>
           ) : (
             ""
           )}
 
           {showContainer === "notification" ? (
             <div>
-              <Container>
-                <div className="p-3">
-                  <div className="flex flex-row ">
-                    <p className="font-extrabold text-black text-xl">
-                      Notifications
-                    </p>
-                  </div>
-                </div>
-              </Container>
+              <FloatingContainer>
+                <NotificationSection/>
+              
+              </FloatingContainer>
             </div>
           ) : (
             ""
@@ -90,7 +88,7 @@ const Main = () => {
           {/* // <Home/> */}
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/Profile" element={<Profile />} />
+            <Route path="/Profile/:profileId" element={<Profile />} />
           </Routes>
         </div>
       </div>

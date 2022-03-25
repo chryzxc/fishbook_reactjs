@@ -51,6 +51,7 @@ const Post = styled.div`
   margin-top: 20px;
   border-radius: 10px;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
+  padding-bottom: 5px;
 `;
 
 const Row = styled.div`

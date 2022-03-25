@@ -2,11 +2,10 @@ import { useState, useEffect, useContext } from "react";
 import { onValue, get, child, orderByChild } from "firebase/database";
 import { UserContext } from "../contexts/UserContext";
 
-const useFetchProfilePost = (dbRef, updateProfile) => {
+const useFetchProfilePost = (dbRef, updateProfile, profileId) => {
   const [fetchedData, setFetchedData] = useState(null);
   const [isStillFetching, setIsStillFetching] = useState(true);
 
-  const { user } = useContext(UserContext);
   useEffect(() => {
     get(dbRef, orderByChild("date_posted"))
       .then((snapshot) => {
@@ -16,7 +15,7 @@ const useFetchProfilePost = (dbRef, updateProfile) => {
           snapshot.forEach((data) => {
             const dataVal = data.val();
 
-            if (user.id === dataVal.user_id) {
+            if (profileId === dataVal.user_id) {
 
               fetchedData.push({
                 post_id: data.key,
