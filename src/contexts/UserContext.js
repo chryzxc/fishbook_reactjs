@@ -17,7 +17,7 @@ import { userReducer } from "../reducers/userReducer";
 export const UserContext = createContext();
 
 const UserContextProvider = (props) => {
- 
+  console.log("User context");
   const [userContextId, setUserContextId] = useState(() => {
     let token = localStorage.getItem("user-token");
     if (token) {
@@ -61,11 +61,11 @@ const UserContextProvider = (props) => {
   //       });
   //   }, []);
 
-    // localStorage.setItem("user-token", userId);
-    //  console.log("set token");
-    // setContextUserId(userId);
-    //navigate("/Home/");
- // };
+  // localStorage.setItem("user-token", userId);
+  //  console.log("set token");
+  // setContextUserId(userId);
+  //navigate("/Home/");
+  // };
 
   const FetchUserData = (userId, navigate) => {
     const dbRef = ref(db);
@@ -83,7 +83,7 @@ const UserContextProvider = (props) => {
             },
           });
 
-         // navigate("/Home/");
+          // navigate("/Home/");
         }
       })
       .catch((error) => {
@@ -113,7 +113,7 @@ const UserContextProvider = (props) => {
   // };
 
   return (
-    <UserContext.Provider value={{ user, setUserContextId,FetchUserData }}>
+    <UserContext.Provider value={{ user, setUserContextId, FetchUserData }}>
       {props.children}
     </UserContext.Provider>
   );

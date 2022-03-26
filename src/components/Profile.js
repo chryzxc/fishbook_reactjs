@@ -123,7 +123,7 @@ const Profile = () => {
                   <p className="ml-1">Add friend</p>
                 </div>
 
-                <div className="self-center mt-10 m-1  text-white  bg-[#196ED8] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-[#155bb1]">
+                <div className="self-center mt-10 m-1  text-white  bg-[#1877F2] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-[#155bb1]">
                   <RiMessengerFill className="h-5 w-5" />
                   <p className="ml-1"> Message</p>
                 </div>

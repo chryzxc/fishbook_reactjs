@@ -204,6 +204,7 @@ const Divider = styled.hr`
 `;
 
 const Home = () => {
+
   let navigate = useNavigate();
 
   const { user, FetchUserData } = useContext(UserContext);
@@ -212,8 +213,12 @@ const Home = () => {
 
   const dbRef = ref(db, "posts/");
 
+  if(localStorage.getItem("user-token") === "" ){
+ navigate(-1);
+  }
+
   useEffect(() => {
-    FetchUserData(localStorage.getItem("user-id"), navigate);
+    FetchUserData(localStorage.getItem("user-token"), navigate);
   }, []);
 
   const { fetchedData, isStillFetching } = useFetchPost(dbRef, updateHome);

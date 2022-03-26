@@ -206,7 +206,7 @@ const Text06 = styled("span")({
 
 const Login = (props) => {
   localStorage.setItem("user-token", "");
-  console.log("login");
+  console.log("login user token has been cleared");
 
   const LoginForm = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -243,7 +243,7 @@ const Login = (props) => {
               loginPassword === snapshot.val().password
             ) {
 
-              localStorage.setItem("user-id", userId);
+              localStorage.setItem("user-token", userId);
               setUserContextId(userId);
               navigate("/Main/");
 
