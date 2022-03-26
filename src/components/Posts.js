@@ -46,9 +46,9 @@ const Post = styled.div`
   background-color: white;
   margin: auto;
   height: auto;
-  width: 37vw;
+  width: 420px;
   min-height: auto;
-  min-width: 37vw;
+  min-width: 420px;
   margin-top: 20px;
   border-radius: 10px;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
@@ -363,12 +363,13 @@ const Posts = ({ post }) => {
                 new Date(post.date_posted),
                 "hh:m a • MMM dd • eee"
               ).toString()} */}
-              {formatDistanceStrict(new Date(post.date_posted), new Date(), {
+              <DateFormat date={post.date_posted} addSuffix={true}/>{" "}
+              {/* {formatDistanceStrict(new Date(post.date_posted), new Date(), {
       
       roundingMethod: 'ceil',
       addSuffix: true,
   
-    })}{" "}
+    })} */}
                 {/* {formatDistance(new Date(post.date_posted), new Date(), {
                   addSuffix: true
                 })}{" "} */}

@@ -14,6 +14,7 @@ import {
   orderByChild,
   onValue,
 } from "firebase/database";
+import DateFormat from "../utils/DateFormat"
 
 const row =
   "flex flex-row w-[100%] mt-1 text-sm rounded-lg hover:bg-neutral-200 pl-1 pr-2 pb-1 pt-1";
@@ -110,9 +111,10 @@ export default function NotificationSection() {
     );
   };
 
-  const FriendRequest = ({id}) => {
+  const FriendRequest = ({id,date_requested}) => {
 
     const [fullname,setFullname] = useState("");
+    const [dateRequested, setDateRequested] =useState("");
 
     const dbRef = ref(db);
     get(child(dbRef, "users/" + id))
@@ -139,7 +141,7 @@ export default function NotificationSection() {
           <div className="text-left ml-2 mt-auto mb-auto w-[100%]">
             <p className="font-bold">{fullname} sent you a friend request</p>
             <div className="flex flex-row text-xs text-neutral-500">
-              <p className="text-blue-500">4 days ago</p>
+              <p className="text-blue-500"><DateFormat date={date_requested} addSuffix={true}/></p>
             </div>
             <div className="flex flex-row mt-2 w-[100%]">
               <button className="bg-[#1877F1]  w-full p-3 m-1 text-white text-sm font-normal rounded-lg">
@@ -176,7 +178,9 @@ export default function NotificationSection() {
           <div>
             <p className="font-semibold text-neutral-700">Friend requests</p>
 
-            {friend_requests_list && friend_requests_list.map((id) => <FriendRequest id={id}/>)}
+            {friend_requests && Object.keys(friend_requests).map((id) =><FriendRequest id={id} date_requested={friend_requests[id].date_requested}/>)}
+
+            {/* {friend_requests_list && friend_requests_list.map((id) => <FriendRequest id={id}/>)} */}
 
            
           </div>
