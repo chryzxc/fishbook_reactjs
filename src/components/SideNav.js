@@ -30,7 +30,7 @@ const Container = styled.div`
 
 const iconPressed = "";
 
- const SideNav = ({showContainer,setShowContainer}) => {
+ const SideNav = ({isHomePage,showContainer,setShowContainer}) => {
   let navigate = useNavigate();
  // const [showContainer, setShowContainer] = useState("home");
 
@@ -43,13 +43,21 @@ const iconPressed = "";
     }
   };
 
+  const HomeButton = (isHomePage) => {
+    if (isHomePage) {
+      return "h-5 w-5 absolute top-[25%] left-[25%] translate-[-25%,-25%] text-[#0371EE]";
+    } else {
+      return "h-5 w-5 absolute top-[25%] left-[25%] translate-[-25%,-25%]";
+    }
+  };
+
   // useEffect(() => {}, [showContainer]);
 
   const navigationListener = (id) => {
     switch (id) {
-      case "home":
-        setShowContainer("home");
-        return;
+      // case "home":
+      //   setShowContainer("home");
+      //   return;
       case "search":
         setShowContainer("search");
         return;
@@ -117,7 +125,7 @@ const iconPressed = "";
 
           <li className={spaceAbove}>
             <div className={icon} onClick={() => navigationListener("home")}>
-              <RiHome3Fill className={NavButtons("home")} />
+              <RiHome3Fill className={HomeButton(isHomePage)} />
             </div>
           </li>
           <li className={spaceAbove}>

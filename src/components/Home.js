@@ -32,7 +32,7 @@ import SideMenu from "./SideMenu";
 const Main = styled.div`
   height: 100%;
   width: 100%;
-  
+
   font-size: 14px;
   background-color: #f0f2f5;
   position: absolute;
@@ -182,7 +182,7 @@ const CreatePostContainer = styled.div`
   /* padding-bottom: 10px; */
   padding-left: 100px;
   padding-right: 100px;
-  margin-top:10px;
+  margin-top: 10px;
 `;
 
 const PostsContainer = styled.div`
@@ -204,7 +204,6 @@ const Divider = styled.hr`
 `;
 
 const Home = () => {
-
   let navigate = useNavigate();
 
   const { user, FetchUserData } = useContext(UserContext);
@@ -213,21 +212,19 @@ const Home = () => {
 
   const dbRef = ref(db, "posts/");
 
-  if(localStorage.getItem("user-token") === "" ){
- navigate(-1);
+  if (localStorage.getItem("user-token") === "") {
+    navigate(-1);
   }
 
   useEffect(() => {
-    FetchUserData(localStorage.getItem("user-token"), navigate);
+    FetchUserData(localStorage.getItem("user-token"));
   }, []);
 
   const { fetchedData, isStillFetching } = useFetchPost(dbRef, updateHome);
 
   const handleRefresh = () => {
     setUpdateHome(updateHome + 1);
-   
   };
-
 
   return (
     <Main>

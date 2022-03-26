@@ -40,6 +40,7 @@ import {
   ref as storageRef,
   getDownloadURL,
 } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
 
 const Post = styled.div`
   background-color: white;
@@ -131,7 +132,7 @@ const Posts = ({ post }) => {
   const [postUpdate, setPostUpdate] = useState(0);
   const [content, setContent] = useState();
 
-  
+  let navigate = useNavigate();
 
   const postRef = ref(db, "posts/" + post.post_id);
 
@@ -343,7 +344,9 @@ const Posts = ({ post }) => {
           <div>
             {post.feeling ? (
               <div className="flex flex-row">
-                <Name className="clickable-text justify-self-center">
+                <Name className="clickable-text justify-self-center" onClick={()=>{
+                   navigate("/Main/Profile/"+post.user_id);
+                }}>
                   {firstname + " " + lastname}
                 </Name>
                 <p className="ml-1 justify-self-center">{`is ${post.feeling}`}</p>

@@ -12,7 +12,7 @@ import { RiCloseFill } from "react-icons/ri";
 import Modal from "react-modal";
 import { uploadBytes, ref as storageRef } from "firebase/storage";
 import { FaGlobeAsia } from "react-icons/fa";
-// Create a root reference
+
 
 const CreatePostCard =  styled.div`
   overflow-y: hidden;

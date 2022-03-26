@@ -18,6 +18,7 @@ export const UserContext = createContext();
 
 const UserContextProvider = (props) => {
   console.log("User context");
+ 
   const [userContextId, setUserContextId] = useState(() => {
     let token = localStorage.getItem("user-token");
     if (token) {
@@ -67,7 +68,7 @@ const UserContextProvider = (props) => {
   //navigate("/Home/");
   // };
 
-  const FetchUserData = (userId, navigate) => {
+  const FetchUserData = (userId) => {
     const dbRef = ref(db);
     get(child(dbRef, "users/" + userId))
       .then((snapshot) => {
@@ -80,6 +81,8 @@ const UserContextProvider = (props) => {
               lastname: snapshot.val().lastname,
               email: snapshot.val().email,
               date_registered: snapshot?.val().date_registered,
+              friend_requests: snapshot?.val().friend_requests,
+              notifications: snapshot?.val().notifications,
             },
           });
 
@@ -90,6 +93,8 @@ const UserContextProvider = (props) => {
         console.error(error);
       });
   };
+
+ 
 
   // const FetchData = () => {
   //   const dbRef = ref(db);
@@ -113,7 +118,7 @@ const UserContextProvider = (props) => {
   // };
 
   return (
-    <UserContext.Provider value={{ user, setUserContextId, FetchUserData }}>
+    <UserContext.Provider value={{ user, setUserContextId, FetchUserData ,dispatch}}>
       {props.children}
     </UserContext.Provider>
   );

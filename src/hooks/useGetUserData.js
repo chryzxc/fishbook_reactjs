@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { ref, child, get } from "firebase/database";
+import { ref, child, onValue } from "firebase/database";
 import { db } from "../others/firebase";
 
 const useGetUserData = async (profileId) => {
-  const dbRef = ref(db);
+  const dbRef = ref(db, "users/" + profileId);
   const [data, setData] = useState(null);
   await useEffect(() => {
-    get(child(dbRef, "users/" + profileId))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          console.log(snapshot);
-          setData(snapshot);
-        } else {
-          setData();
-        }
-      })
-      .catch((error) => {
-        console.error(error);
+    onValue(dbRef, (snapshot) => {
+      if (snapshot.exists()) {
+        // console.log("user :" + snapshot.val().firstname);
+        setData(snapshot);
+      } else {
         setData();
-      });
+      }
+    });
   }, []);
 
   return data;

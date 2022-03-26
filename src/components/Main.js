@@ -28,10 +28,10 @@ const FloatingSideNav = styled.div`
 
 const FloatingContainer = styled.div`
   position: fixed;
- 
+
   background-color: white;
   margin: auto;
- 
+
   height: 98%;
   width: 380px;
   margin-left: 65px;
@@ -42,34 +42,32 @@ const FloatingContainer = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   padding: 5px;
   z-index: 2;
-  overflow: auto ;
+  overflow: auto;
 `;
 
-const FloatingMessageSection = styled.div`
-`;
+const FloatingMessageSection = styled.div``;
 
 const Main = () => {
   const [showContainer, setShowContainer] = useState("home");
+  const [isHomePage, setIsHomePage] = useState(true);
 
   useEffect(() => {}, [showContainer]);
 
   return (
     <UserContextProvider>
       <div className="flex flex-row">
-
         <FloatingSideNav>
           <SideNav
+            isHomePage={isHomePage}
             setShowContainer={setShowContainer}
             showContainer={showContainer}
           />
         </FloatingSideNav>
         <div className="w-[100%]">
           {showContainer === "messenger" ? (
-       
-           <FloatingContainer>
-              <MessengerSection/>
-         
-         </FloatingContainer>
+            <FloatingContainer>
+              <MessengerSection />
+            </FloatingContainer>
           ) : (
             ""
           )}
@@ -77,8 +75,7 @@ const Main = () => {
           {showContainer === "notification" ? (
             <div>
               <FloatingContainer>
-                <NotificationSection/>
-              
+                <NotificationSection />
               </FloatingContainer>
             </div>
           ) : (

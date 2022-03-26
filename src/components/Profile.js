@@ -28,7 +28,7 @@ import {
   RiUserFollowFill,
 } from "react-icons/ri";
 import { UserContext } from "../contexts/UserContext";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import useGetUserData from "../hooks/useGetUserData";
 
 const UpperSection = styled.div`
@@ -46,45 +46,85 @@ const LowerSection = styled.div`
 `;
 const Profile = () => {
   const { profileId } = useParams();
-  console.log(" profileId" + profileId);
-  const { user, FetchUserData } = useContext(UserContext);
+  const { user, dispatch, FetchUserData } = useContext(UserContext);
+  let navigate = useNavigate();
+  const [userId, setUserId] = useState(() => {
+    if (localStorage.getItem("user-token") !== "") {
+      return localStorage.getItem("user-token");
+    } else {
+      navigate(-2);
+    }
+  });
   const dbRef = ref(db, "posts/");
   const [updateProfile, setUpdateProfile] = useState(0);
 
-  //  useEffect(() => {
-  //    FetchUserData(localStorage.getItem("user-id"));
-  //  }, []);
-
-
-  // await const  data  =  useGetUserData(profileId);
-  // console.log("myData"+data);
-    
-
-    // const { fetchedData, isStillFetching } =  useFetchProfilePost(
-    //   dbRef,
-    //   updateProfile,
-    //   profileId
-    // );
-   
-  const LoadProfile = async() =>{
-     const data  = await useGetUserData(profileId);
-     await console.log("myData"+data);
-   
-   
-  }
-
-  LoadProfile();
+  const [firstname, setFirstname] = useState();
+  const [lastname, setLastname] = useState();
+  const [email, setEmail] = useState();
+  const [dateRegisterd, setDateRegistered] = useState();
+  const [isAFriend, setIsAFriend] = useState(false);
+  const [requestSent, setRequestSent] = useState(false);
+  const [myProfile, setMyProfile] = useState(() => {
+    if (profileId === userId) {
+      return true;
+    } else {
+      return false;
+    }
+  });
 
  
+  const data = useGetUserData(profileId).then((data) => {
+    setFirstname(data?.val().firstname);
+    setLastname(data?.val().lastname);
+    setEmail(data?.val().email);
+    setDateRegistered(data?.val().date_registered);
 
-  
+    setRequestSent(() => {
+      const friend_requests = data?.val().friend_requests;
+      const friend_requests_list = [];
 
-  
+      if (friend_requests) {
+        Object.keys(friend_requests).map((key) => {
+          friend_requests_list.push(key);
+        });
 
-  
+        if (friend_requests_list.includes(userId)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    });
+  });
+
+  const { fetchedData, isStillFetching } = useFetchProfilePost(
+    dbRef,
+    updateProfile,
+    profileId
+  );
 
   const handleRefresh = () => {
     setUpdateProfile(updateProfile + 1);
+  };
+
+  const SendFriendRequest = () => {
+    dispatch({
+      type: "SEND_FRIEND_REQUEST",
+      request: {
+        receiver_id: profileId,
+        sender_id: userId,
+      },
+    }).then(() => handleRefresh());
+  };
+
+  const CancelFriendRequest = () => {
+    dispatch({
+      type: "CANCEL_FRIEND_REQUEST",
+      request: {
+        receiver_id: profileId,
+        sender_id: userId,
+      },
+    }).then(() => handleRefresh());
   };
 
   return (
@@ -100,7 +140,7 @@ const Profile = () => {
           </div>
           <div className="flex flex-row mt-[-40px]">
             {/* Left */}
-            <div className="ml-7 rounded-full bg-white p-1 z-1">
+            <div className="ml-7 rounded-full bg-white p-2 z-1">
               <ReactRoundedImage
                 image={logo}
                 roundedSize="0"
@@ -112,27 +152,57 @@ const Profile = () => {
             {/* Middle */}
             <div className="flex flex-row justify-between w-[100%]">
               <div className="self-center mt-10 ml-10">
-                <p className="font-bold text-2xl ">{`${user.firstname} ${user.lastname}`}</p>
+                <p className="font-bold text-2xl ">{`${firstname} ${lastname}`}</p>
                 <p>2k Friends</p>
               </div>
 
               {/* Right */}
-              <div className="flex flex-row font-semibold text-sm tracking-wide">
-                <div className="self-center mt-10 m-1  bg-[#E4E6E9] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-neutral-300">
-                  <RiUserAddFill className="h-5 w-5" />
-                  <p className="ml-1">Add friend</p>
-                </div>
 
-                <div className="self-center mt-10 m-1  text-white  bg-[#1877F2] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-[#155bb1]">
-                  <RiMessengerFill className="h-5 w-5" />
-                  <p className="ml-1"> Message</p>
+              {myProfile ? (
+                <div className="flex flex-row font-semibold text-sm tracking-wide">
+                  <div className="self-center mt-10 m-1  bg-[#E4E6E9] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-neutral-300">
+                    <RiPencilFill className="h-5 w-5" />
+                    <p className="ml-1"> Edit profile</p>
+                  </div>
                 </div>
+              ) : isAFriend ? (
+                <div className="flex flex-row font-semibold text-sm tracking-wide">
+                  <div className="self-center mt-10 m-1  bg-[#E4E6E9] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-neutral-300">
+                    <RiUserFollowFill className="h-5 w-5" />
+                    <p className="ml-1">Friends</p>
+                  </div>
 
-                <div className="self-center mt-10 m-1  bg-[#E4E6E9] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-neutral-300">
-                  <RiPencilFill className="h-5 w-5" />
-                  <p className="ml-1"> Edit profile</p>
+                  <div className="self-center mt-10 m-1  text-white  bg-[#1877F2] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-[#0a62ce]">
+                    <RiMessengerFill className="h-5 w-5" />
+                    <p className="ml-1"> Message</p>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="flex flex-row font-semibold text-sm tracking-wide">
+                  {requestSent ? (
+                    <div
+                      className="self-center mt-10 m-1  text-white bg-[#1877F2] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-[#0a62ce] "
+                      onClick={() => CancelFriendRequest()}
+                    >
+                      <RiUserSharedFill className="h-5 w-5" />
+                      <p className="ml-1">Friend request sent</p>
+                    </div>
+                  ) : (
+                    <div
+                      className="self-center mt-10 m-1  text-white bg-[#1877F2] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-[#0a62ce] "
+                      onClick={() => SendFriendRequest()}
+                    >
+                      <RiUserAddFill className="h-5 w-5" />
+                      <p className="ml-1">Add friend</p>
+                    </div>
+                  )}
+
+                  <div className="self-center mt-10 m-1  text-black  bg-[#E4E6E9] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-neutral-300">
+                    <RiMessengerFill className="h-5 w-5" />
+                    <p className="ml-1"> Message</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -149,10 +219,12 @@ const Profile = () => {
 
           {/* POSTS */}
           <div className="w-[60%] ml-2">
-            <CreatePost
-              data={{ width: "auto", minWidth: "auto" }}
-              handleRefresh={handleRefresh}
-            />
+            {myProfile ? (
+              <CreatePost
+                data={{ width: "auto", minWidth: "auto" }}
+                handleRefresh={handleRefresh}
+              />
+            ) : null}
 
             <Container className="flex flex-row justify-between">
               <p className="font-black font-extrabold text-lg tracking-wider mt-auto mb-auto">
@@ -171,7 +243,7 @@ const Profile = () => {
               </select>
             </Container>
 
-            {/* {fetchedData !== null ? (
+            {fetchedData !== null ? (
               fetchedData.map((post) => (
                 <Posts key={post.post_id} post={post} />
               ))
@@ -179,11 +251,11 @@ const Profile = () => {
               <p className="mt-10 mb-10 text-center font-bold text-2xl text-neutral-500">
                 None
               </p>
-            )} */}
+            )}
           </div>
         </div>
       </LowerSection>
     </div>
   );
-}
+};
 export default Profile;
