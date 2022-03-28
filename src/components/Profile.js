@@ -62,7 +62,27 @@ const Profile = () => {
   const [lastname, setLastname] = useState();
   const [email, setEmail] = useState();
   const [dateRegisterd, setDateRegistered] = useState();
-  const [isAFriend, setIsAFriend] = useState(false);
+
+  const [isAFriend, setIsAFriend] = useState(() => {
+    const my_friends = user.friends;
+    const my_friends_list = [];
+
+    if (my_friends) {
+      Object.keys(my_friends).map((key) => {
+        my_friends_list.push(key);
+      });
+
+      if (my_friends_list.includes(userId)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+   
+  });
+  console.log("isafreiend?" + isAFriend);
+  
   const [requestSent, setRequestSent] = useState(false);
   const [myProfile, setMyProfile] = useState(() => {
     if (profileId === userId) {
@@ -72,7 +92,25 @@ const Profile = () => {
     }
   });
 
- 
+  const [hasRequested, setHasRequested] = useState(() => {
+    // if(user.friend_requests)
+
+    const my_friend_requests = user.friend_requests;
+    const my_friend_requests_list = [];
+
+    if (my_friend_requests) {
+      Object.keys(my_friend_requests).map((key) => {
+        my_friend_requests_list.push(key);
+      });
+
+      if (my_friend_requests_list.includes(profileId)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  });
+
   const data = useGetUserData(profileId).then((data) => {
     setFirstname(data?.val().firstname);
     setLastname(data?.val().lastname);
@@ -113,6 +151,16 @@ const Profile = () => {
       request: {
         receiver_id: profileId,
         sender_id: userId,
+      },
+    }).then(() => handleRefresh());
+  };
+
+  const AcceptFriendRequest = () => {
+    dispatch({
+      type: "ACCEPT_FRIEND_REQUEST",
+      request: {
+        receiver_id: userId,
+        sender_id: profileId,
       },
     }).then(() => handleRefresh());
   };
@@ -179,7 +227,15 @@ const Profile = () => {
                 </div>
               ) : (
                 <div className="flex flex-row font-semibold text-sm tracking-wide">
-                  {requestSent ? (
+                  {hasRequested ? (
+                    <div
+                      className="self-center mt-10 m-1  text-white bg-[#1877F2] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-[#0a62ce] "
+                      onClick={() => AcceptFriendRequest()}
+                    >
+                      <RiUserSharedFill className="h-5 w-5" />
+                      <p className="ml-1">Accept friend request</p>
+                    </div>
+                  ) : requestSent ? (
                     <div
                       className="self-center mt-10 m-1  text-white bg-[#1877F2] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-[#0a62ce] "
                       onClick={() => CancelFriendRequest()}
