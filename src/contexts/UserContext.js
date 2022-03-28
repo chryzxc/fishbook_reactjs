@@ -83,6 +83,7 @@ const UserContextProvider = (props) => {
               date_registered: snapshot?.val().date_registered,
               friend_requests: snapshot?.val().friend_requests,
               notifications: snapshot?.val().notifications,
+              friends:snapshot?.val().friends,
             },
           });
 

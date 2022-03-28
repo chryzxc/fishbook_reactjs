@@ -25,6 +25,7 @@ export const userReducer = (state, action) => {
         date_registered: action.user.date_registered,
         friend_requests: action.user.friend_requests,
         notifications: action.user.notifications,
+        friends: action.user.friends,
       };
 
     case "LOGIN_USER":
@@ -74,6 +75,7 @@ export const userReducer = (state, action) => {
           `users/${action.request.receiver_id}/friends/${action.request.sender_id}`
         ),
         {
+
           date_confirmed: Date.now(),
         }
       ).then(() => {
@@ -97,6 +99,7 @@ export const userReducer = (state, action) => {
             {
               type: "friend_request_received_accepted",
               date_confirmed: Date.now(),
+              notifications_from: action.request.sender_id
             }
           ).then(() => {
             const dbRef = ref(
@@ -107,6 +110,7 @@ export const userReducer = (state, action) => {
             update(newId, {
               type: "friend_request_sent_accepted",
               date_confirmed: Date.now(),
+              notifications_from: action.request.receiver_id
             }).then(
               remove(
                 ref(

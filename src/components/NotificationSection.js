@@ -98,7 +98,7 @@ export default function NotificationSection() {
     );
   };
 
-  const RequestAccepted = () => {
+  const RequestSentAccepted = () => {
     return (
       <div className={row}>
         <div>
@@ -114,6 +114,59 @@ export default function NotificationSection() {
             <p className="font-bold">Christian accepted your friend request</p>
             <div className="flex flex-row text-xs text-neutral-500">
               <p className="text-blue-500">1 day ago</p>
+            </div>
+          </div>
+          <div className="text-blue-500 mt-auto mb-auto text-2xl">
+            <p>●</p>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+
+  const RequestReceivedAccepted = (props) => {
+    console.log("my props: " + props.value.id);
+
+    const dbRef = ref(db);
+    get(child(dbRef, "users/" + props.value.id))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          dispatch({
+            type: "SET_USER",
+            user: {
+              id: snapshot.key,
+              firstname: snapshot.val().firstname,
+              lastname: snapshot.val().lastname,
+              email: snapshot.val().email,
+              date_registered: snapshot?.val().date_registered,
+              friend_requests: snapshot?.val().friend_requests,
+              notifications: snapshot?.val().notifications,
+            },
+          });
+
+          // navigate("/Home/");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    return (
+      <div className={row}>
+        <div>
+          <ReactRoundedImage
+            image={profile}
+            roundedSize="0"
+            imageWidth="50"
+            imageHeight="50"
+          />
+        </div>
+        <div className="flex flex-row justify-between w-[100%]">
+          <div className="text-left ml-2 mt-auto mb-auto">
+            <p className="font-bold">You are now friends with Christian</p>
+            <div className="flex flex-row text-xs text-neutral-500">
+              <p className="text-blue-500"><DateFormat date={props.value.date_confirmed} addSuffix={true}/></p>
             </div>
           </div>
           <div className="text-blue-500 mt-auto mb-auto text-2xl">
@@ -223,14 +276,17 @@ export default function NotificationSection() {
 
   const NotificationsArea = () => {
     return (
-   
       <div>
         <p className="font-semibold text-neutral-700">Others</p>
-        {notifications_list.map((notification) =>{
-          console.log("map : " +notification.id);
-          // if(id.type === "friend_request_received_accepted"){
-          //   <RequestAccepted />
-          // }
+        {notifications_list.map((notification) => {
+          console.log(notification.type);
+
+          if (notification.type === "friend_request_sent_accepted") {
+            return <RequestSentAccepted value={notification}/>;
+          }
+          if (notification.type === "friend_request_received_accepted") {
+            return <RequestReceivedAccepted value={notification}/>;
+          }
         })}
         {/* <SharedPost />
       
@@ -248,8 +304,6 @@ export default function NotificationSection() {
       </div>
 
       <ul className="w-[100%] pl-3">
-
-     
         <FriendRequestArea />
 
         <NotificationsArea />
