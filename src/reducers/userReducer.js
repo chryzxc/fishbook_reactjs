@@ -1,4 +1,3 @@
-
 import {
   ref,
   set,
@@ -9,18 +8,16 @@ import {
   equalTo,
   orderByChild,
   onValue,
-  remove
+  remove,
+  update,
 } from "firebase/database";
 import { useState } from "react";
 import { db } from "../others/firebase";
 
-
 export const userReducer = (state, action) => {
   switch (action.type) {
-
     case "SET_USER":
-     
-      return  {
+      return {
         id: action.user.id,
         firstname: action.user.firstname,
         lastname: action.user.lastname,
@@ -30,9 +27,9 @@ export const userReducer = (state, action) => {
         notifications: action.user.notifications,
       };
 
-      case "LOGIN_USER":
-          return
-     
+    case "LOGIN_USER":
+      return;
+
     case "CREATE_POST":
       set(action.newPost, action.post)
         .then(() => {
@@ -45,30 +42,105 @@ export const userReducer = (state, action) => {
         });
       return;
 
-      case "SEND_FRIEND_REQUEST":
-        
-        return set(ref(db, `users/${action.request.receiver_id}/friend_requests/${action.request.sender_id}`), {
+    case "SEND_FRIEND_REQUEST":
+      return set(
+        ref(
+          db,
+          `users/${action.request.receiver_id}/friend_requests/${action.request.sender_id}`
+        ),
+        {
           seen: false,
           date_requested: Date.now(),
-        })
-        .then(() => {
-      
-        })
-        .catch((error) => {
-         
-        });
+        }
+      )
+        .then(() => {})
+        .catch((error) => {});
 
-        case "CANCEL_FRIEND_REQUEST":
-        
-          return remove(ref(db, `users/${action.request.receiver_id}/friend_requests/${action.request.sender_id}`), {
-          })
-.then(() => {
-        
-          })
-          .catch((error) => {
-           
+    case "CANCEL_FRIEND_REQUEST":
+      return remove(
+        ref(
+          db,
+          `users/${action.request.receiver_id}/friend_requests/${action.request.sender_id}`
+        ),
+        {}
+      )
+        .then(() => {})
+        .catch((error) => {});
+
+    case "ACCEPT_FRIEND_REQUEST":
+      return update(
+        ref(
+          db,
+          `users/${action.request.receiver_id}/friends/${action.request.sender_id}`
+        ),
+        {
+          date_confirmed: Date.now(),
+        }
+      ).then(() => {
+        update(
+          ref(
+            db,
+            `users/${action.request.sender_id}/friends/${action.request.receiver_id}`
+          ),
+          {
+            date_confirmed: Date.now(),
+          }
+        ).then(() => {
+          const dbRef = ref(
+            db,
+            `users/${action.request.receiver_id}/notifications/`
+          );
+          const newId = push(dbRef);
+          update(
+            newId,
+
+            {
+              type: "friend_request_received_accepted",
+              date_confirmed: Date.now(),
+            }
+          ).then(() => {
+            const dbRef = ref(
+              db,
+              `users/${action.request.sender_id}/notifications/`
+            );
+            const newId = push(dbRef);
+            update(newId, {
+              type: "friend_request_sent_accepted",
+              date_confirmed: Date.now(),
+            }).then(
+              remove(
+                ref(
+                  db,
+                  `users/${action.request.receiver_id}/friend_requests/${action.request.sender_id}`
+                )
+              )
+            );
           });
-      
+        });
+      });
+
+    case "DELETE_FRIEND_REQUEST":
+      return remove(
+        ref(
+          db,
+          `users/${action.request.receiver_id}/friend_requests/${action.request.sender_id}`
+        )
+      )
+        .then(() => {})
+        .catch((error) => {});
+
+    case "TEST_FRIEND_REQUEST":
+      return function () {
+        remove(
+          ref(
+            db,
+            `users/${action.request.receiver_id}/friend_requests/${action.request.sender_id}`
+          )
+        )
+          .then(() => {})
+          .catch((error) => {});
+      };
+
     default:
       return state;
   }

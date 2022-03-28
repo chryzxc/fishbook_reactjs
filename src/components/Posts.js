@@ -46,9 +46,9 @@ const Post = styled.div`
   background-color: white;
   margin: auto;
   height: auto;
-  width: 420px;
+  width: 37vw;
   min-height: auto;
-  min-width: 420px;
+  min-width: 37vw;
   margin-top: 20px;
   border-radius: 10px;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
@@ -352,7 +352,8 @@ const Posts = ({ post }) => {
                 <p className="ml-1 justify-self-center">{`is ${post.feeling}`}</p>
               </div>
             ) : (
-              <Name className="clickable-text">
+              <Name className="clickable-text" onClick={()=>{
+                navigate("/Main/Profile/"+post.user_id)}} >
                 {firstname + " " + lastname}
               </Name>
             )}
