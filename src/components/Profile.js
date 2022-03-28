@@ -63,6 +63,8 @@ const Profile = () => {
   const [email, setEmail] = useState();
   const [dateRegisterd, setDateRegistered] = useState();
 
+ 
+
   const [isAFriend, setIsAFriend] = useState(() => {
     const my_friends = user.friends;
     const my_friends_list = [];
@@ -72,17 +74,16 @@ const Profile = () => {
         my_friends_list.push(key);
       });
 
-      if (my_friends_list.includes(userId)) {
+      if (my_friends_list.includes(profileId)) {
         return true;
       } else {
         return false;
       }
+     
     }
-
-   
   });
-  console.log("isafreiend?" + isAFriend);
-  
+ 
+
   const [requestSent, setRequestSent] = useState(false);
   const [myProfile, setMyProfile] = useState(() => {
     if (profileId === userId) {
