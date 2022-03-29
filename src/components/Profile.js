@@ -48,7 +48,7 @@ const Profile = () => {
   const { profileId } = useParams();
   const { user, dispatch, FetchUserData } = useContext(UserContext);
   let navigate = useNavigate();
-  const [userId, setUserId] = useState(() => {
+  const [myId, setMyId] = useState(() => {
     if (localStorage.getItem("user-token") !== "") {
       return localStorage.getItem("user-token");
     } else {
@@ -57,13 +57,13 @@ const Profile = () => {
   });
   const dbRef = ref(db, "posts/");
   const [updateProfile, setUpdateProfile] = useState(0);
+  const [profileData1, setProfileData1] = useState();
 
-  const [firstname, setFirstname] = useState();
-  const [lastname, setLastname] = useState();
-  const [email, setEmail] = useState();
-  const [dateRegisterd, setDateRegistered] = useState();
-
- 
+  const [profileFirstname, setProfileFirstname] = useState();
+  const [profileLastname, setProfileLastname] = useState();
+  const [profileEmail, setProfileEmail] = useState();
+  const [profileDateRegistered, setProfileDateRegistered] = useState();
+  const [profileFriends, setProfileFriends] = useState();
 
   const [isAFriend, setIsAFriend] = useState(() => {
     const my_friends = user.friends;
@@ -79,14 +79,13 @@ const Profile = () => {
       } else {
         return false;
       }
-     
     }
   });
- 
 
-  const [requestSent, setRequestSent] = useState(false);
+  // const [requestSent, setRequestSent] = useState(false);
+
   const [myProfile, setMyProfile] = useState(() => {
-    if (profileId === userId) {
+    if (profileId === myId) {
       return true;
     } else {
       return false;
@@ -94,8 +93,6 @@ const Profile = () => {
   });
 
   const [hasRequested, setHasRequested] = useState(() => {
-    // if(user.friend_requests)
-
     const my_friend_requests = user.friend_requests;
     const my_friend_requests_list = [];
 
@@ -112,29 +109,164 @@ const Profile = () => {
     }
   });
 
-  const data = useGetUserData(profileId).then((data) => {
-    setFirstname(data?.val().firstname);
-    setLastname(data?.val().lastname);
-    setEmail(data?.val().email);
-    setDateRegistered(data?.val().date_registered);
+  const profileData = useGetUserData(myId, profileId);
 
-    setRequestSent(() => {
-      const friend_requests = data?.val().friend_requests;
-      const friend_requests_list = [];
+  // console.log("run" + JSON.stringify(profileData.friends));
 
-      if (friend_requests) {
-        Object.keys(friend_requests).map((key) => {
-          friend_requests_list.push(key);
-        });
+  // const profileData = useGetUserData(profileId).then((data) => {
 
-        if (friend_requests_list.includes(userId)) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    });
-  });
+  //   console.log(data.val().firstname)
+  //   const requestSent = () => {
+  //     const friend_requests = data?.val().friend_requests;
+  //     const friend_requests_list = [];
+  //     if (friend_requests) {
+  //       Object.keys(friend_requests).map((key) => {
+  //         friend_requests_list.push(key);
+  //       });
+  //       if (friend_requests_list.includes(myId)) {
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     }
+  //   };
+
+  //    let profileData = {
+  //         firstname: data?.val().firstname,
+  //         lastname:data?.val().lastname,
+  //         email: data?.val().email,
+  //         date_registered: data?.val().date_registered,
+  //         friends: data?.val().friends,
+  //         request_sent: requestSent,
+  //       };
+  //       console.log("before update");
+  //       setProfileData1(profileData);
+  //       return profileData;
+
+  //   //   setProfileData({
+  //   //     firstname: data?.val().firstname,
+  //   //     lastname:data?.val().lastname,
+  //   //     email: data?.val().email,
+  //   //     date_registered: data?.val().date_registered,
+  //   //     friends: data?.val().friends,
+  //   //     request_sent: requestSent,
+  //   //   });
+
+  //   //   //   setProfileFirstname(data?.val().firstname);
+  //   //   //   setProfileLastname(data?.val().lastname);
+  //   //   //   setProfileEmail(data?.val().email);
+  //   //   //   setProfileDateRegistered(data?.val().date_registered);
+  //   //   //   console.log("get")
+  //   //   //   //  setProfileFriends(data?.val().friends)
+  //   //   // //  setProfileFriends(JSON.stringify(data?.val().friends));
+  //   //   // //  console.log("friends:" + JSON.stringify(data?.val().friends));
+  //   //   //   // await setProfileFriends(async()=>{
+  //   //   //   //   const friends_list = [];
+  //   //   //   //   if (data?.val().friends) {
+  //   //   //   //     await Object.keys(data?.val().friends).map((key) => {
+  //   //   //   //       friends_list.push(key);
+  //   //   //   //     });
+  //   //   //   //     return friends_list;
+  //   //   //   //   }
+  //   //   //   // })
+  //   //   //   //
+  //   //   //   setRequestSent(() => {
+  //   //   //     const friend_requests = data?.val().friend_requests;
+  //   //   //     const friend_requests_list = [];
+  //   //   //     if (friend_requests) {
+  //   //   //       Object.keys(friend_requests).map((key) => {
+  //   //   //         friend_requests_list.push(key);
+  //   //   //       });
+  //   //   //       if (friend_requests_list.includes(myId)) {
+  //   //   //         return true;
+  //   //   //       } else {
+  //   //   //         return false;
+  //   //   //       }
+  //   //   //     }
+  //   //   //   });
+  //   //   console.log("count:" + JSON.stringify(data));
+  // });
+
+  // if (profileData) {
+  //   console.log("key" + profileData.val().firstname);
+  //   //   setProfileData({
+  //   //     firstname: data?.val().firstname,
+  //   //     lastname:data?.val().lastname,
+  //   //     email: data?.val().email,
+  //   //     date_registered: data?.val().date_registered,
+  //   //     friends: data?.val().friends,
+  //   //     request_sent: requestSent,
+  //   //   });
+  //   // Object.keys(profileData1).map((key) => {
+  //   //   console.log("key"+key);
+  //   // });
+  // }
+
+  // useGetUserData((data)=>{
+
+  //   const requestSent = () =>{
+  //     const friend_requests = data?.val().friend_requests;
+  //     const friend_requests_list = [];
+  //     if (friend_requests) {
+  //       Object.keys(friend_requests).map((key) => {
+  //         friend_requests_list.push(key);
+  //       });
+  //       if (friend_requests_list.includes(userId)) {
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     }
+  //   }
+
+  //   setProfileData({
+  //     firstname: data?.val().firstname,
+  //     lastname:data?.val().lastname,
+  //     email: data?.val().email,
+  //     date_registered: data?.val().date_registered,
+  //     friends: data?.val().friends,
+  //     request_sent: requestSent,
+  //   });
+
+  //   //   setProfileFirstname(data?.val().firstname);
+  //   //   setProfileLastname(data?.val().lastname);
+  //   //   setProfileEmail(data?.val().email);
+  //   //   setProfileDateRegistered(data?.val().date_registered);
+  //   //   console.log("get")
+  //   //   //  setProfileFriends(data?.val().friends)
+  //   // //  setProfileFriends(JSON.stringify(data?.val().friends));
+  //   // //  console.log("friends:" + JSON.stringify(data?.val().friends));
+  //   //   // await setProfileFriends(async()=>{
+  //   //   //   const friends_list = [];
+  //   //   //   if (data?.val().friends) {
+  //   //   //     await Object.keys(data?.val().friends).map((key) => {
+  //   //   //       friends_list.push(key);
+  //   //   //     });
+  //   //   //     return friends_list;
+  //   //   //   }
+  //   //   // })
+  //   //   //
+  //   //   setRequestSent(() => {
+  //   //     const friend_requests = data?.val().friend_requests;
+  //   //     const friend_requests_list = [];
+  //   //     if (friend_requests) {
+  //   //       Object.keys(friend_requests).map((key) => {
+  //   //         friend_requests_list.push(key);
+  //   //       });
+  //   //       if (friend_requests_list.includes(userId)) {
+  //   //         return true;
+  //   //       } else {
+  //   //         return false;
+  //   //       }
+  //   //     }
+  //   //   });
+  //   console.log("count:" + JSON.stringify(data));
+
+  // },[])
+
+  //  useGetUserData(profileId).then((data) => {
+
+  // },[]);
 
   const { fetchedData, isStillFetching } = useFetchProfilePost(
     dbRef,
@@ -151,7 +283,7 @@ const Profile = () => {
       type: "SEND_FRIEND_REQUEST",
       request: {
         receiver_id: profileId,
-        sender_id: userId,
+        sender_id: myId,
       },
     }).then(() => handleRefresh());
   };
@@ -160,7 +292,7 @@ const Profile = () => {
     dispatch({
       type: "ACCEPT_FRIEND_REQUEST",
       request: {
-        receiver_id: userId,
+        receiver_id: myId,
         sender_id: profileId,
       },
     }).then(() => handleRefresh());
@@ -171,7 +303,7 @@ const Profile = () => {
       type: "CANCEL_FRIEND_REQUEST",
       request: {
         receiver_id: profileId,
-        sender_id: userId,
+        sender_id: myId,
       },
     }).then(() => handleRefresh());
   };
@@ -201,8 +333,18 @@ const Profile = () => {
             {/* Middle */}
             <div className="flex flex-row justify-between w-[100%]">
               <div className="self-center mt-10 ml-10">
-                <p className="font-bold text-2xl ">{`${firstname} ${lastname}`}</p>
-                <p>2k Friends</p>
+                <p className="font-bold text-2xl ">{`${profileData?.firstname} ${profileData?.lastname}`}</p>
+                <p>
+                  {() => {
+                    const friends = [];
+                    if (profileData.friends) {
+                      Object.keys(profileData.friends).map((key) => {
+                        friends.push(key);
+                      });
+                      return friends.length;
+                    }
+                  }}
+                </p>
               </div>
 
               {/* Right */}
@@ -236,7 +378,7 @@ const Profile = () => {
                       <RiUserSharedFill className="h-5 w-5" />
                       <p className="ml-1">Accept friend request</p>
                     </div>
-                  ) : requestSent ? (
+                  ) : profileData?.request_sent ? (
                     <div
                       className="self-center mt-10 m-1  text-white bg-[#1877F2] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-[#0a62ce] "
                       onClick={() => CancelFriendRequest()}

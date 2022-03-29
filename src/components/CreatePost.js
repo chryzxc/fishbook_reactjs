@@ -198,6 +198,7 @@ const CreatePost = ({ handleRefresh , data} ) => {
   };
 
   const FeelingModal = () => {
+
     const feelingList = [
       { postEmoji: "😀", postFeeling: "happy" },
       { postEmoji: "🥰", postFeeling: "loved" },
@@ -240,7 +241,10 @@ const CreatePost = ({ handleRefresh , data} ) => {
     ];
 
     const Feelings = ({ postEmoji, postFeeling }) => {
+      
       const selectedFeeling = `${postEmoji} feeling ${postFeeling}`;
+
+
       return (
         <>
           {feeling === selectedFeeling ? (
