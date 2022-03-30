@@ -18,7 +18,7 @@ import {
   orderByChild,
   onValue,
 } from "firebase/database";
-import { db } from "../others/firebase";
+import { db } from "../config/firebase";
 import Posts from "./Posts";
 import {
   RiPencilFill,
@@ -110,8 +110,21 @@ const Profile = () => {
   });
 
   const profileData = useGetUserData(myId, profileId);
+  const friends_count = () => {
+    const friends = [];
+    if (profileData?.friends) {
+      Object.keys(profileData.friends).map((key) => {
+        friends.push(key);
+      });
+      if (friends.length !== 1) {
+        return `${friends.length} friends`;
+      } else {
+        return `${friends.length} friend`;
+      }
+    }
+  };
 
-  // console.log("run" + JSON.stringify(profileData.friends));
+  console.log(friends_count());
 
   // const profileData = useGetUserData(profileId).then((data) => {
 
@@ -327,24 +340,35 @@ const Profile = () => {
                 roundedSize="0"
                 imageWidth="140"
                 imageHeight="140"
-              />
+              ><p className="bg-white">TEST</p></ReactRoundedImage>
             </div>
 
             {/* Middle */}
             <div className="flex flex-row justify-between w-[100%]">
               <div className="self-center mt-10 ml-10">
                 <p className="font-bold text-2xl ">{`${profileData?.firstname} ${profileData?.lastname}`}</p>
-                <p>
-                  {() => {
-                    const friends = [];
-                    if (profileData.friends) {
-                      Object.keys(profileData.friends).map((key) => {
-                        friends.push(key);
-                      });
-                      return friends.length;
-                    }
-                  }}
-                </p>
+                <p>{friends_count()}</p>
+                <div className="flex flex-row ml-2 mt-1">
+                  <div className="ml-[-10px] p-[2px] bg-white rounded-full z-[10] ">
+                    <ReactRoundedImage
+                      image={logo}
+                      roundedSize="0"
+                      imageWidth="40"
+                      imageHeight="40"
+                    />
+                  </div>
+
+                  <div className="ml-[-10px] p-[2px] bg-white rounded-full z-[9] ">
+                    <ReactRoundedImage
+                      image={logo}
+                      roundedSize="0"
+                      imageWidth="40"
+                      imageHeight="40"
+                    />
+                  </div>
+
+               
+                </div>
               </div>
 
               {/* Right */}
