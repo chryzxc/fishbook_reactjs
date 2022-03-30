@@ -7,7 +7,7 @@ import { UserContext } from "../contexts/UserContext";
 import storyimage from "../assets/2.jpg";
 import { FaRegImages, FaRegSmile, FaVideo, FcGallery } from "react-icons/fa";
 import { ref, set, push, update } from "firebase/database";
-import { db, storage } from "../others/firebase";
+import { db, storage } from "../config/firebase";
 import { RiCloseFill } from "react-icons/ri";
 import Modal from "react-modal";
 import { uploadBytes, ref as storageRef } from "firebase/storage";

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ref, child, onValue } from "firebase/database";
-import { db } from "../others/firebase";
+import { db } from "../config/firebase";
 
 const useGetUserData = (myId,profileId) => {
   const dbRef = ref(db, "users/" + profileId);

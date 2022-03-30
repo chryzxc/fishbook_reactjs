@@ -13,7 +13,7 @@ import {
 import { FaGlobeAsia } from "react-icons/fa";
 
 import { TiThumbsUp } from "react-icons/ti";
-import { db, storage } from "../others/firebase";
+import { db, storage } from "../config/firebase";
 import {
   ref,
   set,

@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useReducer, useState } from "react";
-import { db } from "../others/firebase";
+import { db } from "../config/firebase";
 import {
   ref,
   set,

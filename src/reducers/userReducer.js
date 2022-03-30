@@ -12,7 +12,7 @@ import {
   update,
 } from "firebase/database";
 import { useState } from "react";
-import { db } from "../others/firebase";
+import { db } from "../config/firebase";
 
 export const userReducer = (state, action) => {
   switch (action.type) {
