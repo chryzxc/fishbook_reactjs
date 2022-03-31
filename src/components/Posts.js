@@ -41,6 +41,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
+import { useGetUserProfilePicture } from "../hooks/useGetUserData";
 
 const Post = styled.div`
   background-color: white;
@@ -135,6 +136,8 @@ const Posts = ({ post }) => {
   let navigate = useNavigate();
 
   const postRef = ref(db, "posts/" + post.post_id);
+
+  const user_profile = useGetUserProfilePicture(user.id);
 
   useEffect(() => {
     // USER INFO
@@ -335,7 +338,7 @@ const Posts = ({ post }) => {
         <Row>
           <div>
             <ReactRoundedImage
-              image={profile}
+              image={useGetUserProfilePicture(post.user_id)}
               roundedSize="0"
               imageWidth="40"
               imageHeight="40"
@@ -516,7 +519,7 @@ const Posts = ({ post }) => {
             <div className="p-4 flex flex-row">
               <div className="self-center">
                 <ReactRoundedImage
-                  image={profile}
+                  image={user_profile}
                   roundedSize="0"
                   imageWidth="40"
                   imageHeight="40"

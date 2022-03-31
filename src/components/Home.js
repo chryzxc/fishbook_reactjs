@@ -11,7 +11,7 @@ import Posts from "./Posts";
 import UserContextProvider, { UserContext } from "../contexts/UserContext";
 import { useParams, useNavigate } from "react-router-dom";
 import useFetchPost from "../hooks/useFetchPost";
-import { db } from "../others/firebase";
+import { db } from "../config/firebase";
 import {
   ref,
   set,
@@ -206,7 +206,7 @@ const Divider = styled.hr`
 const Home = () => {
   let navigate = useNavigate();
 
-  const { user, FetchUserData } = useContext(UserContext);
+   const { user, FetchUserData } = useContext(UserContext);
 
   const [updateHome, setUpdateHome] = useState(0);
 
@@ -217,7 +217,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    FetchUserData(localStorage.getItem("user-token"));
+    FetchUserData();
   }, []);
 
   const { fetchedData, isStillFetching } = useFetchPost(dbRef, updateHome);

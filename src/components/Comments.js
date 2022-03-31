@@ -35,6 +35,7 @@ import { UserContext } from "../contexts/UserContext";
 import { format } from "date-fns";
 import Replies from "./Replies";
 import DateFormat from "../utils/DateFormat";
+import { useGetUserProfilePicture } from "../hooks/useGetUserData";
 
 export default function Comments({ commentData }) {
   const { user } = useContext(UserContext);
@@ -58,6 +59,8 @@ export default function Comments({ commentData }) {
 
   const [replies, setReplies] = useState([]);
   const [numberOfReplies, setNumberOfReplies] = useState(0);
+
+  const my_profile_picture = useGetUserProfilePicture(userId);
 
   const handleReplyComment = () => {
     if (showReplyBox) {
@@ -236,7 +239,7 @@ export default function Comments({ commentData }) {
         <div className="p-4 flex flex-row ">
           <div className="self-center">
             <ReactRoundedImage
-              image={profile}
+              image={my_profile_picture}
               roundedSize="0"
               imageWidth="30"
               imageHeight="30"
@@ -282,7 +285,7 @@ export default function Comments({ commentData }) {
       <div className="flex flex-row pl-5 pr-5 mb-2">
         <div className="w-auto mt-1">
           <ReactRoundedImage
-            image={profile}
+            image={my_profile_picture}
             roundedSize="0"
             imageWidth="30"
             imageHeight="30"

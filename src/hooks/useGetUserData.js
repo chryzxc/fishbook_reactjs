@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { ref, child, onValue } from "firebase/database";
-import { db } from "../config/firebase";
+import { db ,storage} from "../config/firebase";
+import {
+  uploadBytes,
+  ref as storageRef,
+  getDownloadURL,
+} from "firebase/storage";
+import default_profile from "../assets/default_profile.png";
 
-const useGetUserData = (myId,profileId) => {
+export const useGetUserData = (myId,profileId) => {
   const dbRef = ref(db, "users/" + profileId);
   const [data, setData] = useState(null);
 
-  
-  
- 
    useEffect(() => {
     onValue(dbRef, (snapshot) => {
       if (snapshot.exists()) {
@@ -52,4 +55,33 @@ const useGetUserData = (myId,profileId) => {
   
 };
 
-export default useGetUserData;
+
+export const useGetUserProfilePicture = (profileId) => {
+
+  const [profilePicture, setProfilePicture] = useState();
+
+    useEffect(() => {
+
+    getDownloadURL(
+      storageRef(storage, `users/${profileId}/my_profile_picture.jpeg`)
+    )
+      .then((url) => {
+        if(url !== null || url !== ""){
+          setProfilePicture(url);
+        }else{
+          setProfilePicture(default_profile);
+        }
+      
+      })
+      .catch((error) => {
+        console.log("IMAGE NOT EXIST: " + error);
+        setProfilePicture(default_profile);
+      });
+    
+ 
+  }, []);
+  return profilePicture;
+  
+};
+
+

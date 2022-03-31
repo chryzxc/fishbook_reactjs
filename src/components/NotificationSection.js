@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import ReactRoundedImage from "react-rounded-image";
 import profile from "../assets/github.jpg";
 import { UserContext } from "../contexts/UserContext";
-import { db } from "../others/firebase";
+import { db } from "../config/firebase";
 import {
   ref,
   set,

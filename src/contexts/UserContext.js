@@ -13,6 +13,7 @@ import {
 } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import { userReducer } from "../reducers/userReducer";
+import { useGetUserProfilePicture } from "../hooks/useGetUserData";
 
 export const UserContext = createContext();
 
@@ -68,9 +69,10 @@ const UserContextProvider = (props) => {
   //navigate("/Home/");
   // };
 
-  const FetchUserData = (userId) => {
+  const FetchUserData = async() => {
     const dbRef = ref(db);
-    get(child(dbRef, "users/" + userId))
+  
+    await get(child(dbRef, "users/" + userContextId))
       .then((snapshot) => {
         if (snapshot.exists()) {
           dispatch({
@@ -84,6 +86,7 @@ const UserContextProvider = (props) => {
               friend_requests: snapshot?.val().friend_requests,
               notifications: snapshot?.val().notifications,
               friends:snapshot?.val().friends,
+         
             },
           });
 
@@ -119,7 +122,7 @@ const UserContextProvider = (props) => {
   // };
 
   return (
-    <UserContext.Provider value={{ user, setUserContextId, FetchUserData ,dispatch}}>
+    <UserContext.Provider value={{ user, userContextId,setUserContextId, FetchUserData ,dispatch}}>
       {props.children}
     </UserContext.Provider>
   );

@@ -20,6 +20,7 @@ import {
 } from "firebase/database";
 import {db} from "../config/firebase";
 import DateFormat from "../utils/DateFormat";
+import { useGetUserProfilePicture } from "../hooks/useGetUserData";
 
 export default function Replies({ replyData }) {
   const postId = replyData.post_id;
@@ -30,7 +31,7 @@ export default function Replies({ replyData }) {
 
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
-
+  const my_profile_picture = useGetUserProfilePicture(userId);
   const dbRef = ref(db);
   get(child(dbRef, `users/${userId}`))
     .then((snapshot) => {
@@ -50,7 +51,7 @@ export default function Replies({ replyData }) {
       <div className="flex flex-row pl-5 pr-5 pt-2 mt-[5px] ml-5">
         <div className="w-auto mt-1">
           <ReactRoundedImage
-            image={profile}
+            image={my_profile_picture}
             roundedSize="0"
             imageWidth="30"
             imageHeight="30"

@@ -19,15 +19,16 @@ import profile from "../assets/github.jpg";
 import ReactRoundedImage from "react-rounded-image";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { useGetUserProfilePicture } from "../hooks/useGetUserData";
 
 export default function SideMenu() {
   const font = "ml-2 font-bold text-sm self-center";
   const row = "flex flex-row mt-2 p-2 hover:bg-[#E4E6E9] rounded-xl";
   const icon = "h-7 w-7 self-center";
 
-  const { user } = useContext(UserContext);
+  const { user ,userContextId } = useContext(UserContext);
   let navigate = useNavigate();
-
+  const my_profile_picture = useGetUserProfilePicture(userContextId);
   const handleVisitProfile = () => {
     navigate("/Main/Profile/"+user.id);
   };
@@ -41,7 +42,7 @@ export default function SideMenu() {
       <div className={row}  onClick={() => handleVisitProfile()}>
         <div className="self-center">
           <ReactRoundedImage
-            image={profile}
+            image={my_profile_picture}
             roundedSize="0"
             imageWidth="30"
             imageHeight="30"

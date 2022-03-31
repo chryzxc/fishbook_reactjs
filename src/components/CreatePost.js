@@ -4,7 +4,7 @@ import ReactRoundedImage from "react-rounded-image";
 
 import profile from "../assets/github.jpg";
 import { UserContext } from "../contexts/UserContext";
-import storyimage from "../assets/2.jpg";
+
 import { FaRegImages, FaRegSmile, FaVideo, FcGallery } from "react-icons/fa";
 import { ref, set, push, update } from "firebase/database";
 import { db, storage } from "../config/firebase";
@@ -12,6 +12,7 @@ import { RiCloseFill } from "react-icons/ri";
 import Modal from "react-modal";
 import { uploadBytes, ref as storageRef } from "firebase/storage";
 import { FaGlobeAsia } from "react-icons/fa";
+import { useGetUserProfilePicture } from "../hooks/useGetUserData";
 
 
 const CreatePostCard =  styled.div`
@@ -87,7 +88,7 @@ const CreatePost = ({ handleRefresh , data} ) => {
 
   
 
-  const { user } = useContext(UserContext);
+  const { user,userContextId } = useContext(UserContext);
   const [caption, setCaption] = useState("");
 
   const [selectedFile, setSelectedFile] = useState();
@@ -107,6 +108,7 @@ const CreatePost = ({ handleRefresh , data} ) => {
   const handleCloseFeelingModal = () => {
     setOpenModal(false);
   };
+  console.log("Create: " + user.id);
 
   let inputContent = "";
 
@@ -319,7 +321,7 @@ const CreatePost = ({ handleRefresh , data} ) => {
             <div className="mt-3 ml-3 flex flex-row">
               <ReactRoundedImage
               
-                image={profile}
+                image={useGetUserProfilePicture(userContextId)}
                 roundedSize="0"
                 imageWidth="50"
                 imageHeight="50"

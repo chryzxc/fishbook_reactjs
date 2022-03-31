@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { db } from "../others/firebase";
+import { db } from "../config/firebase";
 import Button from "react-bootstrap/Button";
 import CreateAccount from "./CreateAccount";
 import {

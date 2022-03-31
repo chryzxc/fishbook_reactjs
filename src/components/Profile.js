@@ -6,6 +6,7 @@ import styled from "styled-components";
 import CreatePost from "./CreatePost";
 import Intro from "./Intro";
 import useFetchProfilePost from "../hooks/useFetchProfilePost";
+import { db, storage } from "../config/firebase";
 
 import {
   ref,
@@ -18,7 +19,7 @@ import {
   orderByChild,
   onValue,
 } from "firebase/database";
-import { db } from "../config/firebase";
+
 import Posts from "./Posts";
 import {
   RiPencilFill,
@@ -26,10 +27,16 @@ import {
   RiUserAddFill,
   RiUserSharedFill,
   RiUserFollowFill,
+  RiCameraFill,
 } from "react-icons/ri";
 import { UserContext } from "../contexts/UserContext";
 import { useParams, useNavigate } from "react-router-dom";
-import useGetUserData from "../hooks/useGetUserData";
+import {
+  useGetUserData,
+  useGetUserProfilePicture,
+} from "../hooks/useGetUserData";
+import { uploadBytes, ref as storageRef } from "firebase/storage";
+import ProfileFriends from "./ProfileFriends";
 
 const UpperSection = styled.div`
   height: 80%;
@@ -55,6 +62,7 @@ const Profile = () => {
       navigate(-2);
     }
   });
+  let inputContent = "";
   const dbRef = ref(db, "posts/");
   const [updateProfile, setUpdateProfile] = useState(0);
   const [profileData1, setProfileData1] = useState();
@@ -64,7 +72,8 @@ const Profile = () => {
   const [profileEmail, setProfileEmail] = useState();
   const [profileDateRegistered, setProfileDateRegistered] = useState();
   const [profileFriends, setProfileFriends] = useState();
-
+  let friends = [];
+  let friends_index = 0;
   const [isAFriend, setIsAFriend] = useState(() => {
     const my_friends = user.friends;
     const my_friends_list = [];
@@ -111,8 +120,8 @@ const Profile = () => {
 
   const profileData = useGetUserData(myId, profileId);
   const friends_count = () => {
-    const friends = [];
     if (profileData?.friends) {
+      friends = [];
       Object.keys(profileData.friends).map((key) => {
         friends.push(key);
       });
@@ -291,6 +300,27 @@ const Profile = () => {
     setUpdateProfile(updateProfile + 1);
   };
 
+  const ShowProfileFriends = () => {
+    let count = 0;
+  };
+
+  const updateProfilePicture = (e) => {
+    console.log("triggered");
+    const profileRef = storageRef(
+      storage,
+      `users/${myId}/my_profile_picture.jpeg`
+    );
+
+    uploadBytes(profileRef, e.target.files[0])
+      .then((snapshot) => {
+        console.log(" scucess");
+        handleRefresh();
+      })
+      .catch((error) => {
+        console.log("upload error : " + error);
+      });
+  };
+
   const SendFriendRequest = () => {
     dispatch({
       type: "SEND_FRIEND_REQUEST",
@@ -334,13 +364,33 @@ const Profile = () => {
           </div>
           <div className="flex flex-row mt-[-40px]">
             {/* Left */}
-            <div className="ml-7 rounded-full bg-white p-2 z-1">
+            <div className="ml-7 rounded-full bg-white p-2 z-1 relative">
               <ReactRoundedImage
-                image={logo}
+                image={useGetUserProfilePicture(profileId)}
                 roundedSize="0"
-                imageWidth="140"
-                imageHeight="140"
-              ><p className="bg-white">TEST</p></ReactRoundedImage>
+                imageWidth="180"
+                imageHeight="180"
+              />
+              {myProfile ? (
+                <div
+                  className="bg-[#E4E6EB] absolute bottom-8 right-2 rounded-full p-2 hover:bg-neutral-400"
+                  onClick={() => {
+                    inputContent.click();
+                    return false;
+                  }}
+                >
+                  <RiCameraFill className="h-6 w-6" />
+                  <input
+                    onChange={(e) => updateProfilePicture(e)}
+                    ref={(input) => {
+                      inputContent = input;
+                    }}
+                    type="file"
+                    name="file"
+                    className="hidden"
+                  />
+                </div>
+              ) : null}
             </div>
 
             {/* Middle */}
@@ -349,25 +399,38 @@ const Profile = () => {
                 <p className="font-bold text-2xl ">{`${profileData?.firstname} ${profileData?.lastname}`}</p>
                 <p>{friends_count()}</p>
                 <div className="flex flex-row ml-2 mt-1">
-                  <div className="ml-[-10px] p-[2px] bg-white rounded-full z-[10] ">
-                    <ReactRoundedImage
-                      image={logo}
-                      roundedSize="0"
-                      imageWidth="40"
-                      imageHeight="40"
-                    />
-                  </div>
+                  {/* {() => {
+                    let index= friends.length
+                    let count = 0;
+                    friends &&
+                      friends.map(() => {
+                        count +=1;
 
-                  <div className="ml-[-10px] p-[2px] bg-white rounded-full z-[9] ">
-                    <ReactRoundedImage
-                      image={logo}
-                      roundedSize="0"
-                      imageWidth="40"
-                      imageHeight="40"
-                    />
-                  </div>
+                        return (
+                          <div className={`ml-[-10px] p-[2px] bg-white rounded-full z-[${index-count}]`}>
+                            <ReactRoundedImage
+                              image={logo}
+                              roundedSize="0"
+                              imageWidth="40"
+                              imageHeight="40"
+                            />
+                          </div>
+                        );
+                      });
+                    
+                  }} */}
 
-               
+                  {friends &&
+                    friends.map((id) => {
+                      friends_index += 1;
+
+                      return (
+                        <ProfileFriends
+                          id={id}
+                          index={friends.length - friends_index}
+                        />
+                      );
+                    })}
                 </div>
               </div>
 
