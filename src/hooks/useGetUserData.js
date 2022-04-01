@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ref, child, onValue } from "firebase/database";
+import { ref, child, onValue,get,limitToFirst } from "firebase/database";
 import { db ,storage} from "../config/firebase";
 import {
   uploadBytes,
   ref as storageRef,
-  getDownloadURL,
+  getDownloadURL
 } from "firebase/storage";
 import default_profile from "../assets/default_profile.png";
 
@@ -54,6 +54,34 @@ export const useGetUserData = (myId,profileId) => {
   return data;
   
 };
+
+export const useGetUserInfo =  (id) => {
+ 
+  const [firstname, setFirstname] = useState(null);
+  const [lastname, setLastname] = useState(null);
+
+   useEffect(() => {
+    get(ref(db, "users/" + id),limitToFirst(2))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        setFirstname(snapshot.val().firstname);
+        setLastname(snapshot.val().lastname);
+    
+      
+      } else {
+        console.log("No data available");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+ 
+  }, []);
+  return {firstname , lastname};
+  
+};
+
+
 
 
 export const useGetUserProfilePicture = (profileId) => {

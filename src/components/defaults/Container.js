@@ -6,7 +6,7 @@ const Container = styled.div`
   overflow-x: hidden;
   background-color: white;
   margin: 5px;
-  padding: 20px;
+  padding: 10px 10px 10px 20px;
   height: auto;
   width: auto;
   min-height: auto;

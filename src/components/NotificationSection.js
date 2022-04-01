@@ -15,6 +15,8 @@ import {
   onValue,
 } from "firebase/database";
 import DateFormat from "../utils/DateFormat";
+import { useGetUserInfo } from "../hooks/useGetUserData";
+import { info } from "autoprefixer";
 
 const row =
   "flex flex-row w-[100%] mt-1 text-sm rounded-lg hover:bg-neutral-200 pl-1 pr-2 pb-1 pt-1";
@@ -32,19 +34,19 @@ export default function NotificationSection() {
   });
 
   if (notifications) {
+  
     Object.keys(notifications).map((id) => {
       if (notifications[id]) {
-        notifications_list.push(...notifications_list, {
+        notifications_list.push({
           id: id,
           type: notifications[id].type,
           date_confirmed: notifications[id].date_confirmed,
+          notifications_from: notifications[id].notifications_from,
         });
       }
     });
   }
 
-  console.log("notifications : " + notifications);
-  console.log("list : " + notifications_list);
 
   const SharedPost = () => {
     return (
@@ -98,7 +100,9 @@ export default function NotificationSection() {
     );
   };
 
-  const RequestSentAccepted = () => {
+  const RequestSentAccepted = ({data}) => {
+    const info = useGetUserInfo(data.notifications_from);
+   
     return (
       <div className={row}>
         <div>
@@ -111,9 +115,9 @@ export default function NotificationSection() {
         </div>
         <div className="flex flex-row justify-between w-[100%]">
           <div className="text-left ml-2 mt-auto mb-auto">
-            <p className="font-bold">Christian accepted your friend request</p>
+            <p className="font-bold">{`${info.firstname} ${info.lastname} accepted your friend request`}</p>
             <div className="flex flex-row text-xs text-neutral-500">
-              <p className="text-blue-500">1 day ago</p>
+              <p className="text-blue-500"><DateFormat date={data.date_confirmed} addSuffix/></p>
             </div>
           </div>
           <div className="text-blue-500 mt-auto mb-auto text-2xl">
@@ -125,32 +129,13 @@ export default function NotificationSection() {
   };
 
 
-  const RequestReceivedAccepted = (props) => {
-    console.log("my props: " + props.value.id);
+  const RequestReceivedAccepted = ({data}) => {
 
-    const dbRef = ref(db);
-    get(child(dbRef, "users/" + props.value.id))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          dispatch({
-            type: "SET_USER",
-            user: {
-              id: snapshot.key,
-              firstname: snapshot.val().firstname,
-              lastname: snapshot.val().lastname,
-              email: snapshot.val().email,
-              date_registered: snapshot?.val().date_registered,
-              friend_requests: snapshot?.val().friend_requests,
-              notifications: snapshot?.val().notifications,
-            },
-          });
+    const info = useGetUserInfo(data.id);
+    
+  
 
-          // navigate("/Home/");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+   
 
     return (
       <div className={row}>
@@ -164,9 +149,9 @@ export default function NotificationSection() {
         </div>
         <div className="flex flex-row justify-between w-[100%]">
           <div className="text-left ml-2 mt-auto mb-auto">
-            <p className="font-bold">You are now friends with Christian</p>
+            <p className="font-bold">{`You are now friends with ${info.firstname} ${info.lastname}`}</p>
             <div className="flex flex-row text-xs text-neutral-500">
-              <p className="text-blue-500"><DateFormat date={props.value.date_confirmed} addSuffix={true}/></p>
+              <p className="text-blue-500"><DateFormat date={data.date_confirmed} addSuffix={true}/></p>
             </div>
           </div>
           <div className="text-blue-500 mt-auto mb-auto text-2xl">
@@ -180,7 +165,7 @@ export default function NotificationSection() {
   const FriendRequest = ({ id, date_requested }) => {
     const [fullname, setFullname] = useState("");
     const [dateRequested, setDateRequested] = useState("");
-
+   
     const dbRef = ref(db);
     get(child(dbRef, "users/" + id))
       .then((snapshot) => {
@@ -259,6 +244,7 @@ export default function NotificationSection() {
 
             {friend_requests &&
               Object.keys(friend_requests).map((id) => (
+             
                 <FriendRequest
                   id={id}
                   date_requested={friend_requests[id].date_requested}
@@ -279,13 +265,13 @@ export default function NotificationSection() {
       <div>
         <p className="font-semibold text-neutral-700">Others</p>
         {notifications_list.map((notification) => {
-          console.log(notification.type);
+        
 
           if (notification.type === "friend_request_sent_accepted") {
-            return <RequestSentAccepted value={notification}/>;
+            return <RequestSentAccepted data={notification}/>;
           }
           if (notification.type === "friend_request_received_accepted") {
-            return <RequestReceivedAccepted value={notification}/>;
+            return <RequestReceivedAccepted data={notification}/>;
           }
         })}
         {/* <SharedPost />

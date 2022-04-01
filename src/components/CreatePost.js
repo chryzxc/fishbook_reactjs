@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import ReactRoundedImage from "react-rounded-image";
 
-import profile from "../assets/github.jpg";
+
 import { UserContext } from "../contexts/UserContext";
 
 import { FaRegImages, FaRegSmile, FaVideo, FcGallery } from "react-icons/fa";
@@ -239,7 +239,7 @@ const CreatePost = ({ handleRefresh , data} ) => {
       { postEmoji: "🥺", postFeeling: "delighted" },
       { postEmoji: "🥺", postFeeling: "emotional" },
       { postEmoji: "🥺", postFeeling: "aweosme" },
-      { postEmoji: "🥺", postFeeling: "aweosme" },
+      { postEmoji: "🥺", postFeeling: "great" },
     ];
 
     const Feelings = ({ postEmoji, postFeeling }) => {

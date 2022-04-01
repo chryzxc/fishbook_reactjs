@@ -36,7 +36,8 @@ import {
   useGetUserProfilePicture,
 } from "../hooks/useGetUserData";
 import { uploadBytes, ref as storageRef } from "firebase/storage";
-import ProfileFriends from "./ProfileFriends";
+import ProfileFriendsIcon from "./ProfileFriendsIcon";
+import Friends from "./Friends";
 
 const UpperSection = styled.div`
   height: 80%;
@@ -119,7 +120,9 @@ const Profile = () => {
   });
 
   const profileData = useGetUserData(myId, profileId);
+
   const friends_count = () => {
+   
     if (profileData?.friends) {
       friends = [];
       Object.keys(profileData.friends).map((key) => {
@@ -425,7 +428,7 @@ const Profile = () => {
                       friends_index += 1;
 
                       return (
-                        <ProfileFriends
+                        <ProfileFriendsIcon
                           id={id}
                           index={friends.length - friends_index}
                         />
@@ -501,7 +504,10 @@ const Profile = () => {
           {/* INTRO */}
           <div className="w-[40%]">
             <Intro />
+            <Friends friends={friends}/>
           </div>
+
+         
 
           {/* POSTS */}
           <div className="w-[60%] ml-2">

@@ -48,14 +48,13 @@ const FloatingContainer = styled.div`
 const FloatingMessageSection = styled.div``;
 
 const Main = () => {
-  const [showContainer, setShowContainer] = useState("home");
-  const [isHomePage, setIsHomePage] = useState(true);
+  const SideNavigation = () => {
+    const [showContainer, setShowContainer] = useState("home");
+    const [isHomePage, setIsHomePage] = useState(true);
+    useEffect(() => {}, [showContainer]);
 
-  useEffect(() => {}, [showContainer]);
-
-  return (
-    <UserContextProvider>
-      <div className="flex flex-row">
+    return (
+      <>
         <FloatingSideNav>
           <SideNav
             isHomePage={isHomePage}
@@ -83,11 +82,20 @@ const Main = () => {
           )}
 
           {/* // <Home/> */}
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/Profile/:profileId" element={<Profile />} />
-          </Routes>
         </div>
+      </>
+    );
+  };
+
+  return (
+    <UserContextProvider>
+      <div className="flex flex-row"></div>
+      <SideNavigation />
+      <div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Profile/:profileId" element={<Profile />} />
+        </Routes>
       </div>
     </UserContextProvider>
   );
