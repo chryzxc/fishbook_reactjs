@@ -131,7 +131,7 @@ export default function NotificationSection() {
 
   const RequestReceivedAccepted = ({data}) => {
 
-    const info = useGetUserInfo(data.id);
+    const info = useGetUserInfo(data.notifications_from);
     
   
 
