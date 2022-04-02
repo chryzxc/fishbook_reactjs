@@ -66,8 +66,6 @@ export const useGetUserInfo =  (id) => {
       if (snapshot.exists()) {
         setFirstname(snapshot.val().firstname);
         setLastname(snapshot.val().lastname);
-    
-      
       } else {
         console.log("No data available");
       }
@@ -102,7 +100,7 @@ export const useGetUserProfilePicture = (profileId) => {
       
       })
       .catch((error) => {
-        console.log("IMAGE NOT EXIST: " + error);
+        console.log("IMAGE NOT EXIST: " + error.code);
         setProfilePicture(default_profile);
       });
     
