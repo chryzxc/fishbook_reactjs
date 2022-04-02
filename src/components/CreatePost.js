@@ -88,7 +88,7 @@ const CreatePost = ({ handleRefresh , data} ) => {
 
   
 
-  const { user,userContextId } = useContext(UserContext);
+  const { user,userContextId ,dispatch} = useContext(UserContext);
   const [caption, setCaption] = useState("");
 
   const [selectedFile, setSelectedFile] = useState();
@@ -97,7 +97,7 @@ const CreatePost = ({ handleRefresh , data} ) => {
   const [content, setContent] = useState();
   const [contentName, setContentName] = useState();
 
-  const [feeling, setFeeling] = useState();
+  const [feeling, setFeeling] = useState("");
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -108,7 +108,7 @@ const CreatePost = ({ handleRefresh , data} ) => {
   const handleCloseFeelingModal = () => {
     setOpenModal(false);
   };
-  console.log("Create: " + user.id);
+ 
 
   let inputContent = "";
 
@@ -164,39 +164,55 @@ const CreatePost = ({ handleRefresh , data} ) => {
     const dbRef = ref(db, "posts/");
     const newPost = push(dbRef);
 
-    set(newPost, post)
-      .then(async () => {
-        setCaption("");
+    dispatch({
+     
+      type: "CREATE_POST",
+      setContent,
+      setCaption,
+      handleRefresh,
+      data: {
+        newPost: newPost,
+        post: post,
+        content:content,
+      },
+     
+    });
 
-        if (content) {
-          //   await contents.forEach(async (content) => {
-          const dbRef = ref(db, `posts/${newPost.key}/contents`);
-          const newContent = push(dbRef);
+    
 
-          update(newContent, content).then(async () => {
-            const contentRef = storageRef(
-              storage,
-              `posts/${newPost.key}/${newContent.key}.jpeg`
-            );
+    // set(newPost, post)
+    //   .then(async () => {
+    //     setCaption("");
 
-            await uploadBytes(contentRef, content.file_path)
-              .then((snapshot) => {
-                console.log("Uploaded a blob or file!" + content.file_path);
-                setContent();
-                handleRefresh();
-              })
-              .catch((error) => {
-                console.log("upload error : " + error);
-              });
-          });
-          //  });
-        } else {
-          handleRefresh();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    //     if (content) {
+    //       //   await contents.forEach(async (content) => {
+    //       const dbRef = ref(db, `posts/${newPost.key}/contents`);
+    //       const newContent = push(dbRef);
+
+    //       update(newContent, content).then(async () => {
+    //         const contentRef = storageRef(
+    //           storage,
+    //           `posts/${newPost.key}/${newContent.key}.jpeg`
+    //         );
+
+    //         await uploadBytes(contentRef, content.file_path)
+    //           .then((snapshot) => {
+    //             console.log("Uploaded a blob or file!" + content.file_path);
+    //             setContent();
+    //             handleRefresh();
+    //           })
+    //           .catch((error) => {
+    //             console.log("upload error : " + error);
+    //           });
+    //       });
+    //       //  });
+    //     } else {
+    //       handleRefresh();
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   const FeelingModal = () => {

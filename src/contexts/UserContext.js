@@ -22,9 +22,8 @@ const UserContextProvider = (props) => {
  
   const [userContextId, setUserContextId] = useState(() => {
     let token = localStorage.getItem("user-token");
-    if (token) {
-      return token;
-    }
+    console.log(" tooken:"+token);
+   
   });
 
   // let token = localStorage.getItem("user-token");

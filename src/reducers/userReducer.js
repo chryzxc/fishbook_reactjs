@@ -12,7 +12,8 @@ import {
   update,
 } from "firebase/database";
 import { useState } from "react";
-import { db } from "../config/firebase";
+import { db,storage } from "../config/firebase";
+import { uploadBytes, ref as storageRef } from "firebase/storage";
 
 export const userReducer = (state, action) => {
   switch (action.type) {
@@ -32,16 +33,41 @@ export const userReducer = (state, action) => {
       return;
 
     case "CREATE_POST":
-      set(action.newPost, action.post)
-        .then(() => {
-          action.setCaption("");
-          console.log("post submitted");
-          action.handleRefresh();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      return;
+     return set(action.data.newPost, action.data.post,action.data.content,action.setCaption,action.setContent,action.handleRefresh)
+     .then(async () => {
+      action.setCaption("");
+      console.log("ado");
+
+       if (action.data.content) {
+         
+         const dbRef = ref(db, `posts/${action.data.newPost.key}/contents`);
+         const newContent = push(dbRef);
+
+         update(newContent, action.data.content).then(async () => {
+           const contentRef = storageRef(
+             storage,
+             `posts/${action.data.newPost.key}/${newContent.key}.jpeg`
+           );
+
+           await uploadBytes(contentRef, action.data.content.file_path)
+             .then((snapshot) => {
+               console.log("Uploaded a blob or file!" + action.data.content.file_path);
+               action.setContent();
+               action.handleRefresh();
+          
+             })
+             .catch((error) => {
+               console.log("upload error : " + error);
+             });
+         });
+      
+       } else {
+        action.handleRefresh();
+       }
+     })
+     .catch((error) => {
+       console.log(error);
+     });
 
     case "SEND_FRIEND_REQUEST":
       return set(

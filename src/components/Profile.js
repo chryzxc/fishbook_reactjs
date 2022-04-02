@@ -136,8 +136,6 @@ const Profile = () => {
     }
   };
 
-  console.log(friends_count());
-
   // const profileData = useGetUserData(profileId).then((data) => {
 
   //   console.log(data.val().firstname)
@@ -308,7 +306,7 @@ const Profile = () => {
   };
 
   const updateProfilePicture = (e) => {
-    console.log("triggered");
+    
     const profileRef = storageRef(
       storage,
       `users/${myId}/my_profile_picture.jpeg`
@@ -322,6 +320,55 @@ const Profile = () => {
       .catch((error) => {
         console.log("upload error : " + error);
       });
+
+
+      // const post = {
+      //   user_id: user.id,
+      //   // caption: caption,
+      //   date_posted: Date.now(),
+      //   // feeling: feeling,
+      // };
+  
+      // const dbRef = ref(db, "posts/");
+      // const newPost = push(dbRef);
+  
+      // set(newPost, post)
+      //   .then(async () => {
+        
+  
+      //     if (e.target.files[0]) {
+      
+      //       const dbRef = ref(db, `posts/${newPost.key}/contents`);
+      //       const newContent = push(dbRef);
+  
+
+      //       update(newContent, content).then(async () => {
+      //         const contentRef = storageRef(
+      //           storage,
+      //           `posts/${newPost.key}/${newContent.key}.jpeg`
+      //         );
+  
+      //         await uploadBytes(contentRef, e.target.files[0])
+      //           .then((snapshot) => {
+            
+      //             handleRefresh();
+      //           })
+      //           .catch((error) => {
+      //             console.log("upload error : " + error);
+      //           });
+      //       });
+      //       //  });
+      //     } else {
+      //       handleRefresh();
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
+
+
+
+
   };
 
   const SendFriendRequest = () => {
