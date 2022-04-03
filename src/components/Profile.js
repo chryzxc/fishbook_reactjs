@@ -58,11 +58,13 @@ const Profile = () => {
   let navigate = useNavigate();
   const [myId, setMyId] = useState(() => {
     if (localStorage.getItem("user-token") !== "") {
+     
       return localStorage.getItem("user-token");
     } else {
       navigate(-2);
     }
   });
+  
   let inputContent = "";
   const dbRef = ref(db, "posts/");
   const [updateProfile, setUpdateProfile] = useState(0);
@@ -298,7 +300,9 @@ const Profile = () => {
   );
 
   const handleRefresh = () => {
+  
     setUpdateProfile(updateProfile + 1);
+    console.log("refrehsed");
   };
 
   const ShowProfileFriends = () => {

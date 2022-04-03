@@ -218,6 +218,7 @@ const Home = () => {
 
   useEffect(() => {
     FetchUserData();
+    console.log("fetch")
   }, []);
 
   const { fetchedData, isStillFetching } = useFetchPost(dbRef, updateHome);
@@ -259,7 +260,7 @@ const Home = () => {
           <PostsContainer>
             {fetchedData &&
               fetchedData.map((post) => (
-                <Posts key={post.post_id} post={post} />
+                <Posts key={post.post_id} post={post} handleRefresh={handleRefresh}/>
               ))}
           </PostsContainer>
         </Feeds>

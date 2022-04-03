@@ -11,6 +11,7 @@ import {
   AiOutlineSend,
 } from "react-icons/ai";
 import { FaGlobeAsia } from "react-icons/fa";
+import { FiTrash2 } from "react-icons/fi";
 
 import { TiThumbsUp } from "react-icons/ti";
 import { db, storage } from "../config/firebase";
@@ -32,14 +33,21 @@ import {
   remove,
 } from "firebase/database";
 import { UserContext } from "../contexts/UserContext";
-import { format, formatDistance, subDays ,formatDistanceStrict} from "date-fns";
+import {
+  format,
+  formatDistance,
+  subDays,
+  formatDistanceStrict,
+} from "date-fns";
 import Comments from "./Comments";
 import DateFormat from "../utils/DateFormat";
 import {
-  uploadBytes,
+  getStorage,
   ref as storageRef,
   getDownloadURL,
+  deleteObject,
 } from "firebase/storage";
+
 import { useNavigate } from "react-router-dom";
 import { useGetUserProfilePicture } from "../hooks/useGetUserData";
 
@@ -76,7 +84,7 @@ const RowBottom = styled.div`
 
 const Name = styled.p`
   font-weight: bold;
- // margin-top: -2px;
+  // margin-top: -2px;
   font-size: 14px;
   margin-left: 10px;
   text-align: left;
@@ -114,7 +122,7 @@ const Divider = styled.hr`
   margin-right: 20px;
 `;
 
-const Posts = ({ post }) => {
+const Posts = ({ post, handleRefresh }) => {
   const dbRef = ref(db);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -284,6 +292,27 @@ const Posts = ({ post }) => {
     //   });
   }, []);
 
+  const deletePost = () => {
+    remove(ref(db, "posts/" + post.post_id)).then(() => {
+      if (post.content) {
+        deleteObject(
+          storageRef(
+            storage,
+            `posts/${post.post_id}/${Object.keys(post.contents)}.jpeg`
+          )
+        )
+          .then(() => {
+            handleRefresh();
+          })
+          .catch((error) => {
+            console.log("failed to delete: " + error);
+          });
+      } else {
+        handleRefresh();
+      }
+    });
+  };
+
   const handleReactPost = () => {
     if (reacted) {
       remove(ref(db, "posts/" + post.post_id + "/reacted_users/" + user.id));
@@ -347,16 +376,23 @@ const Posts = ({ post }) => {
           <div>
             {post.feeling ? (
               <div className="flex flex-row">
-                <Name className="clickable-text justify-self-center" onClick={()=>{
-                   navigate("/Main/Profile/"+post.user_id);
-                }}>
+                <Name
+                  className="clickable-text justify-self-center"
+                  onClick={() => {
+                    navigate("/Main/Profile/" + post.user_id);
+                  }}
+                >
                   {firstname + " " + lastname}
                 </Name>
                 <p className="ml-1 justify-self-center">{`is ${post.feeling}`}</p>
               </div>
             ) : (
-              <Name className="clickable-text" onClick={()=>{
-                navigate("/Main/Profile/"+post.user_id)}} >
+              <Name
+                className="clickable-text"
+                onClick={() => {
+                  navigate("/Main/Profile/" + post.user_id);
+                }}
+              >
                 {firstname + " " + lastname}
               </Name>
             )}
@@ -367,8 +403,8 @@ const Posts = ({ post }) => {
                 new Date(post.date_posted),
                 "hh:m a • MMM dd • eee"
               ).toString()} */}
-              <DateFormat date={post.date_posted} addSuffix={true}/>{" "}
-              {/* {formatDistanceStrict(new Date(post.date_posted), new Date(), {
+                <DateFormat date={post.date_posted} addSuffix={true} />{" "}
+                {/* {formatDistanceStrict(new Date(post.date_posted), new Date(), {
       
       roundingMethod: 'ceil',
       addSuffix: true,
@@ -384,11 +420,18 @@ const Posts = ({ post }) => {
           </div>
         </Row>
 
-        <div>
-          <h1>Not friends</h1>
-        </div>
+        {post.user_id === user.id ? (
+          <div
+            className="text-neutral-500 hover:bg-neutral-300 h-fit p-2 rounded-full"
+            onClick={() => deletePost()}
+          >
+            <FiTrash2 className="h-5 w-5 " />
+          </div>
+        ) : null}
       </RowBottom>
-      <Caption className="text-gray-600 mb-3 text-[16px]">{post.caption}</Caption>
+      <Caption className="text-gray-600 mb-3 text-[16px]">
+        {post.caption}
+      </Caption>
 
       {post.contents ? <PostImage alt="post" src={content}></PostImage> : ""}
 

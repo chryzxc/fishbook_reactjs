@@ -22,7 +22,8 @@ const UserContextProvider = (props) => {
  
   const [userContextId, setUserContextId] = useState(() => {
     let token = localStorage.getItem("user-token");
-    console.log(" tooken:"+token);
+    return token;
+   
    
   });
 
@@ -71,9 +72,11 @@ const UserContextProvider = (props) => {
   const FetchUserData = async() => {
     const dbRef = ref(db);
   
-    await get(child(dbRef, "users/" + userContextId))
+     await get(child(dbRef, "users/" + userContextId))
       .then((snapshot) => {
+        
         if (snapshot.exists()) {
+        
           dispatch({
             type: "SET_USER",
             user: {
