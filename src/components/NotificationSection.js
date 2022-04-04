@@ -15,7 +15,7 @@ import {
   onValue,
 } from "firebase/database";
 import DateFormat from "../utils/DateFormat";
-import { useGetUserInfo } from "../hooks/useGetUserData";
+import { useGetUserInfo, useGetUserProfilePicture } from "../hooks/useGetUserData";
 import { info } from "autoprefixer";
 
 const row =
@@ -43,7 +43,9 @@ export default function NotificationSection() {
           date_confirmed: notifications[id].date_confirmed,
           notifications_from: notifications[id].notifications_from,
         });
+       
       }
+      notifications_list.reverse();
     });
   }
 
@@ -107,7 +109,7 @@ export default function NotificationSection() {
       <div className={row}>
         <div>
           <ReactRoundedImage
-            image={profile}
+            image={useGetUserProfilePicture(data.notifications_from)}
             roundedSize="0"
             imageWidth="50"
             imageHeight="50"
@@ -133,15 +135,12 @@ export default function NotificationSection() {
 
     const info = useGetUserInfo(data.notifications_from);
     
-  
-
-   
 
     return (
       <div className={row}>
         <div>
           <ReactRoundedImage
-            image={profile}
+            image={useGetUserProfilePicture(data.notifications_from)}
             roundedSize="0"
             imageWidth="50"
             imageHeight="50"

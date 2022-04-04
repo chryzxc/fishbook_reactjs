@@ -131,7 +131,7 @@ const Posts = ({ post, handleRefresh }) => {
   const [reactors, setReactors] = useState([]);
   const [reacted, setReacted] = useState(false);
 
-  const { user } = useContext(UserContext);
+  const { user,userContextId } = useContext(UserContext);
 
   const [myComment, setMyComment] = useState("");
   const [comments, setComments] = useState([]);
@@ -420,7 +420,7 @@ const Posts = ({ post, handleRefresh }) => {
           </div>
         </Row>
 
-        {post.user_id === user.id ? (
+        {post.user_id === userContextId ? (
           <div
             className="text-neutral-500 hover:bg-neutral-300 h-fit p-2 rounded-full"
             onClick={() => deletePost()}

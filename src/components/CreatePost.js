@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState ,useEffect} from "react";
 import styled from "styled-components";
 import ReactRoundedImage from "react-rounded-image";
 
@@ -88,8 +88,10 @@ const CreatePost = ({ handleRefresh , data} ) => {
 
   
 
-  const { user,userContextId ,dispatch} = useContext(UserContext);
+  const { user,userContextId ,FetchUserData,dispatch} = useContext(UserContext);
   const [caption, setCaption] = useState("");
+
+ 
 
   const [selectedFile, setSelectedFile] = useState();
   const [isFilePicked, setIsFilePicked] = useState(false);

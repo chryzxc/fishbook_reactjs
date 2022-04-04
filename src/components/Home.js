@@ -218,8 +218,8 @@ const Home = () => {
 
   useEffect(() => {
     FetchUserData();
-    console.log("fetch")
-  }, []);
+   
+  }, [updateHome]);
 
   const { fetchedData, isStillFetching } = useFetchPost(dbRef, updateHome);
 

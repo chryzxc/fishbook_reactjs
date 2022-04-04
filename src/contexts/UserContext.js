@@ -70,6 +70,7 @@ const UserContextProvider = (props) => {
   // };
 
   const FetchUserData = async() => {
+   
     const dbRef = ref(db);
   
      await get(child(dbRef, "users/" + userContextId))
@@ -99,6 +100,11 @@ const UserContextProvider = (props) => {
         console.error(error);
       });
   };
+
+ 
+ 
+
+  
 
  
 

@@ -406,15 +406,23 @@ const Profile = () => {
   };
 
   return (
-    <div className="w-[100%] h-[auto] text-sm items-center">
+    <div className="w-[100%] h-[auto] text-sm items-center ">
       <UpperSection>
-        <div className="w-[65vw] h-[100%]  m-auto pb-3">
-          <div className="">
+        <div className="w-[65vw] h-[100%]  m-auto pb-3 ">
+          <div className="relative">
             <img
               src={logo}
               alt="cover_photo"
               className="h-[400px] w-[100%] rounded-bl-2xl rounded-br-2xl object-cover"
             ></img>
+             <div className="flex flex-row font-semibold text-sm tracking-wide absolute bottom-3 right-4">
+                  <div className="self-center mt-10 m-1  bg-[#E4E6E9] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-neutral-300">
+                    <RiCameraFill className="h-5 w-5" />
+                    <p className="ml-1">Change cover picture</p>
+                  </div>
+                </div>
+
+         
           </div>
           <div className="flex flex-row mt-[-40px]">
             {/* Left */}

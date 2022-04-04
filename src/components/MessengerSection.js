@@ -1,7 +1,19 @@
-import React from "react";
+import React ,{useContext}from "react";
+import { UserContext } from "../contexts/UserContext";
 import MessengerRow from "./MessengerRow";
 
 export default function MessengerSection() {
+  const { user, FetchUserData } = useContext(UserContext);
+  let friends_list = [];
+
+  Object.keys(user.friends).map((id) => {
+    if (user.friends[id]) {
+      friends_list.push(id);
+    }
+  });
+
+  console.log("friends:"+friends_list);
+
   return (
     <div className="">
       <div className="flex flex-row p-3 ">
@@ -12,17 +24,8 @@ export default function MessengerSection() {
       </div>
 
       <ul className="w-[100%]">
-          <MessengerRow/>
-          <MessengerRow/>
-          <MessengerRow/>
-          <MessengerRow/>
-          <MessengerRow/>
-          <MessengerRow/>
-          <MessengerRow/>
-          <MessengerRow/>
-          <MessengerRow/>
-          <MessengerRow/>
-          <MessengerRow/>
+
+        {friends_list && friends_list.map((id)=> <MessengerRow id={id}/>)}
       </ul>
     </div>
   );
