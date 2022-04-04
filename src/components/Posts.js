@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-import storyimage from "../assets/2.jpg";
-import profile from "../assets/github.jpg";
+
 import ReactRoundedImage from "react-rounded-image";
 import {
   AiOutlineLike,
@@ -50,6 +49,7 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import { useGetUserProfilePicture } from "../hooks/useGetUserData";
+import View from "./View";
 
 const Post = styled.div`
   background-color: white;
@@ -60,7 +60,9 @@ const Post = styled.div`
   min-width: 37vw;
   margin-top: 20px;
   border-radius: 10px;
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: ${(props) => props.box_value};
+  
+  /* box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19); */
   padding-bottom: 5px;
 `;
 
@@ -122,7 +124,7 @@ const Divider = styled.hr`
   margin-right: 20px;
 `;
 
-const Posts = ({ post, handleRefresh }) => {
+const Posts = ({ isHomePage ,post, handleRefresh ,setViewData }) => {
   const dbRef = ref(db);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -263,33 +265,7 @@ const Posts = ({ post, handleRefresh }) => {
 
     fetchData();
 
-    // get(child(dbRef, `posts/${post.post_id}/comments`))
-    //   .then((snapshot) => {
-    //     if (snapshot.exists()) {
-    //       let comments = [];
-    //       let numOfComments = 0;
-    //       snapshot.forEach((data) => {
-    //         const commentDetails = {
-    //           comment_id: data.key,
-    //           comment: data.val().comment,
-    //           date_posted: data.val().date_posted,
-    //           user_id: data.val().user_id,
-    //         };
-
-    //         comments.push(commentDetails);
-    //         comments.reverse();
-    //         numOfComments += 1;
-    //       });
-    //       setComments(comments);
-    //       setNumOfComments(numOfComments);
-    //       console.log("comments" + comments);
-    //     } else {
-    //       setNumOfComments(0);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
+  
   }, []);
 
   const deletePost = () => {
@@ -334,6 +310,8 @@ const Posts = ({ post, handleRefresh }) => {
     // }
   };
 
+
+
   const handleCommentListener = (e) => {
     setMyComment(e.target.value);
   };
@@ -361,8 +339,14 @@ const Posts = ({ post, handleRefresh }) => {
       });
   };
 
+
+
   return (
-    <Post>
+    <Post box_value={()=>{
+      if(isHomePage){
+        return `0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19)`;
+      }
+    }}>
       <RowBottom className="pt-4">
         <Row>
           <div>
@@ -433,7 +417,15 @@ const Posts = ({ post, handleRefresh }) => {
         {post.caption}
       </Caption>
 
-      {post.contents ? <PostImage alt="post" src={content}></PostImage> : ""}
+      
+
+      {isHomePage ?  post.contents ? <PostImage alt="post" src={content} onClick={()=> {
+        setViewData({data : {
+          post: post,
+          content: content,
+        }});
+         navigate("/Main/View/");
+      }}></PostImage> : "" : ""}
 
       <div>
         <RowBottom className="mt-2">

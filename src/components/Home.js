@@ -29,6 +29,8 @@ import FeedsFriendSuggestionList from "./FeedsFriendSuggestionList";
 import SideNav from "./SideNav";
 import SideMenu from "./SideMenu";
 
+
+
 const Main = styled.div`
   height: 100%;
   width: 100%;
@@ -60,6 +62,8 @@ const NavBar = styled.div`
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 0.5px 5px 0 rgba(0, 0, 0, 0.19);
   text-align: center;
 `;
+
+
 
 const Container = styled.div`
   height: auto;
@@ -203,7 +207,7 @@ const Divider = styled.hr`
   margin-top: 10px;
 `;
 
-const Home = () => {
+const Home = ({setViewData}) => {
   let navigate = useNavigate();
 
    const { user, FetchUserData } = useContext(UserContext);
@@ -260,7 +264,7 @@ const Home = () => {
           <PostsContainer>
             {fetchedData &&
               fetchedData.map((post) => (
-                <Posts key={post.post_id} post={post} handleRefresh={handleRefresh}/>
+                <Posts key={post.post_id} isHomePage={true} post={post} handleRefresh={handleRefresh} setViewData={setViewData}/>
               ))}
           </PostsContainer>
         </Feeds>

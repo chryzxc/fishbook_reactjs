@@ -1,8 +1,8 @@
 import Login from "./components/Login";
-import Home from "./components/Home";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserContextProvider from "./contexts/UserContext.js";
-import Profile from "./components/Profile";
+
 import Main from "./components/Main";
 
 

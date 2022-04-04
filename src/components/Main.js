@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import MessengerSection from "./MessengerSection";
 import NotificationSection from "./NotificationSection";
+import MyRoutes from "../routes/MyRoutes";
 
 const FloatingSideNav = styled.div`
   // background-color: brown;
@@ -48,6 +49,9 @@ const FloatingContainer = styled.div`
 const FloatingMessageSection = styled.div``;
 
 const Main = () => {
+  const [viewData,setViewData] = useState(null);
+  console.log("viewDataMain: "+JSON.stringify(viewData));
+
   const SideNavigation = () => {
     const [showContainer, setShowContainer] = useState("home");
     const [isHomePage, setIsHomePage] = useState(true);
@@ -92,10 +96,11 @@ const Main = () => {
       <div className="flex flex-row"></div>
       <SideNavigation />
       <div>
-        <Routes>
+        <MyRoutes viewData={viewData} setViewData={setViewData}/>
+        {/* <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Profile/:profileId" element={<Profile />} />
-        </Routes>
+        </Routes> */}
       </div>
     </UserContextProvider>
   );
