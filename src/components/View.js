@@ -1,17 +1,40 @@
 import React from "react";
 import Posts from "./Posts";
+import {
+ 
+  RiCloseFill,
+} from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
-export default function View({ viewData }) {
-  console.log("viewData: " + JSON.stringify(viewData));
+
+export default function View({ viewData , setShowView}) {
+  let navigate = useNavigate();
+ 
+  document.body.style.overflow = "hidden";
+  
 
   return (
-    <div className="h-[100%] w-[100%] flex flex-row">
-      <div className="h-[100vh] w-[80%] bg-slate-800">
-          <img src={viewData.data.content} alt="photo" className="object-cover h-[100%]"></img>
+    <div className="h-[100vh] w-[100vw] flex flex-row pl-[68px] ">
+      <div className="h-[100vh] w-[70vw] bg-slate-800 relative border-r-[1px] border-neutral-300">
+
+        <img
+          src={viewData.data.content}
+          alt="photo"
+          className="object-cover h-[100%]"
+        ></img>
         
+        <div className="flex flex-row font-semibold text-sm tracking-wide absolute top-5 left-4">
+          <div className="border-[1px] border-neutral-300 self-center p-2  bg-[#E4E6E9] rounded-full flex flex-row items-center hover:bg-neutral-300" onClick={()=> {
+            document.body.style.overflow = "auto";
+            setShowView(false)}}>
+          
+            <RiCloseFill className="h-7 w-7" />
+         
+          </div>
+        </div>
       </div>
-      <div className="h-[100vh] ">
-        <Posts post={viewData.data.post}/>
+      <div className="h-[100vh]">
+        <Posts post={viewData.data.post} />
       </div>
     </div>
   );

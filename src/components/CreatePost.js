@@ -1,7 +1,6 @@
-import React, { useContext, useState ,useEffect} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import ReactRoundedImage from "react-rounded-image";
-
 
 import { UserContext } from "../contexts/UserContext";
 
@@ -14,16 +13,15 @@ import { uploadBytes, ref as storageRef } from "firebase/storage";
 import { FaGlobeAsia } from "react-icons/fa";
 import { useGetUserProfilePicture } from "../hooks/useGetUserData";
 
-
-const CreatePostCard =  styled.div`
+const CreatePostCard = styled.div`
   overflow-y: hidden;
   overflow-x: hidden;
   background-color: white;
   margin: 5px;
   height: auto;
-  width:  ${props => props.data.width};
+  width: ${(props) => props.data.width};
 
- // width: 37vw;
+  // width: 37vw;
   min-height: auto;
 
   margin-top: 10px;
@@ -82,16 +80,11 @@ const FeelingList = styled.ul`
   -moz-columns: 2;
 `;
 
-const CreatePost = ({ handleRefresh , data} ) => {
-  
-  
-
-  
-
-  const { user,userContextId ,FetchUserData,dispatch} = useContext(UserContext);
+const CreatePost = ({ handleRefresh, data }) => {
+  const { user, userContextId, FetchUserData, dispatch } =
+    useContext(UserContext);
   const [caption, setCaption] = useState("");
 
- 
 
   const [selectedFile, setSelectedFile] = useState();
   const [isFilePicked, setIsFilePicked] = useState(false);
@@ -102,15 +95,23 @@ const CreatePost = ({ handleRefresh , data} ) => {
   const [feeling, setFeeling] = useState("");
 
   const [openModal, setOpenModal] = useState(false);
+ 
+  console.log(document.body.style.overflow);
 
   const handleOpenFeelingModal = () => {
+   
+  
     setOpenModal(true);
+    
+
+  
+   
   };
 
   const handleCloseFeelingModal = () => {
+    document.body.style.overflow = "auto";
     setOpenModal(false);
   };
- 
 
   let inputContent = "";
 
@@ -125,6 +126,7 @@ const CreatePost = ({ handleRefresh , data} ) => {
     } else {
       setFeeling(`${postEmoji} feeling ${postFeeling}`);
     }
+    document.body.style.overflow = "auto";
 
     setOpenModal(false);
   };
@@ -167,7 +169,6 @@ const CreatePost = ({ handleRefresh , data} ) => {
     const newPost = push(dbRef);
 
     dispatch({
-     
       type: "CREATE_POST",
       setContent,
       setCaption,
@@ -175,50 +176,14 @@ const CreatePost = ({ handleRefresh , data} ) => {
       data: {
         newPost: newPost,
         post: post,
-        content:content,
+        content: content,
       },
-     
     });
 
-    
-
-    // set(newPost, post)
-    //   .then(async () => {
-    //     setCaption("");
-
-    //     if (content) {
-    //       //   await contents.forEach(async (content) => {
-    //       const dbRef = ref(db, `posts/${newPost.key}/contents`);
-    //       const newContent = push(dbRef);
-
-    //       update(newContent, content).then(async () => {
-    //         const contentRef = storageRef(
-    //           storage,
-    //           `posts/${newPost.key}/${newContent.key}.jpeg`
-    //         );
-
-    //         await uploadBytes(contentRef, content.file_path)
-    //           .then((snapshot) => {
-    //             console.log("Uploaded a blob or file!" + content.file_path);
-    //             setContent();
-    //             handleRefresh();
-    //           })
-    //           .catch((error) => {
-    //             console.log("upload error : " + error);
-    //           });
-    //       });
-    //       //  });
-    //     } else {
-    //       handleRefresh();
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+   
   };
 
   const FeelingModal = () => {
-
     const feelingList = [
       { postEmoji: "😀", postFeeling: "happy" },
       { postEmoji: "🥰", postFeeling: "loved" },
@@ -261,9 +226,7 @@ const CreatePost = ({ handleRefresh , data} ) => {
     ];
 
     const Feelings = ({ postEmoji, postFeeling }) => {
-      
       const selectedFeeling = `${postEmoji} feeling ${postFeeling}`;
-
 
       return (
         <>
@@ -301,7 +264,10 @@ const CreatePost = ({ handleRefresh , data} ) => {
           // onAfterOpen={afterOpenModal}
           onRequestClose={handleCloseFeelingModal}
           style={modalStyle}
-          contentLabel="Sign up"
+           ariaHideApp={false}
+         
+          // ariaHideApp={true}
+          contentLabel=""
         >
           <div>
             <p className="font-bold text-black text-xl text-center">
@@ -338,7 +304,6 @@ const CreatePost = ({ handleRefresh , data} ) => {
           <div className="mt-5">
             <div className="mt-3 ml-3 flex flex-row">
               <ReactRoundedImage
-              
                 image={useGetUserProfilePicture(userContextId)}
                 roundedSize="0"
                 imageWidth="50"
@@ -387,7 +352,7 @@ const CreatePost = ({ handleRefresh , data} ) => {
             </WritePost>
           </div>
           <div>
-            <Divider className="ml-3 mr-3"/>
+            <Divider className="ml-3 mr-3" />
           </div>
           <div className="ml-4 mr-4 mb-5 mt-5">
             <div className="flex flex-row justify-around">
@@ -430,7 +395,10 @@ const CreatePost = ({ handleRefresh , data} ) => {
 
               <div
                 className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2"
-                onClick={() => setOpenModal(true)}
+                onClick={() => {
+                  document.body.style.overflow = "hidden";
+                  setOpenModal(true)
+                }}
               >
                 <FaRegSmile
                   className="self-center h-6 w-6"
@@ -460,6 +428,5 @@ const CreatePost = ({ handleRefresh , data} ) => {
     </div>
   );
 };
-
 
 export default CreatePost;
