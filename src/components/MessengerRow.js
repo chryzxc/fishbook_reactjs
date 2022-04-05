@@ -20,7 +20,7 @@ export default function MessengerRow({id}) {
         <div className="text-left ml-2 mt-auto mb-auto">
           <p className="font-bold">{`${friend_data.firstname} ${friend_data.lastname}`}</p>
           <div className="flex flex-row text-xs text-neutral-500">
-            <p className="font-semibold">Say hi to your new friend</p>
+            <p className="font-semibold">Messages not yet available</p>
             {/* <p className="ml-1 mr-1">●</p>
             <p>11 mins</p> */}
           </div>

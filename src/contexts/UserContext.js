@@ -19,6 +19,8 @@ export const UserContext = createContext();
 
 const UserContextProvider = (props) => {
   console.log("User context");
+
+  
  
   const [userContextId, setUserContextId] = useState(() => {
     let token = localStorage.getItem("user-token");
@@ -26,6 +28,14 @@ const UserContextProvider = (props) => {
    
    
   });
+  const [user, dispatch] = useReducer(userReducer, {
+    user: {
+      id: userContextId,
+    }
+  });
+
+ 
+
 
   // let token = localStorage.getItem("user-token");
   // const [contextUserId, setContextUserId] = useState(token);
@@ -39,7 +49,7 @@ const UserContextProvider = (props) => {
   //   date_registered: "",
   // });
 
-  const [user, dispatch] = useReducer(userReducer, {});
+  
 
   // const LoginUser = () => {
   //   const dbRef = ref(db);

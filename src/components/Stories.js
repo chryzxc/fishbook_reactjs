@@ -1,9 +1,11 @@
-import React from "react";
+import React,{useContext} from "react";
 import styled from "styled-components";
 import storyimage from "../assets/2.jpg";
 import profile from "../assets/github.jpg";
 
 import ReactRoundedImage from "react-rounded-image";
+import { useGetUserProfilePicture } from "../hooks/useGetUserData";
+import { UserContext } from "../contexts/UserContext";
 
 const Story = styled.div`
   margin: auto;
@@ -45,6 +47,8 @@ const StoryOwner = styled.p`
 `;
 
 export default function Stories() {
+  const { user } = useContext(UserContext);
+
   return (
     <Story>
       <StoryImage src={storyimage} alt="story"></StoryImage>
@@ -53,7 +57,7 @@ export default function Stories() {
       </div>
       <ProfileContainer>
         <ReactRoundedImage
-          image={profile}
+          image={useGetUserProfilePicture(user.id)}
           imageWidth="40"
           imageHeight="40"
           roundedColor="#166ADA"

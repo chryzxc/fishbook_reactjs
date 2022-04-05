@@ -29,8 +29,6 @@ import FeedsFriendSuggestionList from "./FeedsFriendSuggestionList";
 import SideNav from "./SideNav";
 import SideMenu from "./SideMenu";
 
-
-
 const Main = styled.div`
   height: 100%;
   width: 100%;
@@ -62,8 +60,6 @@ const NavBar = styled.div`
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 0.5px 5px 0 rgba(0, 0, 0, 0.19);
   text-align: center;
 `;
-
-
 
 const Container = styled.div`
   height: auto;
@@ -207,10 +203,10 @@ const Divider = styled.hr`
   margin-top: 10px;
 `;
 
-const Home = ({setViewData}) => {
+const Home = ({ setViewData ,setShowView}) => {
   let navigate = useNavigate();
 
-   const { user, FetchUserData } = useContext(UserContext);
+  const { user, FetchUserData } = useContext(UserContext);
 
   const [updateHome, setUpdateHome] = useState(0);
 
@@ -222,7 +218,6 @@ const Home = ({setViewData}) => {
 
   useEffect(() => {
     FetchUserData();
-   
   }, [updateHome]);
 
   const { fetchedData, isStillFetching } = useFetchPost(dbRef, updateHome);
@@ -236,7 +231,6 @@ const Home = ({setViewData}) => {
       <Body>
         <LeftNav>
           <div className="flex flex-row h-[100%]">
-            {/* <SideNav /> */}
             <SideMenu />
           </div>
         </LeftNav>
@@ -264,7 +258,14 @@ const Home = ({setViewData}) => {
           <PostsContainer>
             {fetchedData &&
               fetchedData.map((post) => (
-                <Posts key={post.post_id} isHomePage={true} post={post} handleRefresh={handleRefresh} setViewData={setViewData}/>
+                <Posts
+                  key={post.post_id}
+                  notView={true}
+                  post={post}
+                  handleRefresh={handleRefresh}
+                  setViewData={setViewData}
+                  setShowView ={setShowView}
+                />
               ))}
           </PostsContainer>
         </Feeds>

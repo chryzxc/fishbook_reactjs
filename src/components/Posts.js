@@ -124,7 +124,7 @@ const Divider = styled.hr`
   margin-right: 20px;
 `;
 
-const Posts = ({ isHomePage ,post, handleRefresh ,setViewData }) => {
+const Posts = ({ notView ,post, handleRefresh ,setViewData ,setShowView}) => {
   const dbRef = ref(db);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -343,7 +343,7 @@ const Posts = ({ isHomePage ,post, handleRefresh ,setViewData }) => {
 
   return (
     <Post box_value={()=>{
-      if(isHomePage){
+      if(notView){
         return `0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19)`;
       }
     }}>
@@ -419,12 +419,13 @@ const Posts = ({ isHomePage ,post, handleRefresh ,setViewData }) => {
 
       
 
-      {isHomePage ?  post.contents ? <PostImage alt="post" src={content} onClick={()=> {
+      {notView ?  post.contents ? <PostImage alt="post" src={content} onClick={()=> {
         setViewData({data : {
           post: post,
           content: content,
         }});
-         navigate("/Main/View/");
+        setShowView(true);
+        //  navigate("/Main/View/");
       }}></PostImage> : "" : ""}
 
       <div>

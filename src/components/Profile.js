@@ -52,7 +52,7 @@ const LowerSection = styled.div`
   margin-top: 1px;
   padding-bottom: 20px;
 `;
-const Profile = () => {
+const Profile = ({setShowView,setViewData }) => {
   const { profileId } = useParams();
   const { user, dispatch, FetchUserData } = useContext(UserContext);
   let navigate = useNavigate();
@@ -409,7 +409,7 @@ const Profile = () => {
     <div className="w-[100%] h-[auto] text-sm items-center ">
       <UpperSection>
         <div className="w-[65vw] h-[100%]  m-auto pb-3 ">
-          <div className="relative">
+          <div className="relative border-b-[1px] border-l-[1px] border-r-[1px] border-neutral-200 rounded-bl-2xl rounded-br-2xl">
             <img
               src={logo}
               alt="cover_photo"
@@ -562,7 +562,7 @@ const Profile = () => {
         <div className="w-[65%] justify-center flex flex-row m-auto ">
           {/* INTRO */}
           <div className="w-[40%]">
-            <Intro />
+            {/* <Intro /> */}
             <Friends friends={friends}/>
           </div>
 
@@ -596,7 +596,7 @@ const Profile = () => {
 
             {fetchedData !== null ? (
               fetchedData.map((post) => (
-                <Posts key={post.post_id} post={post} />
+                <Posts key={post.post_id} post={post} notView={true} setShowView={setShowView} setViewData={setViewData}/>
               ))
             ) : (
               <p className="mt-10 mb-10 text-center font-bold text-2xl text-neutral-500">

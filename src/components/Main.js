@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import MessengerSection from "./MessengerSection";
 import NotificationSection from "./NotificationSection";
 import MyRoutes from "../routes/MyRoutes";
+import View from "./View";
+import Modal from "react-modal";
 
 const FloatingSideNav = styled.div`
   // background-color: brown;
@@ -46,11 +48,29 @@ const FloatingContainer = styled.div`
   overflow: auto;
 `;
 
-const FloatingMessageSection = styled.div``;
-
 const Main = () => {
-  const [viewData,setViewData] = useState(null);
-  console.log("viewDataMain: "+JSON.stringify(viewData));
+  const [viewData, setViewData] = useState(null);
+  const [showView, setShowView] = useState(false);
+  console.log("showView: " + showView);
+
+  const modalStyle = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
+
+  const handleOpenViewModal = () => {
+    setShowView(true);
+  };
+
+  const handleCloseViewModal = () => {
+    setShowView(false);
+  };
 
   const SideNavigation = () => {
     const [showContainer, setShowContainer] = useState("home");
@@ -96,7 +116,27 @@ const Main = () => {
       <div className="flex flex-row"></div>
       <SideNavigation />
       <div>
-        <MyRoutes viewData={viewData} setViewData={setViewData}/>
+        <MyRoutes
+          viewData={viewData}
+          setViewData={setViewData}
+          setShowView={setShowView}
+        />
+
+        {showView ? (
+          <Modal
+            isOpen={handleOpenViewModal}
+            // onAfterOpen={afterOpenModal}
+            onRequestClose={handleCloseViewModal}
+            style={modalStyle}
+            // contentLabel="Sign up"
+          >
+            <div className="flex flex-row relative"></div>
+            <View viewData={viewData} setShowView={setShowView} />
+          </Modal>
+        ) : (
+          ""
+        )}
+
         {/* <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Profile/:profileId" element={<Profile />} />

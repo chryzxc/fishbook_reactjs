@@ -13,12 +13,12 @@ export default function Friends({ friends }) {
 
 
     return (
-      <div className="p-1 h-[100%] w-[auto]">
+      <div className="p-1 h-[100%] w-[auto] ">
         <img
           src={useGetUserProfilePicture(id)}
-          className=" h-[120px] w-[auto] object-cover rounded-lg"
+          className=" h-[120px] w-[auto] object-cover rounded-lg border-[0.5px] border-neutral-200 "
         ></img>
-        <p className="text-[12px] font-bold">{`${firstname} ${lastname}`}</p>
+        <p className="text-[12px] font-bold mt-1">{`${firstname} ${lastname}`}</p>
       </div>
     );
   };
