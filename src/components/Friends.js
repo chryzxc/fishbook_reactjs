@@ -9,9 +9,8 @@ export default function Friends({ friends }) {
 
   const FriendsCard = ({id}) => {
 
-     const {firstname , lastname} =  useGetUserInfo(id);
-
-
+    const {firstname , lastname} =  useGetUserInfo(id);
+    
     return (
       <div className="p-1 h-[100%] w-[auto] ">
         <img
