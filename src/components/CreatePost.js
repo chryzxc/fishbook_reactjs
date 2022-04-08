@@ -4,31 +4,31 @@ import ReactRoundedImage from "react-rounded-image";
 
 import { UserContext } from "../contexts/UserContext";
 
-import { FaRegImages, FaRegSmile, FaVideo, FcGallery } from "react-icons/fa";
-import { ref, set, push, update } from "firebase/database";
-import { db, storage } from "../config/firebase";
-import { RiCloseFill } from "react-icons/ri";
+import { FaRegImages, FaRegSmile, FaVideo } from "react-icons/fa";
+import { ref, push } from "firebase/database";
+import { db } from "../config/firebase";
+import { RiCloseFill,RiArrowLeftLine } from "react-icons/ri";
 import Modal from "react-modal";
-import { uploadBytes, ref as storageRef } from "firebase/storage";
+
 import { FaGlobeAsia } from "react-icons/fa";
-import { useGetUserProfilePicture } from "../hooks/useGetUserData";
+
 import { CREATE_POST } from "./Actions";
 
-const CreatePostCard = styled.div`
-  overflow-y: hidden;
-  overflow-x: hidden;
-  background-color: white;
-  margin: 5px;
-  height: auto;
-  width: ${(props) => props.data.width};
+// const CreatePostCard = styled.div`
+//   overflow-y: hidden;
+//   overflow-x: hidden;
+//   background-color: white;
+//   margin: 5px;
+//   height: auto;
+//   width: ${(props) => props.data.width};
 
-  // width: 37vw;
-  min-height: auto;
+//   // width: 37vw;
+//   min-height: auto;
 
-  margin-top: 10px;
-  border-radius: 10px;
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
-`;
+//   margin-top: 10px;
+//   border-radius: 10px;
+//   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
+// `;
 
 const Divider = styled.hr`
   border-top: 1pt solid #bbb;
@@ -66,13 +66,15 @@ const WritePost = styled.div`
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: 40px;
+  height: 120px;
   padding: 5px;
   box-sizing: border-box;
   border: none;
   border-radius: none;
   background-color: transparent;
   resize: none;
+  margin-top: 5px;
+  font-size: 20px;
 `;
 
 const FeelingList = styled.ul`
@@ -86,9 +88,6 @@ const CreatePost = ({ handleRefresh, data }) => {
     useContext(UserContext);
   const [caption, setCaption] = useState("");
 
-  const [selectedFile, setSelectedFile] = useState();
-  const [isFilePicked, setIsFilePicked] = useState(false);
-
   const [content, setContent] = useState();
   const [contentName, setContentName] = useState();
 
@@ -96,8 +95,7 @@ const CreatePost = ({ handleRefresh, data }) => {
 
   const [openModal, setOpenModal] = useState(false);
 
-
-
+  document.body.style.overflow = "hidden";
   const handleOpenFeelingModal = () => {
     setOpenModal(true);
   };
@@ -140,14 +138,24 @@ const CreatePost = ({ handleRefresh, data }) => {
 
   const modalStyle = {
     content: {
-      top: "30%",
+      top: "35%",
       left: "50%",
-      right: "20px",
-      bottom: "20%",
+      right: "180px",
+      bottom: "0%",
       ariaHideApp: false,
-      transform: "translate(-50%, -30%)",
+      transform: "translate(-50%, -35%)",
     },
   };
+  // const modalStyle = {
+  //   content: {
+  //     top: "30%",
+  //     left: "50%",
+  //     right: "20px",
+  //     bottom: "20%",
+  //     ariaHideApp: false,
+  //     transform: "translate(-50%, -30%)",
+  //   },
+  // };
 
   const submitPost = (e) => {
     e.preventDefault();
@@ -272,6 +280,16 @@ const CreatePost = ({ handleRefresh, data }) => {
           contentLabel=""
         >
           <div>
+          
+              <div
+                className="absolute border-[1px] border-neutral-300 self-center ml-[-1px] p-1 left-5 top-4  bg-[#E4E6E9] rounded-full flex flex-row items-center hover:bg-neutral-300"
+                onClick={() => {
+                  handleCloseFeelingModal();
+                }}
+              >
+                <RiArrowLeftLine className="h-6 w-6" />
+              </div>
+         
             <p className="font-bold text-black text-xl text-center">
               How are you feeling today?
             </p>
@@ -291,7 +309,7 @@ const CreatePost = ({ handleRefresh, data }) => {
   };
 
   return (
-    <div>
+    <div className="p-0 m-0 text-center">
       {openModal ? (
         <FeelingModal
           handleOpenFeelingModal={handleOpenFeelingModal}
@@ -301,9 +319,24 @@ const CreatePost = ({ handleRefresh, data }) => {
         ""
       )}
 
+  
+        <div
+          className="absolute border-[1px] border-neutral-300 self-center p-1 right-5 top-4 bg-[#E4E6E9] rounded-full flex flex-row items-center hover:bg-neutral-300" 
+          onClick={() => {
+            document.body.style.overflow = "auto";
+          }}
+        >
+          <RiCloseFill className="h-6 w-6" />
+        </div>
+    
+
+      <p className="font-bold text-black text-xl text-center">Write a post</p>
+
+      <Divider></Divider>
+
       <form onSubmit={submitPost}>
-        <CreatePostCard data={data}>
-          <div className="mt-5">
+        <div data={data}>
+          <div className="mt-1">
             <div className="mt-3 ml-3 flex flex-row">
               <ReactRoundedImage
                 image={user.profile_picture}
@@ -328,30 +361,28 @@ const CreatePost = ({ handleRefresh, data }) => {
               </div>
             </div>
 
-            <WritePost>
-              <TextArea
-                placeholder={"What's on your mind, " + user.firstname + "?"}
-                value={caption}
-                onChange={(e) => {
-                  handleCaptionListener(e);
-                }}
-              ></TextArea>
-              {content ? (
-                <div className="ml-1 flex flex-row bg-[#e0e1e4] rounded-full w-fit pl-2 pr-2 pt-1 pb-1 hover:bg-[#fff]">
-                  <p className=" text-xs font-bold text-left">
-                    Attachment: {contentName}
-                  </p>
-                  <div
-                    className="ml-1 bg-[#F4556F] text-white rounded-full"
-                    onClick={() => setContent()}
-                  >
-                    <RiCloseFill className="h-4 w-4" />
-                  </div>
+            <TextArea
+              placeholder={"What's on your mind, " + user.firstname + "?"}
+              value={caption}
+              onChange={(e) => {
+                handleCaptionListener(e);
+              }}
+            ></TextArea>
+            {content ? (
+              <div className="ml-1 flex flex-row bg-[#e0e1e4] rounded-full w-fit pl-2 pr-2 pt-1 pb-1 hover:bg-[#fff]">
+                <p className=" text-xs font-bold text-left">
+                  Attachment: {contentName}
+                </p>
+                <div
+                  className="ml-1 bg-[#F4556F] text-white rounded-full"
+                  onClick={() => setContent()}
+                >
+                  <RiCloseFill className="h-4 w-4" />
                 </div>
-              ) : (
-                ""
-              )}
-            </WritePost>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
           <div>
             <Divider className="ml-3 mr-3" />
@@ -360,9 +391,7 @@ const CreatePost = ({ handleRefresh, data }) => {
             <div className="flex flex-row justify-around">
               <div
                 className="flex flex-row justify-center w-[100%] hover:bg-[#E4E6E9] rounded-xl p-2"
-                onClick={() => {
-                 
-                }}
+                onClick={() => {}}
               >
                 <FaVideo
                   className="self-center h-6 w-6"
@@ -425,7 +454,7 @@ const CreatePost = ({ handleRefresh, data }) => {
               ""
             )}
           </div>
-        </CreatePostCard>
+        </div>
       </form>
     </div>
   );

@@ -43,6 +43,7 @@ import {
   CANCEL_FRIEND_REQUEST,
   SEND_FRIEND_REQUEST,
 } from "./Actions";
+import PostSection from "./PostSection";
 
 const UpperSection = styled.div`
   height: 80%;
@@ -64,9 +65,6 @@ const Profile = ({ setShowView, setViewData }) => {
 
   let navigate = useNavigate();
 
-  useEffect(() => {
-    FetchUserData();
-  }, [updateProfile]);
 
   const [myId, setMyId] = useState(() => {
     if (localStorage.getItem("user-token") !== "") {
@@ -126,6 +124,10 @@ const Profile = ({ setShowView, setViewData }) => {
   });
 
   const profileData = useGetUserData(myId, profileId);
+  
+  useEffect(() => {
+    FetchUserData();
+  }, [updateProfile]);
 
   const friends_count = () => {
     if (profileData?.friends) {
@@ -582,10 +584,11 @@ const Profile = ({ setShowView, setViewData }) => {
           {/* POSTS */}
           <div className="w-[60%] ml-2">
             {myProfile ? (
-              <CreatePost
-                data={{ width: "auto", minWidth: "auto" }}
-                handleRefresh={handleRefresh}
-              />
+              <PostSection/>
+              // <CreatePost
+              //   data={{ width: "auto", minWidth: "auto" }}
+              //   handleRefresh={handleRefresh}
+              // />
             ) : null}
 
             <Container className="flex flex-row justify-between">

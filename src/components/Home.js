@@ -28,6 +28,7 @@ import ContactsSection from "./ContactsSection";
 import FeedsFriendSuggestionList from "./FeedsFriendSuggestionList";
 import SideNav from "./SideNav";
 import SideMenu from "./SideMenu";
+import PostSection from "./PostSection";
 
 const Main = styled.div`
   height: 100%;
@@ -245,13 +246,16 @@ const Home = ({ setViewData ,setShowView}) => {
           </StoriesContainer>
 
           <CreatePostContainer>
-            <CreatePost
+            <PostSection/>
+
+
+            {/* <CreatePost
               data={{
                 width: "37vw",
                 minWidth: "37vw",
               }}
               handleRefresh={handleRefresh}
-            />
+            /> */}
           </CreatePostContainer>
 
           <FeedsFriendSuggestionList />
