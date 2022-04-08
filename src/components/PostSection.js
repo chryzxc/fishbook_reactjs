@@ -17,7 +17,7 @@ const CreatePostCard = styled.div`
   margin: 5px;
   height: auto;
 
-  width: 37vw;
+  width: 35rem;
   min-height: auto;
 
   margin-top: 10px;
@@ -76,7 +76,6 @@ export default function PostSection() {
     },
   };
 
-  console.log("open? " + openPostModal);
 
   return (
     <div>
@@ -95,6 +94,7 @@ export default function PostSection() {
               width: "auto",
               minWidth: "auto",
             }}
+            setOpenPostModal={setOpenPostModal}
           />
         </Modal>
       ) : (
@@ -111,12 +111,11 @@ export default function PostSection() {
               imageHeight="50"
             ></ReactRoundedImage>
             <div className="w-full pl-2 pr-2">
-              <WritePost>
+              <WritePost  onClick={() => setOpenPostModal(true)}>
                 <TextArea
                   placeholder={"What's on your mind, " + user.firstname + "?"}
-                  onChange={(e) => {
-                    // handleCaptionListener(e);
-                  }}
+                  onClick={() => setOpenPostModal(true)}
+                  disabled="true"
                 ></TextArea>
               </WritePost>
             </div>
@@ -142,7 +141,7 @@ export default function PostSection() {
 
             <div
               className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2"
-              onClick={(e) => ""}
+              onClick={() => setOpenPostModal(true)}
             >
               <FaRegImages
                 className="self-center h-6 w-6"
@@ -155,10 +154,7 @@ export default function PostSection() {
 
             <div
               className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2"
-              onClick={() => {
-                //   document.body.style.overflow = "hidden";
-                // setOpenModal(true);
-              }}
+              onClick={() => setOpenPostModal(true)}
             >
               <FaRegSmile
                 className="self-center h-6 w-6"

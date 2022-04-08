@@ -83,7 +83,7 @@ const FeelingList = styled.ul`
   -moz-columns: 2;
 `;
 
-const CreatePost = ({ handleRefresh, data }) => {
+const CreatePost = ({ handleRefresh, data ,setOpenPostModal }) => {
   const { user, userContextId, FetchUserData, dispatch } =
     useContext(UserContext);
   const [caption, setCaption] = useState("");
@@ -324,6 +324,7 @@ const CreatePost = ({ handleRefresh, data }) => {
           className="absolute border-[1px] border-neutral-300 self-center p-1 right-5 top-4 bg-[#E4E6E9] rounded-full flex flex-row items-center hover:bg-neutral-300" 
           onClick={() => {
             document.body.style.overflow = "auto";
+            setOpenPostModal(false);
           }}
         >
           <RiCloseFill className="h-6 w-6" />
@@ -441,18 +442,17 @@ const CreatePost = ({ handleRefresh, data }) => {
               </div>
             </div>
 
-            {caption ? (
-              <div className="w-full h-auto">
+            <div className="w-full h-auto">
                 <button
-                  className="m-auto self-center border-none bg-[#1877f2] text-white rounded-[6px] font-light mt-1 p-2 w-full "
+                  className={caption? `m-auto self-center border-none bg-[#1877f2] text-white rounded-[6px] font-light mt-1 p-2 w-full` : `m-auto self-center border-none bg-neutral-200 text-white rounded-[6px] font-light mt-1 p-2 w-full `}
                   type="submit"
+                  disabled={caption? false : true}
                 >
                   Post
                 </button>
               </div>
-            ) : (
-              ""
-            )}
+
+           
           </div>
         </div>
       </form>
