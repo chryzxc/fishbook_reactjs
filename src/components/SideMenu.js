@@ -29,6 +29,7 @@ export default function SideMenu() {
   const { user ,userContextId } = useContext(UserContext);
   let navigate = useNavigate();
   const my_profile_picture = useGetUserProfilePicture(userContextId);
+  
   const handleVisitProfile = () => {
     navigate("/Main/Profile/"+user.id);
   };

@@ -9,14 +9,15 @@ export default function View({ viewData, setShowView }) {
   document.body.style.overflow = "hidden";
 
   return (
-    <div className="h-[100vh] w-[100vw] flex flex-row pl-[68px] ">
-      <div className="flex h-[100vh] w-[70vw] bg-stone-900 relative border-r-[1px] border-neutral-300 bg-center text-center">
-        
-        <img
+    <div className="h-[100vh] w-[100vw] flex flex-row pl-[68px] overflow-hidden">
+      <div className="flex h-[100vh] w-[70vw] bg-black relative border-r-[1px] border-neutral-300 bg-center text-center">
+        <div className="w-full bg-neutral-600 ml-auto mr-auto mt-auto mb-auto">
+          <img
             src={viewData.data.content}
             alt="photo"
             className="ml-auto mr-auto mt-auto mb-auto"
           ></img>
+        </div>
 
         <div className="flex flex-row font-semibold text-sm tracking-wide absolute top-5 left-4">
           <div
@@ -31,7 +32,7 @@ export default function View({ viewData, setShowView }) {
         </div>
       </div>
       <div className="h-[100vh]">
-        <Posts post={viewData.data.post} />
+        <Posts post={viewData.data.post} notView={false} />
       </div>
     </div>
   );

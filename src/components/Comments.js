@@ -281,7 +281,7 @@ export default function Comments({ commentData }) {
   };
 
   return (
-    <div>
+    <div className="text-xs" >
       <div className="flex flex-row pl-5 pr-5 mb-2">
         <div className="w-auto mt-1">
           <ReactRoundedImage

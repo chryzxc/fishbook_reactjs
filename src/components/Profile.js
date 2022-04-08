@@ -52,29 +52,28 @@ const LowerSection = styled.div`
   margin-top: 1px;
   padding-bottom: 20px;
 `;
-const Profile = ({setShowView,setViewData }) => {
+const Profile = ({ setShowView, setViewData }) => {
   const { profileId } = useParams();
   const { user, dispatch, FetchUserData } = useContext(UserContext);
+  const [updateProfile, setUpdateProfile] = useState(0);
+
   let navigate = useNavigate();
+
+  useEffect(() => {
+    FetchUserData();
+  }, [updateProfile]);
+
   const [myId, setMyId] = useState(() => {
     if (localStorage.getItem("user-token") !== "") {
-     
       return localStorage.getItem("user-token");
     } else {
       navigate(-2);
     }
   });
-  
+
   let inputContent = "";
   const dbRef = ref(db, "posts/");
-  const [updateProfile, setUpdateProfile] = useState(0);
-  const [profileData1, setProfileData1] = useState();
 
-  const [profileFirstname, setProfileFirstname] = useState();
-  const [profileLastname, setProfileLastname] = useState();
-  const [profileEmail, setProfileEmail] = useState();
-  const [profileDateRegistered, setProfileDateRegistered] = useState();
-  const [profileFriends, setProfileFriends] = useState();
   let friends = [];
   let friends_index = 0;
   const [isAFriend, setIsAFriend] = useState(() => {
@@ -124,7 +123,6 @@ const Profile = ({setShowView,setViewData }) => {
   const profileData = useGetUserData(myId, profileId);
 
   const friends_count = () => {
-   
     if (profileData?.friends) {
       friends = [];
       Object.keys(profileData.friends).map((key) => {
@@ -300,7 +298,6 @@ const Profile = ({setShowView,setViewData }) => {
   );
 
   const handleRefresh = () => {
-  
     setUpdateProfile(updateProfile + 1);
     console.log("refrehsed");
   };
@@ -310,7 +307,6 @@ const Profile = ({setShowView,setViewData }) => {
   };
 
   const updateProfilePicture = (e) => {
-    
     const profileRef = storageRef(
       storage,
       `users/${myId}/my_profile_picture.jpeg`
@@ -325,54 +321,47 @@ const Profile = ({setShowView,setViewData }) => {
         console.log("upload error : " + error);
       });
 
+    // const post = {
+    //   user_id: user.id,
+    //   // caption: caption,
+    //   date_posted: Date.now(),
+    //   // feeling: feeling,
+    // };
 
-      // const post = {
-      //   user_id: user.id,
-      //   // caption: caption,
-      //   date_posted: Date.now(),
-      //   // feeling: feeling,
-      // };
-  
-      // const dbRef = ref(db, "posts/");
-      // const newPost = push(dbRef);
-  
-      // set(newPost, post)
-      //   .then(async () => {
-        
-  
-      //     if (e.target.files[0]) {
-      
-      //       const dbRef = ref(db, `posts/${newPost.key}/contents`);
-      //       const newContent = push(dbRef);
-  
+    // const dbRef = ref(db, "posts/");
+    // const newPost = push(dbRef);
 
-      //       update(newContent, content).then(async () => {
-      //         const contentRef = storageRef(
-      //           storage,
-      //           `posts/${newPost.key}/${newContent.key}.jpeg`
-      //         );
-  
-      //         await uploadBytes(contentRef, e.target.files[0])
-      //           .then((snapshot) => {
-            
-      //             handleRefresh();
-      //           })
-      //           .catch((error) => {
-      //             console.log("upload error : " + error);
-      //           });
-      //       });
-      //       //  });
-      //     } else {
-      //       handleRefresh();
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
+    // set(newPost, post)
+    //   .then(async () => {
 
+    //     if (e.target.files[0]) {
 
+    //       const dbRef = ref(db, `posts/${newPost.key}/contents`);
+    //       const newContent = push(dbRef);
 
+    //       update(newContent, content).then(async () => {
+    //         const contentRef = storageRef(
+    //           storage,
+    //           `posts/${newPost.key}/${newContent.key}.jpeg`
+    //         );
 
+    //         await uploadBytes(contentRef, e.target.files[0])
+    //           .then((snapshot) => {
+
+    //             handleRefresh();
+    //           })
+    //           .catch((error) => {
+    //             console.log("upload error : " + error);
+    //           });
+    //       });
+    //       //  });
+    //     } else {
+    //       handleRefresh();
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   const SendFriendRequest = () => {
@@ -415,14 +404,12 @@ const Profile = ({setShowView,setViewData }) => {
               alt="cover_photo"
               className="h-[400px] w-[100%] rounded-bl-2xl rounded-br-2xl object-cover"
             ></img>
-             <div className="flex flex-row font-semibold text-sm tracking-wide absolute bottom-3 right-4">
-                  <div className="self-center mt-10 m-1  bg-[#E4E6E9] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-neutral-300">
-                    <RiCameraFill className="h-5 w-5" />
-                    <p className="ml-1">Change cover picture</p>
-                  </div>
-                </div>
-
-         
+            <div className="flex flex-row font-semibold text-sm tracking-wide absolute bottom-3 right-4">
+              <div className="self-center mt-10 m-1  bg-[#E4E6E9] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-neutral-300">
+                <RiCameraFill className="h-5 w-5" />
+                <p className="ml-1">Change cover picture</p>
+              </div>
+            </div>
           </div>
           <div className="flex flex-row mt-[-40px]">
             {/* Left */}
@@ -563,10 +550,8 @@ const Profile = ({setShowView,setViewData }) => {
           {/* INTRO */}
           <div className="w-[40%]">
             {/* <Intro /> */}
-            <Friends friends={friends}/>
+            <Friends friends={friends} />
           </div>
-
-         
 
           {/* POSTS */}
           <div className="w-[60%] ml-2">
@@ -596,7 +581,14 @@ const Profile = ({setShowView,setViewData }) => {
 
             {fetchedData !== null ? (
               fetchedData.map((post) => (
-                <Posts key={post.post_id} post={post} notView={true} setShowView={setShowView} setViewData={setViewData}/>
+                <Posts
+                  key={post.post_id}
+                  post={post}
+                  notView={true}
+                  setShowView={setShowView}
+                  setViewData={setViewData}
+                  handleRefresh={handleRefresh}
+                />
               ))
             ) : (
               <p className="mt-10 mb-10 text-center font-bold text-2xl text-neutral-500">

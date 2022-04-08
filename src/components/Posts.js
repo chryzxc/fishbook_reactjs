@@ -61,7 +61,7 @@ const Post = styled.div`
   margin-top: 20px;
   border-radius: 10px;
   box-shadow: ${(props) => props.box_value};
-  
+  font-size: 13px;
   /* box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19); */
   padding-bottom: 5px;
 `;
@@ -404,14 +404,14 @@ const Posts = ({ notView ,post, handleRefresh ,setViewData ,setShowView}) => {
           </div>
         </Row>
 
-        {post.user_id === userContextId ? (
+        {post.user_id === userContextId ? notView ? (
           <div
             className="text-neutral-500 hover:bg-neutral-300 h-fit p-2 rounded-full"
             onClick={() => deletePost()}
           >
             <FiTrash2 className="h-5 w-5 " />
           </div>
-        ) : null}
+        ) : null : null}
       </RowBottom>
       <Caption className="text-gray-600 mb-3 text-[16px]">
         {post.caption}
@@ -548,8 +548,8 @@ const Posts = ({ notView ,post, handleRefresh ,setViewData ,setShowView}) => {
         </div>
       </div>
 
-      {showCommentBox ? (
-        <div>
+      {showCommentBox || !notView ? (
+        <div className={!notView? "overflow-y-scroll h-[65vh]": null}>
           <div>
             <Divider className="mt-1"></Divider>
             <div className="p-4 flex flex-row">
