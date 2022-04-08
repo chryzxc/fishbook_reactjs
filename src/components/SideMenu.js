@@ -28,7 +28,9 @@ export default function SideMenu() {
 
   const { user ,userContextId } = useContext(UserContext);
   let navigate = useNavigate();
-  const my_profile_picture = useGetUserProfilePicture(userContextId);
+
+ 
+ 
   
   const handleVisitProfile = () => {
     navigate("/Main/Profile/"+user.id);
@@ -43,7 +45,7 @@ export default function SideMenu() {
       <div className={row}  onClick={() => handleVisitProfile()}>
         <div className="self-center">
           <ReactRoundedImage
-            image={my_profile_picture}
+            image={user.profile_picture}
             roundedSize="0"
             imageWidth="30"
             imageHeight="30"

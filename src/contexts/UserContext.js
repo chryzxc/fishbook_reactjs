@@ -1,93 +1,58 @@
-import React, { createContext, useEffect, useReducer, useState } from "react";
-import { db } from "../config/firebase";
+import React, { createContext, useReducer, useState } from "react";
+import { db ,storage} from "../config/firebase";
 import {
   ref,
-  set,
-  push,
-  getDatabase,
   child,
-  get,
-  equalTo,
-  orderByChild,
-  onValue,
+  get
 } from "firebase/database";
-import { useNavigate } from "react-router-dom";
+import {
+  ref as storageRef,
+  getDownloadURL
+} from "firebase/storage";
+
 import { userReducer } from "../reducers/userReducer";
-import { useGetUserProfilePicture } from "../hooks/useGetUserData";
+
+import default_profile from "../assets/default_profile.png";
+
 
 export const UserContext = createContext();
 
 const UserContextProvider = (props) => {
-  console.log("User context");
-
-  
- 
   const [userContextId, setUserContextId] = useState(() => {
     let token = localStorage.getItem("user-token");
     return token;
-   
-   
   });
+
   const [user, dispatch] = useReducer(userReducer, {
-    user: {
-      id: userContextId,
-    }
+    id: userContextId,
   });
 
- 
 
 
-  // let token = localStorage.getItem("user-token");
-  // const [contextUserId, setContextUserId] = useState(token);
-  // console.log("contetxt: " + token);
-
-  // const [user, setUser] = useState({
-  //   id: "",
-  //   firstname: "",
-  //   lastname: "",
-  //   email: "",
-  //   date_registered: "",
-  // });
-
-  
-
-  // const LoginUser = () => {
-  //   const dbRef = ref(db);
-  //   useEffect(() => {
-  //     get(child(dbRef, "users/"))
-  //       .then((snapshot) => {
-  //         if (snapshot.exists()) {
-  //           // setUser({
-  //           //   id: snapshot.key,
-  //           //   firstname: snapshot.val().firstname,
-  //           //   lastname: snapshot.val().lastname,
-  //           //   email: snapshot.val().email,
-  //           //   date_registered: snapshot?.val().date_registered,
-  //           // });
-  //           //   navigate("/Home/");
-  //         }
-  //       })
-
-  //       .catch((error) => {
-  //         console.error(error);
-  //       });
-  //   }, []);
-
-  // localStorage.setItem("user-token", userId);
-  //  console.log("set token");
-  // setContextUserId(userId);
-  //navigate("/Home/");
-  // };
-
-  const FetchUserData = async() => {
-   
+  const FetchUserData = async () => {
     const dbRef = ref(db);
+
+    let profile_picture = await getDownloadURL(
+      storageRef(storage, `users/${userContextId}/my_profile_picture.jpeg`)
+    )
+      .then((url) => {
+        if(url !== null || url !== ""){
+          return url;
+        }else{
+          return default_profile;
+        }
+      })
+      .catch((error) => {
+
+        return default_profile;
+      });
+   
+    
   
-     await get(child(dbRef, "users/" + userContextId))
+    await get(child(dbRef, "users/" + userContextId))
       .then((snapshot) => {
-        
         if (snapshot.exists()) {
-        
+       
           dispatch({
             type: "SET_USER",
             user: {
@@ -98,8 +63,8 @@ const UserContextProvider = (props) => {
               date_registered: snapshot?.val().date_registered,
               friend_requests: snapshot?.val().friend_requests,
               notifications: snapshot?.val().notifications,
-              friends:snapshot?.val().friends,
-         
+              friends: snapshot?.val().friends,
+              profile_picture: profile_picture,
             },
           });
 
@@ -110,13 +75,6 @@ const UserContextProvider = (props) => {
         console.error(error);
       });
   };
-
- 
- 
-
-  
-
- 
 
   // const FetchData = () => {
   //   const dbRef = ref(db);
@@ -140,7 +98,9 @@ const UserContextProvider = (props) => {
   // };
 
   return (
-    <UserContext.Provider value={{ user, userContextId,setUserContextId, FetchUserData ,dispatch}}>
+    <UserContext.Provider
+      value={{ user, userContextId, setUserContextId, FetchUserData, dispatch }}
+    >
       {props.children}
     </UserContext.Provider>
   );

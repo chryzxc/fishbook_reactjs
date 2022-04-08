@@ -12,6 +12,7 @@ import Modal from "react-modal";
 import { uploadBytes, ref as storageRef } from "firebase/storage";
 import { FaGlobeAsia } from "react-icons/fa";
 import { useGetUserProfilePicture } from "../hooks/useGetUserData";
+import { CREATE_POST } from "./Actions";
 
 const CreatePostCard = styled.div`
   overflow-y: hidden;
@@ -85,7 +86,6 @@ const CreatePost = ({ handleRefresh, data }) => {
     useContext(UserContext);
   const [caption, setCaption] = useState("");
 
-
   const [selectedFile, setSelectedFile] = useState();
   const [isFilePicked, setIsFilePicked] = useState(false);
 
@@ -95,17 +95,11 @@ const CreatePost = ({ handleRefresh, data }) => {
   const [feeling, setFeeling] = useState("");
 
   const [openModal, setOpenModal] = useState(false);
- 
-  console.log(document.body.style.overflow);
+
+
 
   const handleOpenFeelingModal = () => {
-   
-  
     setOpenModal(true);
-    
-
-  
-   
   };
 
   const handleCloseFeelingModal = () => {
@@ -168,8 +162,7 @@ const CreatePost = ({ handleRefresh, data }) => {
     const dbRef = ref(db, "posts/");
     const newPost = push(dbRef);
 
-    dispatch({
-      type: "CREATE_POST",
+    CREATE_POST({
       setContent,
       setCaption,
       handleRefresh,
@@ -180,7 +173,17 @@ const CreatePost = ({ handleRefresh, data }) => {
       },
     });
 
-   
+    // dispatch({
+    //   type: "CREATE_POST",
+    //   setContent,
+    //   setCaption,
+    //   handleRefresh,
+    //   data: {
+    //     newPost: newPost,
+    //     post: post,
+    //     content: content,
+    //   },
+    // });
   };
 
   const FeelingModal = () => {
@@ -264,8 +267,7 @@ const CreatePost = ({ handleRefresh, data }) => {
           // onAfterOpen={afterOpenModal}
           onRequestClose={handleCloseFeelingModal}
           style={modalStyle}
-           ariaHideApp={false}
-         
+          ariaHideApp={false}
           // ariaHideApp={true}
           contentLabel=""
         >
@@ -304,7 +306,7 @@ const CreatePost = ({ handleRefresh, data }) => {
           <div className="mt-5">
             <div className="mt-3 ml-3 flex flex-row">
               <ReactRoundedImage
-                image={useGetUserProfilePicture(userContextId)}
+                image={user.profile_picture}
                 roundedSize="0"
                 imageWidth="50"
                 imageHeight="50"
@@ -359,7 +361,7 @@ const CreatePost = ({ handleRefresh, data }) => {
               <div
                 className="flex flex-row justify-center w-[100%] hover:bg-[#E4E6E9] rounded-xl p-2"
                 onClick={() => {
-                  console.log("clicked");
+                 
                 }}
               >
                 <FaVideo
@@ -397,7 +399,7 @@ const CreatePost = ({ handleRefresh, data }) => {
                 className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2"
                 onClick={() => {
                   document.body.style.overflow = "hidden";
-                  setOpenModal(true)
+                  setOpenModal(true);
                 }}
               >
                 <FaRegSmile

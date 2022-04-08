@@ -38,6 +38,11 @@ import {
 import { uploadBytes, ref as storageRef } from "firebase/storage";
 import ProfileFriendsIcon from "./ProfileFriendsIcon";
 import Friends from "./Friends";
+import {
+  ACCEPT_FRIEND_REQUEST,
+  CANCEL_FRIEND_REQUEST,
+  SEND_FRIEND_REQUEST,
+} from "./Actions";
 
 const UpperSection = styled.div`
   height: 80%;
@@ -54,7 +59,7 @@ const LowerSection = styled.div`
 `;
 const Profile = ({ setShowView, setViewData }) => {
   const { profileId } = useParams();
-  const { user, dispatch, FetchUserData } = useContext(UserContext);
+  const { user, FetchUserData } = useContext(UserContext);
   const [updateProfile, setUpdateProfile] = useState(0);
 
   let navigate = useNavigate();
@@ -365,33 +370,54 @@ const Profile = ({ setShowView, setViewData }) => {
   };
 
   const SendFriendRequest = () => {
-    dispatch({
-      type: "SEND_FRIEND_REQUEST",
+    SEND_FRIEND_REQUEST({
       request: {
         receiver_id: profileId,
         sender_id: myId,
       },
     }).then(() => handleRefresh());
+
+    // dispatch({
+    //   type: "SEND_FRIEND_REQUEST",
+    //   request: {
+    //     receiver_id: profileId,
+    //     sender_id: myId,
+    //   },
+    // }).then(() => handleRefresh());
   };
 
   const AcceptFriendRequest = () => {
-    dispatch({
+    ACCEPT_FRIEND_REQUEST({
       type: "ACCEPT_FRIEND_REQUEST",
       request: {
         receiver_id: myId,
         sender_id: profileId,
       },
     }).then(() => handleRefresh());
+    // dispatch({
+    //   type: "ACCEPT_FRIEND_REQUEST",
+    //   request: {
+    //     receiver_id: myId,
+    //     sender_id: profileId,
+    //   },
+    // }).then(() => handleRefresh());
   };
 
   const CancelFriendRequest = () => {
-    dispatch({
+    CANCEL_FRIEND_REQUEST({
       type: "CANCEL_FRIEND_REQUEST",
       request: {
         receiver_id: profileId,
         sender_id: myId,
       },
     }).then(() => handleRefresh());
+    // dispatch({
+    //   type: "CANCEL_FRIEND_REQUEST",
+    //   request: {
+    //     receiver_id: profileId,
+    //     sender_id: myId,
+    //   },
+    // }).then(() => handleRefresh());
   };
 
   return (
@@ -415,7 +441,7 @@ const Profile = ({ setShowView, setViewData }) => {
             {/* Left */}
             <div className="ml-7 rounded-full bg-white p-2 z-1 relative">
               <ReactRoundedImage
-                image={useGetUserProfilePicture(profileId)}
+                image={user.profile_picture}
                 roundedSize="0"
                 imageWidth="180"
                 imageHeight="180"

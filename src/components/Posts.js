@@ -304,10 +304,8 @@ const Posts = ({ notView ,post, handleRefresh ,setViewData ,setShowView}) => {
     if (!showCommentBox) {
       setShowCommentBox(!showCommentBox);
     }
-    //  else {
-    //   setShowCommentBox(!showCommentBox);
-
-    // }
+   
+    
   };
 
 

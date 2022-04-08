@@ -51,7 +51,7 @@ const FloatingContainer = styled.div`
 const Main = () => {
   const [viewData, setViewData] = useState(null);
   const [showView, setShowView] = useState(false);
-  console.log("showView: " + showView);
+  
 
   const modalStyle = {
     content: {

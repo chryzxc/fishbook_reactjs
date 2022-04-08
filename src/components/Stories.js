@@ -57,7 +57,7 @@ export default function Stories() {
       </div>
       <ProfileContainer>
         <ReactRoundedImage
-          image={useGetUserProfilePicture(user.id)}
+          image={user.profile_picture}
           imageWidth="40"
           imageHeight="40"
           roundedColor="#166ADA"

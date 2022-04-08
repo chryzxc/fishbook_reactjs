@@ -216,6 +216,7 @@ const Home = ({ setViewData ,setShowView}) => {
     navigate(-1);
   }
 
+
   useEffect(() => {
     FetchUserData();
   }, [updateHome]);
