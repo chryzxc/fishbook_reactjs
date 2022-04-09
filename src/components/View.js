@@ -31,7 +31,7 @@ export default function View({ viewData, setShowView }) {
           </div>
         </div>
       </div>
-      <div className="h-[100vh]">
+      <div className="h-[100vh] w-auto">
         <Posts post={viewData.data.post} notView={false} />
       </div>
     </div>

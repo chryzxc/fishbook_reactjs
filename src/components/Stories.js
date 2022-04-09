@@ -11,10 +11,10 @@ const Story = styled.div`
   margin: auto;
   background-color: white;
   position: relative;
-  height: 15rem;
-  width: 8rem;
-  min-height: 15rem;
-  min-width:8rem;
+  height: 13rem;
+  width: 7rem;
+  min-height: 13rem;
+  min-width:7rem;
   margin-top: 20px;
   margin-left: 5px;
   border-radius: 20px;

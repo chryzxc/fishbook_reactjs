@@ -55,9 +55,9 @@ const Post = styled.div`
   background-color: white;
   margin: auto;
   height: auto;
-  width: 35rem;
+  width: 31rem;
   min-height: auto;
-  min-width: 35rem;
+  min-width: 31rem;
   margin-top: 20px;
   border-radius: 10px;
   box-shadow: ${(props) => props.box_value};

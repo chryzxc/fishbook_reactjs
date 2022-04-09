@@ -37,7 +37,7 @@ const Main = styled.div`
   font-size: 14px;
   background-color: #f0f2f5;
   position: absolute;
-  min-width: 80vh;
+  min-width: 50vh;
 `;
 
 const Row = styled.div`

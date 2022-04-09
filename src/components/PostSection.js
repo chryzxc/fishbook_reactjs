@@ -17,7 +17,7 @@ const CreatePostCard = styled.div`
   margin: 5px;
   height: auto;
 
-  width: 35rem;
+  width: 31rem;
   min-height: auto;
 
   margin-top: 10px;
@@ -67,12 +67,17 @@ export default function PostSection() {
 
   const modalStyle = {
     content: {
-      top: "35%",
+      top: "0%",
       left: "50%",
       right: "180px",
       bottom: "0%",
       ariaHideApp: false,
-      transform: "translate(-50%, -35%)",
+      transform: "translate(-50%, -0%)",
+      height: "auto",
+      width: "450px",
+      marginBottom: "20px",
+      marginTop: "20px",
+      "overflow" :"hidden",
     },
   };
 
@@ -80,7 +85,7 @@ export default function PostSection() {
   return (
     <div>
       {openPostModal ? (
-        <Modal
+        <Modal 
           isOpen={() => setOpenPostModal(true)}
           // onAfterOpen={afterOpenModal}
           onRequestClose={() => setOpenPostModal(false)}
@@ -95,6 +100,7 @@ export default function PostSection() {
               minWidth: "auto",
             }}
             setOpenPostModal={setOpenPostModal}
+            sharedPost={true}
           />
         </Modal>
       ) : (

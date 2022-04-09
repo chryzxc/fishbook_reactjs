@@ -53,7 +53,8 @@ const UpperSection = styled.div`
 const LowerSection = styled.div`
   background-color: #f0f2f5;
   height: auto;
-  width: 100%;
+  width: auto;
+  margin:auto;
   justify-content: center;
   margin-top: 1px;
   padding-bottom: 20px;
@@ -425,7 +426,7 @@ const Profile = ({ setShowView, setViewData }) => {
   return (
     <div className="w-[100%] h-[auto] text-sm items-center ">
       <UpperSection>
-        <div className="w-[65vw] h-[100%]  m-auto pb-3 ">
+        <div className="w-[60em] h-[100%]  m-auto pb-3 ">
           <div className="relative border-b-[1px] border-l-[1px] border-r-[1px] border-neutral-200 rounded-bl-2xl rounded-br-2xl">
             <img
               src={logo}
@@ -574,7 +575,7 @@ const Profile = ({ setShowView, setViewData }) => {
         <p>Christian VIllablanca</p>
       </div> */}
       <LowerSection>
-        <div className="w-[65%] justify-center flex flex-row m-auto ">
+        <div className="w-[60em] justify-center flex flex-row m-auto ">
           {/* INTRO */}
           <div className="w-[40%]">
             {/* <Intro /> */}

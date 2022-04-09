@@ -3,11 +3,11 @@ import styled from "styled-components";
 import ReactRoundedImage from "react-rounded-image";
 
 import { UserContext } from "../contexts/UserContext";
-
+import photo from "../assets/github.jpg";
 import { FaRegImages, FaRegSmile, FaVideo } from "react-icons/fa";
 import { ref, push } from "firebase/database";
 import { db } from "../config/firebase";
-import { RiCloseFill,RiArrowLeftLine } from "react-icons/ri";
+import { RiCloseFill, RiArrowLeftLine } from "react-icons/ri";
 import Modal from "react-modal";
 
 import { FaGlobeAsia } from "react-icons/fa";
@@ -66,14 +66,14 @@ const WritePost = styled.div`
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: 120px;
+  height: auto;
   padding: 5px;
   box-sizing: border-box;
   border: none;
   border-radius: none;
   background-color: transparent;
   resize: none;
-  margin-top: 5px;
+  margin-top: 10px;
   font-size: 20px;
 `;
 
@@ -83,7 +83,7 @@ const FeelingList = styled.ul`
   -moz-columns: 2;
 `;
 
-const CreatePost = ({ handleRefresh, data ,setOpenPostModal }) => {
+const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
   const { user, userContextId, FetchUserData, dispatch } =
     useContext(UserContext);
   const [caption, setCaption] = useState("");
@@ -137,8 +137,9 @@ const CreatePost = ({ handleRefresh, data ,setOpenPostModal }) => {
   };
 
   const modalStyle = {
+    innerHeight: "auto",
     content: {
-      top: "35%",
+      top: "30%",
       left: "50%",
       right: "180px",
       bottom: "0%",
@@ -280,16 +281,15 @@ const CreatePost = ({ handleRefresh, data ,setOpenPostModal }) => {
           contentLabel=""
         >
           <div>
-          
-              <div
-                className="absolute border-[1px] border-neutral-300 self-center ml-[-1px] p-1 left-5 top-4  bg-[#E4E6E9] rounded-full flex flex-row items-center hover:bg-neutral-300"
-                onClick={() => {
-                  handleCloseFeelingModal();
-                }}
-              >
-                <RiArrowLeftLine className="h-6 w-6" />
-              </div>
-         
+            <div
+              className="absolute border-[1px] border-neutral-300 self-center ml-[-1px] p-1 left-5 top-4  bg-[#E4E6E9] rounded-full flex flex-row items-center hover:bg-neutral-300"
+              onClick={() => {
+                handleCloseFeelingModal();
+              }}
+            >
+              <RiArrowLeftLine className="h-6 w-6" />
+            </div>
+
             <p className="font-bold text-black text-xl text-center">
               How are you feeling today?
             </p>
@@ -309,7 +309,7 @@ const CreatePost = ({ handleRefresh, data ,setOpenPostModal }) => {
   };
 
   return (
-    <div className="p-0 m-0 text-center">
+    <div className="p-0 m-0 text-center ">
       {openModal ? (
         <FeelingModal
           handleOpenFeelingModal={handleOpenFeelingModal}
@@ -319,17 +319,15 @@ const CreatePost = ({ handleRefresh, data ,setOpenPostModal }) => {
         ""
       )}
 
-  
-        <div
-          className="absolute border-[1px] border-neutral-300 self-center p-1 right-5 top-4 bg-[#E4E6E9] rounded-full flex flex-row items-center hover:bg-neutral-300" 
-          onClick={() => {
-            document.body.style.overflow = "auto";
-            setOpenPostModal(false);
-          }}
-        >
-          <RiCloseFill className="h-6 w-6" />
-        </div>
-    
+      <div
+        className="absolute border-[1px] border-neutral-300 self-center p-1 right-5 top-4 bg-[#E4E6E9] rounded-full flex flex-row items-center hover:bg-neutral-300"
+        onClick={() => {
+          document.body.style.overflow = "auto";
+          setOpenPostModal(false);
+        }}
+      >
+        <RiCloseFill className="h-6 w-6" />
+      </div>
 
       <p className="font-bold text-black text-xl text-center">Write a post</p>
 
@@ -337,7 +335,7 @@ const CreatePost = ({ handleRefresh, data ,setOpenPostModal }) => {
 
       <form onSubmit={submitPost}>
         <div data={data}>
-          <div className="mt-1">
+          <div className="mt-1 ">
             <div className="mt-3 ml-3 flex flex-row">
               <ReactRoundedImage
                 image={user.profile_picture}
@@ -362,13 +360,22 @@ const CreatePost = ({ handleRefresh, data ,setOpenPostModal }) => {
               </div>
             </div>
 
-            <TextArea
-              placeholder={"What's on your mind, " + user.firstname + "?"}
-              value={caption}
-              onChange={(e) => {
-                handleCaptionListener(e);
-              }}
-            ></TextArea>
+            <div className="overflow-y-scroll ">
+              <TextArea
+                placeholder={"What's on your mind, " + user.firstname + "?"}
+                value={caption}
+                onChange={(e) => {
+                  handleCaptionListener(e);
+                }}
+              ></TextArea>
+              {/* <div className="mr-4 ml-4 m-2 border-[0.5px] border-neutral-400 rounded-xl">
+                <img className="rounded-t-xl" src={photo} alt="test"></img>
+                <p>Test</p>
+              </div> */}
+            </div>
+
+            {/* {sharedPost?  :""} */}
+
             {content ? (
               <div className="ml-1 flex flex-row bg-[#e0e1e4] rounded-full w-fit pl-2 pr-2 pt-1 pb-1 hover:bg-[#fff]">
                 <p className=" text-xs font-bold text-left">
@@ -385,11 +392,64 @@ const CreatePost = ({ handleRefresh, data ,setOpenPostModal }) => {
               ""
             )}
           </div>
-          <div>
+          {/* <div>
             <Divider className="ml-3 mr-3" />
-          </div>
-          <div className="ml-4 mr-4 mb-5 mt-5">
-            <div className="flex flex-row justify-around">
+          </div> */}
+          <div className="mt-5">
+            <div className="mb-2 flex flex-row justify-between border-neutral-300 border-[1px] p-1 rounded-xl">
+              <div className="text-[13px] text-center mt-auto mb-auto ml-2 font-semibold text-neutral-600">
+                <p>Add to your post</p>
+              </div>
+
+              <div className="flex flex-row">
+                {/* <div
+                  className="flex flex-row justify-center w-[100%] hover:bg-[#E4E6E9] rounded-xl p-2"
+                  onClick={() => {}}
+                >
+                  <FaVideo
+                    className="self-center h-6 w-6"
+                    style={{ color: "#F4556F", fontSize: "1.5em" }}
+                  ></FaVideo>
+                </div> */}
+
+                {!sharedPost ? (
+                  <div
+                    className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2"
+                    onClick={(e) => handleContent(e.target)}
+                  >
+                    <FaRegImages
+                      className="self-center h-6 w-6"
+                      style={{ color: "#45BD61", fontSize: "1.5em" }}
+                    ></FaRegImages>
+
+                    <input
+                      onChange={(e) => updateContents(e)}
+                      ref={(input) => {
+                        inputContent = input;
+                      }}
+                      type="file"
+                      name="file"
+                      className="hidden"
+                    />
+                  </div>
+                ) : null}
+
+                <div
+                  className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2"
+                  onClick={() => {
+                    document.body.style.overflow = "hidden";
+                    setOpenModal(true);
+                  }}
+                >
+                  <FaRegSmile
+                    className="self-center h-6 w-6"
+                    style={{ color: "#F7B927", fontSize: "1.5em" }}
+                  ></FaRegSmile>
+                </div>
+              </div>
+            </div>
+
+            {/* <div className="flex flex-row justify-around">
               <div
                 className="flex flex-row justify-center w-[100%] hover:bg-[#E4E6E9] rounded-xl p-2"
                 onClick={() => {}}
@@ -440,19 +500,21 @@ const CreatePost = ({ handleRefresh, data ,setOpenPostModal }) => {
                   Feeling/activity
                 </p>
               </div>
-            </div>
+            </div> */}
 
             <div className="w-full h-auto">
-                <button
-                  className={caption? `m-auto self-center border-none bg-[#1877f2] text-white rounded-[6px] font-light mt-1 p-2 w-full` : `m-auto self-center border-none bg-neutral-200 text-white rounded-[6px] font-light mt-1 p-2 w-full `}
-                  type="submit"
-                  disabled={caption? false : true}
-                >
-                  Post
-                </button>
-              </div>
-
-           
+              <button
+                className={
+                  caption
+                    ? `m-auto self-center border-none bg-[#1877f2] text-white rounded-[6px] font-light mt-1 p-2 w-full`
+                    : `m-auto self-center border-none bg-neutral-300 text-white rounded-[6px] font-light mt-1 p-2 w-full `
+                }
+                type="submit"
+                disabled={caption ? false : true}
+              >
+                Post
+              </button>
+            </div>
           </div>
         </div>
       </form>
