@@ -61,34 +61,48 @@ const TextArea = styled.textarea`
   resize: none;
 `;
 
+
+
+
 export default function PostSection() {
   const { user } = useContext(UserContext);
   const [openPostModal, setOpenPostModal] = useState();
-
+ 
+  
   const modalStyle = {
     content: {
-      top: "0%",
+      top: "auto",
       left: "50%",
       right: "180px",
-      bottom: "0%",
+      bottom: "auto",
       ariaHideApp: false,
-      transform: "translate(-50%, -0%)",
+      transform: "translate(-50%, 0)",
       height: "fit",
-      width: "450px",
+      width: "500px",
       marginBottom: "20px",
       marginTop: "20px",
       "overflow" :"hidden",
     },
   };
 
+  const handleOpenModal = ()=>{
+    document.body.style.overflow = "hidden";
+    setOpenPostModal(true)
+  }
+
+  const handleCloseModal = ()=>{
+    setOpenPostModal(false)
+  }
+
 
   return (
     <div>
       {openPostModal ? (
         <Modal 
-          isOpen={() => setOpenPostModal(true)}
+          isOpen={() => handleOpenModal()}
           // onAfterOpen={afterOpenModal}
-          onRequestClose={() => setOpenPostModal(false)}
+          onAfterClose={()=>  document.body.style.overflow = "auto"}
+          onRequestClose={() => handleCloseModal()}
           style={modalStyle}
           ariaHideApp={false}
           // ariaHideApp={true}
@@ -100,7 +114,7 @@ export default function PostSection() {
               minWidth: "auto",
             }}
             setOpenPostModal={setOpenPostModal}
-            sharedPost={false}
+            sharedPost={{shared: false}}
           />
         </Modal>
       ) : (
@@ -117,10 +131,10 @@ export default function PostSection() {
               imageHeight="50"
             ></ReactRoundedImage>
             <div className="w-full pl-2 pr-2">
-              <WritePost  onClick={() => setOpenPostModal(true)}>
+              <WritePost  onClick={() => handleOpenModal()}>
                 <TextArea
                   placeholder={"What's on your mind, " + user.firstname + "?"}
-                  onClick={() => setOpenPostModal(true)}
+                  onClick={() => handleOpenModal()}
                   disabled="true"
                 ></TextArea>
               </WritePost>
@@ -134,7 +148,7 @@ export default function PostSection() {
           <div className="flex flex-row justify-around">
             <div
               className="flex flex-row justify-center w-[100%] hover:bg-[#E4E6E9] rounded-xl p-2"
-              onClick={() => setOpenPostModal(true)}
+              onClick={() => handleOpenModal()}
             >
               <FaVideo
                 className="self-center h-6 w-6"
@@ -147,7 +161,7 @@ export default function PostSection() {
 
             <div
               className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2"
-              onClick={() => setOpenPostModal(true)}
+              onClick={() => handleOpenModal()}
             >
               <FaRegImages
                 className="self-center h-6 w-6"
@@ -160,7 +174,7 @@ export default function PostSection() {
 
             <div
               className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2"
-              onClick={() => setOpenPostModal(true)}
+              onClick={() => handleOpenModal()}
             >
               <FaRegSmile
                 className="self-center h-6 w-6"

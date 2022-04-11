@@ -9,7 +9,7 @@ import { ref, push } from "firebase/database";
 import { db } from "../config/firebase";
 import { RiCloseFill, RiArrowLeftLine } from "react-icons/ri";
 import Modal from "react-modal";
-
+import DateFormat from "../utils/DateFormat";
 import { FaGlobeAsia } from "react-icons/fa";
 
 import { CREATE_POST } from "./Actions";
@@ -83,6 +83,55 @@ const FeelingList = styled.ul`
   -moz-columns: 2;
 `;
 
+
+
+const RowBottom = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: auto;
+  width: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 10px;
+  justify-content: space-between;
+`;
+
+const Name = styled.p`
+  font-weight: bold;
+  // margin-top: -2px;
+  font-size: 14px;
+  margin-left: 10px;
+  text-align: left;
+`;
+
+const TimeLabel = styled.p`
+  align-self: flex-start;
+  text-align: start;
+  margin-left: 10px;
+`;
+
+const Caption = styled.p`
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 15px;
+  text-align: justify;
+`;
+
+const PostImage = styled.img`
+  height: auto;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+`;
+
+const NumberOfLikes = styled.p`
+  text-align: end;
+  justify-self: end;
+`;
+
+
+
 const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
   const { user, userContextId, FetchUserData, dispatch } =
     useContext(UserContext);
@@ -95,7 +144,6 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
 
   const [openModal, setOpenModal] = useState(false);
 
-  document.body.style.overflow = "hidden";
   const handleOpenFeelingModal = () => {
     setOpenModal(true);
   };
@@ -273,6 +321,7 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
       <div>
         <Modal
           isOpen={handleOpenFeelingModal}
+          onAfterClose={() => (document.body.style.overflow = "hidden")}
           // onAfterOpen={afterOpenModal}
           onRequestClose={handleCloseFeelingModal}
           style={modalStyle}
@@ -360,7 +409,7 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
               </div>
             </div>
 
-            <div className="overflow-y-scroll ">
+            <div className="overflow-y-scroll h-[300px]">
               <TextArea
                 placeholder={"What's on your mind, " + user.firstname + "?"}
                 value={caption}
@@ -368,10 +417,52 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
                   handleCaptionListener(e);
                 }}
               ></TextArea>
-              {/* <div className="mr-4 ml-4 m-2 border-[0.5px] border-neutral-400 rounded-xl">
+
+              <div className="mr-4 ml-4 m-2 border-[0.5px] border-neutral-400 rounded-xl ">
                 <img className="rounded-t-xl" src={photo} alt="test"></img>
-                <p>Test</p>
-              </div> */}
+
+                <RowBottom className="pt-4">
+                  <Row>
+                    
+                    <div>
+                      {sharedPost?.feeling ? (
+                        <div className="flex flex-row">
+                          <Name
+                            className="clickable-text justify-self-center"
+                          
+                          >
+                            {sharedPost?.firstname + " " + sharedPost?.lastname}
+                          </Name>
+                          <p className="ml-1 justify-self-center">{`is ${sharedPost?.feeling}`}</p>
+                        </div>
+                      ) : (
+                        <Name
+                          className="clickable-text"
+                          
+                        >
+                          {sharedPost?.firstname + " " + sharedPost?.lastname}
+                        </Name>
+                      )}
+
+                      <div className="flex flex-row text-gray-600">
+                        <TimeLabel>
+                          <DateFormat
+                            date={sharedPost?.date_posted}
+                            addSuffix={true}
+                          />{" "}
+                          •
+                        </TimeLabel>
+                        <FaGlobeAsia className="self-center ml-1" />
+                      </div>
+                    </div>
+                  </Row>
+
+             
+                </RowBottom>
+                <Caption className="text-gray-600 mb-3 text-[16px]">
+                  {sharedPost?.caption}
+                </Caption>
+              </div>
             </div>
 
             {/* {sharedPost?  :""} */}

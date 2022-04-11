@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 
+import Modal from "react-modal";
+import CreatePost from "./CreatePost";
+
 import ReactRoundedImage from "react-rounded-image";
 import {
   AiOutlineLike,
@@ -124,7 +127,7 @@ const Divider = styled.hr`
   margin-right: 20px;
 `;
 
-const Posts = ({ notView ,post, handleRefresh ,setViewData ,setShowView}) => {
+const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
   const dbRef = ref(db);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -133,7 +136,7 @@ const Posts = ({ notView ,post, handleRefresh ,setViewData ,setShowView}) => {
   const [reactors, setReactors] = useState([]);
   const [reacted, setReacted] = useState(false);
 
-  const { user,userContextId } = useContext(UserContext);
+  const { user, userContextId } = useContext(UserContext);
 
   const [myComment, setMyComment] = useState("");
   const [comments, setComments] = useState([]);
@@ -264,8 +267,6 @@ const Posts = ({ notView ,post, handleRefresh ,setViewData ,setShowView}) => {
     }
 
     fetchData();
-
-  
   }, []);
 
   const deletePost = () => {
@@ -300,15 +301,44 @@ const Posts = ({ notView ,post, handleRefresh ,setViewData ,setShowView}) => {
     setPostUpdate(postUpdate + 1);
   };
 
+  const [openPostModal, setOpenPostModal] = useState();
+
+  const modalStyle = {
+    content: {
+      top: "auto",
+      left: "50%",
+      right: "180px",
+      bottom: "auto",
+      ariaHideApp: false,
+      transform: "translate(-50%, 0)",
+      height: "fit",
+      width: "500px",
+      marginBottom: "20px",
+      marginTop: "20px",
+      "overflow" :"hidden",
+    },
+  };
+
+  const handleOpenModal = () => {
+    document.body.style.overflow = "hidden";
+    setOpenPostModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenPostModal(false);
+  };
+
   const handleCommentPost = () => {
     if (!showCommentBox) {
       setShowCommentBox(!showCommentBox);
     }
-   
-    
   };
 
 
+
+  const handleSharePost = () => {
+   setOpenPostModal(true)
+  };
 
   const handleCommentListener = (e) => {
     setMyComment(e.target.value);
@@ -337,14 +367,16 @@ const Posts = ({ notView ,post, handleRefresh ,setViewData ,setShowView}) => {
       });
   };
 
-
-
   return (
-    <Post box_value={()=>{
-      if(notView){
-        return `0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19)`;
-      }
-    }}>
+    <Post
+      box_value={() => {
+        if (notView) {
+          return `0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19)`;
+        }
+      }}
+    >
+
+
       <RowBottom className="pt-4">
         <Row>
           <div>
@@ -381,50 +413,50 @@ const Posts = ({ notView ,post, handleRefresh ,setViewData ,setShowView}) => {
 
             <div className="flex flex-row text-gray-600">
               <TimeLabel>
-                {/* {format(
-                new Date(post.date_posted),
-                "hh:m a • MMM dd • eee"
-              ).toString()} */}
-                <DateFormat date={post.date_posted} addSuffix={true} />{" "}
-                {/* {formatDistanceStrict(new Date(post.date_posted), new Date(), {
-      
-      roundingMethod: 'ceil',
-      addSuffix: true,
-  
-    })} */}
-                {/* {formatDistance(new Date(post.date_posted), new Date(), {
-                  addSuffix: true
-                })}{" "} */}
-                •{/*  <DateFormat date={post.date_posted} /> • */}
+                <DateFormat date={post.date_posted} addSuffix={true} /> •
               </TimeLabel>
               <FaGlobeAsia className="self-center ml-1" />
             </div>
           </div>
         </Row>
 
-        {post.user_id === userContextId ? notView ? (
-          <div
-            className="text-neutral-500 hover:bg-neutral-300 h-fit p-2 rounded-full"
-            onClick={() => deletePost()}
-          >
-            <FiTrash2 className="h-5 w-5 " />
-          </div>
-        ) : null : null}
+        {post.user_id === userContextId ? (
+          notView ? (
+            <div
+              className="text-neutral-500 hover:bg-neutral-300 h-fit p-2 rounded-full"
+              onClick={() => deletePost()}
+            >
+              <FiTrash2 className="h-5 w-5 " />
+            </div>
+          ) : null
+        ) : null}
       </RowBottom>
       <Caption className="text-gray-600 mb-3 text-[16px]">
         {post.caption}
       </Caption>
 
-      
-
-      {notView ?  post.contents ? <PostImage alt="post" src={content} onClick={()=> {
-        setViewData({data : {
-          post: post,
-          content: content,
-        }});
-        setShowView(true);
-        //  navigate("/Main/View/");
-      }}></PostImage> : "" : ""}
+      {notView ? (
+        post.contents ? (
+          <PostImage
+            alt="post"
+            src={content}
+            onClick={() => {
+              setViewData({
+                data: {
+                  post: post,
+                  content: content,
+                },
+              });
+              setShowView(true);
+              //  navigate("/Main/View/");
+            }}
+          ></PostImage>
+        ) : (
+          ""
+        )
+      ) : (
+        ""
+      )}
 
       <div>
         <RowBottom className="mt-2">
@@ -538,7 +570,10 @@ const Posts = ({ notView ,post, handleRefresh ,setViewData ,setShowView}) => {
           </label>
         </div>
 
-        <div className="flex flex-row justify-center w-[100%] hover:bg-[#E4E6E9]  rounded-2xl p-2 ">
+        <div
+          className="flex flex-row justify-center w-[100%] hover:bg-[#E4E6E9]  rounded-2xl p-2 "
+          onClick={handleSharePost}
+        >
           <AiOutlineRetweet className="h-6 w-6 self-center" />
           <label className="ml-1 self-center text-[14px] font-semibold">
             Share
@@ -547,7 +582,7 @@ const Posts = ({ notView ,post, handleRefresh ,setViewData ,setShowView}) => {
       </div>
 
       {showCommentBox || !notView ? (
-        <div className={!notView? "overflow-y-scroll h-[65vh]": null}>
+        <div className={!notView ? "overflow-y-scroll h-[65vh]" : null}>
           <div>
             <Divider className="mt-1"></Divider>
             <div className="p-4 flex flex-row">
