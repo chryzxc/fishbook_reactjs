@@ -19,14 +19,14 @@ export default function FeedsFriendSuggestion() {
   const { fetchedData } = useFetchSuggestedFriends();
 
   return (
-    <div className="pl-[100px] pr-[100px] m-auto p-1 overflow-hidden">
+    <div className="pl-[100px] pr-[100px] m-auto p-1 overflow-hidden ">
       <Container className="pt-2">
         <p className="text-left text-neutral-500 font-semibold text-[15px] m-4">
           People you may know
         </p>
 
         <div className="overflow-y-hidden overflow-x-auto ">
-          <div className="inline-flex pl-2 mb-3 mt-2 pr-2">
+          <div className="inline-flex pl-2 mb-3 mt-2 pr-2 ">
             {fetchedData &&
               fetchedData.map((users) => (
                 <FeedsFriendSuggestionRow

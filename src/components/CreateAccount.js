@@ -135,7 +135,7 @@ export default function CreateAccount({
           >
             <input
               className="m-1"
-              placeholder="Email or phone number"
+              placeholder="Email"
               required
               value={email}
               onChange={(e) => {

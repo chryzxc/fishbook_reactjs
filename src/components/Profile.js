@@ -433,18 +433,20 @@ const Profile = ({ setShowView, setViewData }) => {
               alt="cover_photo"
               className="h-[400px] w-[100%] rounded-bl-2xl rounded-br-2xl object-cover"
             ></img>
-            <div className="flex flex-row font-semibold text-sm tracking-wide absolute bottom-3 right-4">
+
+            {myProfile? <div className="flex flex-row font-semibold text-sm tracking-wide absolute bottom-3 right-4">
               <div className="self-center mt-10 m-1  bg-[#E4E6E9] p-2 pl-3 pr-3 rounded-lg flex flex-row items-center hover:bg-neutral-300">
                 <RiCameraFill className="h-5 w-5" />
                 <p className="ml-1">Change cover picture</p>
               </div>
-            </div>
+            </div>: ""}
+            
           </div>
           <div className="flex flex-row mt-[-40px]">
             {/* Left */}
             <div className="ml-7 rounded-full bg-white p-2 z-1 relative">
               <ReactRoundedImage
-                image={user.profile_picture}
+                image={useGetUserProfilePicture(profileId)}
                 roundedSize="0"
                 imageWidth="180"
                 imageHeight="180"

@@ -73,7 +73,7 @@ export default function PostSection() {
       bottom: "0%",
       ariaHideApp: false,
       transform: "translate(-50%, -0%)",
-      height: "auto",
+      height: "fit",
       width: "450px",
       marginBottom: "20px",
       marginTop: "20px",
@@ -100,7 +100,7 @@ export default function PostSection() {
               minWidth: "auto",
             }}
             setOpenPostModal={setOpenPostModal}
-            sharedPost={true}
+            sharedPost={false}
           />
         </Modal>
       ) : (
