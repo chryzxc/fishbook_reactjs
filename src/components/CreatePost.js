@@ -374,7 +374,7 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
         <RiCloseFill className="h-6 w-6" />
       </div>
 
-      <p className="font-bold text-black text-xl text-center">Write a post</p>
+      <p className="font-bold text-black text-xl text-center">{sharedPost.shared? "Share a post" : "Write a post"}</p>
 
       <Divider></Divider>
 
