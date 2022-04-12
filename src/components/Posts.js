@@ -315,7 +315,7 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
       width: "500px",
       marginBottom: "20px",
       marginTop: "20px",
-      "overflow" :"hidden",
+      overflow: "hidden",
     },
   };
 
@@ -334,10 +334,9 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
     }
   };
 
-
-
   const handleSharePost = () => {
-   setOpenPostModal(true)
+
+   handleOpenModal();
   };
 
   const handleCommentListener = (e) => {
@@ -375,7 +374,38 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
         }
       }}
     >
-
+      {openPostModal ? (
+        <Modal
+          isOpen={() => handleOpenModal()}
+          // onAfterOpen={afterOpenModal}
+          onAfterClose={() => (document.body.style.overflow = "auto")}
+          onRequestClose={() => handleCloseModal()}
+          style={modalStyle}
+          ariaHideApp={false}
+          // ariaHideApp={true}
+          contentLabel=""
+        >
+          <CreatePost
+            data={{
+              width: "auto",
+              minWidth: "auto",
+            }}
+            setOpenPostModal={setOpenPostModal}
+            sharedPost={{ shared: true , data:{
+              firstname: firstname,
+              lastname: lastname,
+              content: content? content : null,
+              feeling: post.feeling,
+              date_posted: post.date_posted,
+              caption: post.caption,
+              shared_post_user_id: post.user_id,
+              shared_post_id: post.post_id
+            }}}
+          />
+        </Modal>
+      ) : (
+        ""
+      )}
 
       <RowBottom className="pt-4">
         <Row>

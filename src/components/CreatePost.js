@@ -83,8 +83,6 @@ const FeelingList = styled.ul`
   -moz-columns: 2;
 `;
 
-
-
 const RowBottom = styled.div`
   display: flex;
   flex-direction: row;
@@ -100,18 +98,17 @@ const Name = styled.p`
   font-weight: bold;
   // margin-top: -2px;
   font-size: 14px;
-  margin-left: 10px;
+
   text-align: left;
 `;
 
 const TimeLabel = styled.p`
   align-self: flex-start;
   text-align: start;
-  margin-left: 10px;
 `;
 
 const Caption = styled.p`
-  margin-left: 20px;
+  margin-left: 15px;
   margin-right: 20px;
   margin-top: 15px;
   text-align: justify;
@@ -130,9 +127,8 @@ const NumberOfLikes = styled.p`
   justify-self: end;
 `;
 
-
-
 const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
+  console.log("shared: " + JSON.stringify(sharedPost));
   const { user, userContextId, FetchUserData, dispatch } =
     useContext(UserContext);
   const [caption, setCaption] = useState("");
@@ -385,7 +381,7 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
       <form onSubmit={submitPost}>
         <div data={data}>
           <div className="mt-1 ">
-            <div className="mt-3 ml-3 flex flex-row">
+            <div className="mt-3 ml-3 mb-2 flex flex-row">
               <ReactRoundedImage
                 image={user.profile_picture}
                 roundedSize="0"
@@ -409,7 +405,11 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
               </div>
             </div>
 
-            <div className="overflow-y-scroll h-[300px]">
+            <div
+              className={`${
+                sharedPost.shared ? "h-[300px] overflow-y-scroll" : null
+              }`}
+            >
               <TextArea
                 placeholder={"What's on your mind, " + user.firstname + "?"}
                 value={caption}
@@ -418,54 +418,58 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
                 }}
               ></TextArea>
 
-              <div className="mr-4 ml-4 m-2 border-[0.5px] border-neutral-400 rounded-xl ">
-                <img className="rounded-t-xl" src={photo} alt="test"></img>
+              {sharedPost.shared ? (
+                <div className="mr-4 ml-4 m-2 border-[0.5px] border-neutral-400 rounded-xl ">
+                  {sharedPost.data.content ? (
+                    <img
+                      className="rounded-t-xl"
+                      src={sharedPost?.data.content}
+                      alt="test"
+                    ></img>
+                  ) : (
+                    ""
+                  )}
+                   <Caption className="text-gray-600 mb-3 text-[16px]">
+                    {sharedPost?.data.caption}
+                  </Caption>
 
-                <RowBottom className="pt-4">
-                  <Row>
-                    
-                    <div>
-                      {sharedPost?.feeling ? (
-                        <div className="flex flex-row">
-                          <Name
-                            className="clickable-text justify-self-center"
-                          
-                          >
-                            {sharedPost?.firstname + " " + sharedPost?.lastname}
+                  <RowBottom className="pt-4">
+                    <Row>
+                      <div>
+                        {sharedPost?.data.feeling ? (
+                          <div className="flex flex-row">
+                            <Name className="ml-0 justify-self-center">
+                              {sharedPost?.data.firstname +
+                                " " +
+                                sharedPost?.data.lastname}
+                            </Name>
+                            <p className="ml-1 justify-self-center">{`is ${sharedPost?.data.feeling}`}</p>
+                          </div>
+                        ) : (
+                          <Name className="ml-0">
+                            {sharedPost?.data.firstname +
+                              " " +
+                              sharedPost?.data.lastname}
                           </Name>
-                          <p className="ml-1 justify-self-center">{`is ${sharedPost?.feeling}`}</p>
+                        )}
+
+                        <div className="flex flex-row text-gray-600">
+                          <TimeLabel>
+                            <DateFormat
+                              date={sharedPost?.data.date_posted}
+                              addSuffix={true}
+                            />{" "}
+                            •
+                          </TimeLabel>
+                          <FaGlobeAsia className="self-center ml-1" />
                         </div>
-                      ) : (
-                        <Name
-                          className="clickable-text"
-                          
-                        >
-                          {sharedPost?.firstname + " " + sharedPost?.lastname}
-                        </Name>
-                      )}
-
-                      <div className="flex flex-row text-gray-600">
-                        <TimeLabel>
-                          <DateFormat
-                            date={sharedPost?.date_posted}
-                            addSuffix={true}
-                          />{" "}
-                          •
-                        </TimeLabel>
-                        <FaGlobeAsia className="self-center ml-1" />
                       </div>
-                    </div>
-                  </Row>
-
-             
-                </RowBottom>
-                <Caption className="text-gray-600 mb-3 text-[16px]">
-                  {sharedPost?.caption}
-                </Caption>
-              </div>
+                    </Row>
+                  </RowBottom>
+                 
+                </div>
+              ) : null}
             </div>
-
-            {/* {sharedPost?  :""} */}
 
             {content ? (
               <div className="ml-1 flex flex-row bg-[#e0e1e4] rounded-full w-fit pl-2 pr-2 pt-1 pb-1 hover:bg-[#fff]">
@@ -503,7 +507,7 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
                   ></FaVideo>
                 </div> */}
 
-                {!sharedPost ? (
+                {!sharedPost.shared ? (
                   <div
                     className="flex flex-row w-[100%] justify-center hover:bg-[#E4E6E9] rounded-xl p-2"
                     onClick={(e) => handleContent(e.target)}
