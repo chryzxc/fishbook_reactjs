@@ -15,7 +15,7 @@ import {
   onValue,
 } from "firebase/database";
 import DateFormat from "../utils/DateFormat";
-import { useGetUserInfo, useGetUserProfilePicture } from "../hooks/useGetUserData";
+import { useGetUserInfo, useGetUserProfilePicture } from "../hooks/useGetData";
 import { info } from "autoprefixer";
 
 const row =

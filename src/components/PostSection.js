@@ -82,6 +82,7 @@ export default function PostSection() {
       marginBottom: "20px",
       marginTop: "20px",
       "overflow" :"hidden",
+      borderRadius: "10px"
     },
   };
 
@@ -135,7 +136,7 @@ export default function PostSection() {
                 <TextArea
                   placeholder={"What's on your mind, " + user.firstname + "?"}
                   onClick={() => handleOpenModal()}
-                  disabled="true"
+                  disabled={true}
                 ></TextArea>
               </WritePost>
             </div>

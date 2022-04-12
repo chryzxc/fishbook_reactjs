@@ -51,8 +51,9 @@ import {
 } from "firebase/storage";
 
 import { useNavigate } from "react-router-dom";
-import { useGetUserProfilePicture } from "../hooks/useGetUserData";
+import { useGetPostData, useGetUserProfilePicture } from "../hooks/useGetData";
 import View from "./View";
+import SharedPostContent from "./SharedPostContent";
 
 const Post = styled.div`
   background-color: white;
@@ -67,6 +68,7 @@ const Post = styled.div`
   font-size: 13px;
   /* box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19); */
   padding-bottom: 5px;
+  padding-top: 1px;
 `;
 
 const Row = styled.div`
@@ -151,6 +153,21 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
   const postRef = ref(db, "posts/" + post.post_id);
 
   const user_profile = useGetUserProfilePicture(user.id);
+
+
+  let data;
+  const fetchData = useGetPostData(post.shared_post).then(() =>{
+     data = {
+    
+
+    }
+  });
+
+
+
+ 
+  
+  
 
   useEffect(() => {
     // USER INFO
@@ -316,6 +333,7 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
       marginBottom: "20px",
       marginTop: "20px",
       overflow: "hidden",
+      borderRadius: "10px"
     },
   };
 
@@ -407,8 +425,17 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
         ""
       )}
 
+
+    {post.shared_post ? <div className="text-left ">
+      <p className="mt-4 ml-4 mb-3 font-normal text-sm">{`${firstname} ${lastname} shared a post`}</p>
+      <Divider />
+
+    </div> : ""}
+    
       <RowBottom className="pt-4">
+        
         <Row>
+      
           <div>
             <ReactRoundedImage
               image={useGetUserProfilePicture(post.user_id)}
@@ -419,7 +446,7 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
           </div>
           <div>
             {post.feeling ? (
-              <div className="flex flex-row">
+              <div className="flex flex-row text-center">
                 <Name
                   className="clickable-text justify-self-center"
                   onClick={() => {
@@ -428,7 +455,7 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
                 >
                   {firstname + " " + lastname}
                 </Name>
-                <p className="ml-1 justify-self-center">{`is ${post.feeling}`}</p>
+                <p className="ml-1 justify-self-center self-center text-[14px]">{`is ${post.feeling}`}</p>
               </div>
             ) : (
               <Name
@@ -464,6 +491,8 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
       <Caption className="text-gray-600 mb-3 text-[16px]">
         {post.caption}
       </Caption>
+
+      {data && post.shared_post? <SharedPostContent sharedPost={{data}}/> : ""}
 
       {notView ? (
         post.contents ? (

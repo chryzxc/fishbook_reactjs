@@ -1,6 +1,6 @@
 import React from "react";
 import storyimage from "../assets/2.jpg";
-import { useGetUserProfilePicture } from "../hooks/useGetUserData";
+import { useGetUserProfilePicture } from "../hooks/useGetData";
 import DateFormat from "../utils/DateFormat";
 
 export default function FeedsFriendSuggestionList({id,users}) {

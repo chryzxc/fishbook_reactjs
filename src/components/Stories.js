@@ -4,7 +4,7 @@ import storyimage from "../assets/2.jpg";
 import profile from "../assets/github.jpg";
 
 import ReactRoundedImage from "react-rounded-image";
-import { useGetUserProfilePicture } from "../hooks/useGetUserData";
+import { useGetUserProfilePicture } from "../hooks/useGetData";
 import { UserContext } from "../contexts/UserContext";
 
 const Story = styled.div`

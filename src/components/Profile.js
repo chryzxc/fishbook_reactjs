@@ -34,7 +34,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   useGetUserData,
   useGetUserProfilePicture,
-} from "../hooks/useGetUserData";
+} from "../hooks/useGetData";
 import { uploadBytes, ref as storageRef } from "firebase/storage";
 import ProfileFriendsIcon from "./ProfileFriendsIcon";
 import Friends from "./Friends";

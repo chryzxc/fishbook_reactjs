@@ -35,7 +35,7 @@ import { UserContext } from "../contexts/UserContext";
 import { format } from "date-fns";
 import Replies from "./Replies";
 import DateFormat from "../utils/DateFormat";
-import { useGetUserProfilePicture } from "../hooks/useGetUserData";
+import { useGetUserProfilePicture } from "../hooks/useGetData";
 
 export default function Comments({ commentData }) {
   const { user } = useContext(UserContext);

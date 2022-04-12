@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "./defaults/Container";
 import profile from "../assets/github.jpg";
-import { useGetUserData, useGetUserInfo, useGetUserProfilePicture } from "../hooks/useGetUserData";
+import { useGetUserData, useGetUserInfo, useGetUserProfilePicture } from "../hooks/useGetData";
 import { async } from "@firebase/util";
 
 export default function Friends({ friends }) {

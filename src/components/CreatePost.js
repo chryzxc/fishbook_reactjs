@@ -9,10 +9,11 @@ import { ref, push } from "firebase/database";
 import { db } from "../config/firebase";
 import { RiCloseFill, RiArrowLeftLine } from "react-icons/ri";
 import Modal from "react-modal";
-import DateFormat from "../utils/DateFormat";
+
 import { FaGlobeAsia } from "react-icons/fa";
 
-import { CREATE_POST } from "./Actions";
+import { CREATE_POST, SHARED_BY, SHARED_BY_NOTIFICATION } from "./Actions";
+import SharedPostContent from "./SharedPostContent";
 
 // const CreatePostCard = styled.div`
 //   overflow-y: hidden;
@@ -35,18 +36,6 @@ const Divider = styled.hr`
   //margin-left: 20px;
   // margin-right: 20px;
   margin-top: 10px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  height: auto;
-
-  padding-bottom: 5px;
-  // justify-content: center;
-
-  //padding: 5px;
 `;
 
 const WritePost = styled.div`
@@ -81,45 +70,6 @@ const FeelingList = styled.ul`
   columns: 2;
   -webkit-columns: 2;
   -moz-columns: 2;
-`;
-
-const RowBottom = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: auto;
-  width: auto;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-bottom: 10px;
-  justify-content: space-between;
-`;
-
-const Name = styled.p`
-  font-weight: bold;
-  // margin-top: -2px;
-  font-size: 14px;
-
-  text-align: left;
-`;
-
-const TimeLabel = styled.p`
-  align-self: flex-start;
-  text-align: start;
-`;
-
-const Caption = styled.p`
-  margin-left: 15px;
-  margin-right: 20px;
-  margin-top: 15px;
-  text-align: justify;
-`;
-
-const PostImage = styled.img`
-  height: auto;
-  width: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: cover;
 `;
 
 const NumberOfLikes = styled.p`
@@ -189,6 +139,7 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
       bottom: "0%",
       ariaHideApp: false,
       transform: "translate(-50%, -35%)",
+      borderRadius: "10px",
     },
   };
   // const modalStyle = {
@@ -210,10 +161,29 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
       caption: caption,
       date_posted: Date.now(),
       feeling: feeling,
+      shared_post: sharedPost.shared ? sharedPost.data.shared_post_id : null,
     };
 
     const dbRef = ref(db, "posts/");
     const newPost = push(dbRef);
+
+    if (sharedPost.shared) {
+      SHARED_BY({
+        user_id: user.id,
+        post_id: sharedPost.data.shared_post_id,
+      });
+
+      const dbRef = ref(
+        db,
+        `users/${sharedPost.data.shared_post_user_id}/notifications/`
+      );
+      const newId = push(dbRef);
+
+      SHARED_BY_NOTIFICATION({
+        sender_id: user.id,
+        newId: newId,
+      });
+    }
 
     CREATE_POST({
       setContent,
@@ -354,7 +324,7 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
   };
 
   return (
-    <div className="p-0 m-0 text-center ">
+    <div className="p-0 m-0 text-center text-sm">
       {openModal ? (
         <FeelingModal
           handleOpenFeelingModal={handleOpenFeelingModal}
@@ -374,7 +344,9 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
         <RiCloseFill className="h-6 w-6" />
       </div>
 
-      <p className="font-bold text-black text-xl text-center">{sharedPost.shared? "Share a post" : "Write a post"}</p>
+      <p className="font-bold text-black text-xl text-center">
+        {sharedPost.shared ? "Share a post" : "Write a post"}
+      </p>
 
       <Divider></Divider>
 
@@ -405,69 +377,21 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
               </div>
             </div>
 
+            <TextArea
+              placeholder={"What's on your mind, " + user.firstname + "?"}
+              value={caption}
+              onChange={(e) => {
+                handleCaptionListener(e);
+              }}
+            ></TextArea>
+
             <div
               className={`${
-                sharedPost.shared ? "h-[300px] overflow-y-scroll" : null
+                sharedPost.shared ? "h-[40vh] overflow-y-scroll" : null
               }`}
             >
-              <TextArea
-                placeholder={"What's on your mind, " + user.firstname + "?"}
-                value={caption}
-                onChange={(e) => {
-                  handleCaptionListener(e);
-                }}
-              ></TextArea>
-
               {sharedPost.shared ? (
-                <div className="mr-4 ml-4 m-2 border-[0.5px] border-neutral-400 rounded-xl ">
-                  {sharedPost.data.content ? (
-                    <img
-                      className="rounded-t-xl"
-                      src={sharedPost?.data.content}
-                      alt="test"
-                    ></img>
-                  ) : (
-                    ""
-                  )}
-                   <Caption className="text-gray-600 mb-3 text-[16px]">
-                    {sharedPost?.data.caption}
-                  </Caption>
-
-                  <RowBottom className="pt-4">
-                    <Row>
-                      <div>
-                        {sharedPost?.data.feeling ? (
-                          <div className="flex flex-row">
-                            <Name className="ml-0 justify-self-center">
-                              {sharedPost?.data.firstname +
-                                " " +
-                                sharedPost?.data.lastname}
-                            </Name>
-                            <p className="ml-1 justify-self-center">{`is ${sharedPost?.data.feeling}`}</p>
-                          </div>
-                        ) : (
-                          <Name className="ml-0">
-                            {sharedPost?.data.firstname +
-                              " " +
-                              sharedPost?.data.lastname}
-                          </Name>
-                        )}
-
-                        <div className="flex flex-row text-gray-600">
-                          <TimeLabel>
-                            <DateFormat
-                              date={sharedPost?.data.date_posted}
-                              addSuffix={true}
-                            />{" "}
-                            •
-                          </TimeLabel>
-                          <FaGlobeAsia className="self-center ml-1" />
-                        </div>
-                      </div>
-                    </Row>
-                  </RowBottom>
-                 
-                </div>
+                <SharedPostContent sharedPost={sharedPost} />
               ) : null}
             </div>
 
@@ -607,7 +531,7 @@ const CreatePost = ({ handleRefresh, data, setOpenPostModal, sharedPost }) => {
                 type="submit"
                 disabled={caption ? false : true}
               >
-                Post
+                {sharedPost.shared ? "Share" : "Post"}
               </button>
             </div>
           </div>

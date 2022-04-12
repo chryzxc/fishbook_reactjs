@@ -19,7 +19,7 @@ import profile from "../assets/github.jpg";
 import ReactRoundedImage from "react-rounded-image";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { useGetUserProfilePicture } from "../hooks/useGetUserData";
+import { useGetUserProfilePicture } from "../hooks/useGetData";
 
 export default function SideMenu() {
   const font = "ml-2 font-bold text-sm self-center";

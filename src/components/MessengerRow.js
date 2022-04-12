@@ -1,7 +1,7 @@
 import React from "react";
 import ReactRoundedImage from "react-rounded-image";
 import logo from "../assets/facebook.png";
-import { useGetUserInfo, useGetUserProfilePicture } from "../hooks/useGetUserData";
+import { useGetUserInfo, useGetUserProfilePicture } from "../hooks/useGetData";
 export default function MessengerRow({id}) {
 
   const friend_data = useGetUserInfo(id);

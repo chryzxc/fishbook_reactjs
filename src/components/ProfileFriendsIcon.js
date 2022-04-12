@@ -1,5 +1,5 @@
 import React from 'react'
-import { useGetUserProfilePicture } from '../hooks/useGetUserData'
+import { useGetUserProfilePicture } from '../hooks/useGetData'
 import ReactRoundedImage from "react-rounded-image";
 
 export default function ProfileFriends({id,index}) {

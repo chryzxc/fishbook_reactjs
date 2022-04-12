@@ -20,7 +20,7 @@ import {
 } from "firebase/database";
 import {db} from "../config/firebase";
 import DateFormat from "../utils/DateFormat";
-import { useGetUserProfilePicture } from "../hooks/useGetUserData";
+import { useGetUserProfilePicture } from "../hooks/useGetData";
 
 export default function Replies({ replyData }) {
   const postId = replyData.post_id;
