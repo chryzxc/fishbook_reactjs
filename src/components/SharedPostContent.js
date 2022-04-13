@@ -56,10 +56,10 @@ const RowBottom = styled.div`
 
 
 export default function SharedPostContent({sharedPost}) {
-    console.log("from shared:" + JSON.stringify(sharedPost));
+  
   return (
     <div className="mr-4 ml-4 m-2 border-[0.5px] border-neutral-400 rounded-xl ">
-      {sharedPost.data.content ? (
+      {sharedPost.data?.content ? (
         <img
           className="rounded-t-xl w-[100%] object-cover"
           src={sharedPost?.data.content}
