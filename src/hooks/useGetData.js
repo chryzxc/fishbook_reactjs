@@ -107,14 +107,16 @@ export const useGetPostData = (postId) => {
 
           const dataVal = snapshot.val();
 
+        
+
           setData({
             post_id: snapshot.key,
-            user_id: dataVal.user_id,
-            caption: dataVal.caption,
+            user_id: dataVal?.user_id,
+            caption: dataVal?.caption,
             shared_post: dataVal?.shared_post,
 
-            contents: dataVal.contents,
-            date_posted: dataVal.date_posted,
+            contents: dataVal?.contents,
+            date_posted: dataVal?.date_posted,
             feeling: dataVal?.feeling,
           });
 

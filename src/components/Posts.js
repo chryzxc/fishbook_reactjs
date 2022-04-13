@@ -51,7 +51,7 @@ import {
 } from "firebase/storage";
 
 import { useNavigate } from "react-router-dom";
-import { useGetPostData, useGetUserProfilePicture } from "../hooks/useGetData";
+import { useGetPostData, useGetUserInfo, useGetUserProfilePicture } from "../hooks/useGetData";
 import View from "./View";
 import SharedPostContent from "./SharedPostContent";
 
@@ -155,14 +155,9 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
   const user_profile = useGetUserProfilePicture(user.id);
 
 
-  let data;
-  const fetchData = useGetPostData(post.shared_post).then(() =>{
-     data = {
-    
-
-    }
-  });
-
+ 
+  
+ 
 
 
  
@@ -384,6 +379,55 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
       });
   };
 
+
+  const SharedPost = () =>{
+
+    let data; 
+    let fetchData;
+    let fetchInfo;
+    let fetchContent;
+   
+      const Get = () => {
+         fetchData = useGetPostData(post.shared_post);
+         fetchInfo = useGetUserInfo(post.shared_post_user_id);
+         if(fetchData){
+           console.log("data:" + fetchData.contents)
+          fetchContent =  getDownloadURL(
+            storageRef(storage, `posts/${post.shared_post_id}/${Object.keys(fetchData?.contents)}.jpeg`)
+          )
+            .then((url) => {
+              console.log("url: " + url)
+            })
+            .catch((error) => {
+           
+            });
+  
+         }
+        
+          data = {
+
+
+          }
+        
+      
+      }
+
+      Get();
+
+  
+
+   
+    return(
+      <div>
+       
+        
+      </div>
+
+    )
+
+
+  }
+
   return (
     <Post
       box_value={() => {
@@ -492,7 +536,7 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
         {post.caption}
       </Caption>
 
-      {data && post.shared_post? <SharedPostContent sharedPost={{data}}/> : ""}
+      {post.shared_post? <SharedPost/> : ""}
 
       {notView ? (
         post.contents ? (
