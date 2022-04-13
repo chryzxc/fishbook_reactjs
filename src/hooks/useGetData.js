@@ -130,5 +130,5 @@ export const useGetPostData = (postId) => {
       });
   }, []);
 
-  return  data ;
+  return data;
 };

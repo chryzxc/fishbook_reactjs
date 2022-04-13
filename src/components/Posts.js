@@ -51,7 +51,11 @@ import {
 } from "firebase/storage";
 
 import { useNavigate } from "react-router-dom";
-import { useGetPostData, useGetUserInfo, useGetUserProfilePicture } from "../hooks/useGetData";
+import {
+  useGetPostData,
+  useGetUserInfo,
+  useGetUserProfilePicture,
+} from "../hooks/useGetData";
 import View from "./View";
 import SharedPostContent from "./SharedPostContent";
 
@@ -135,6 +139,7 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
   const [lastname, setLastname] = useState("");
 
   const [numOfReacts, setNumOfReacts] = useState(0);
+  const [numOfShare, setNumOfShares] = useState(0);
   const [reactors, setReactors] = useState([]);
   const [reacted, setReacted] = useState(false);
 
@@ -153,16 +158,6 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
   const postRef = ref(db, "posts/" + post.post_id);
 
   const user_profile = useGetUserProfilePicture(user.id);
-
-
- 
-  
- 
-
-
- 
-  
-  
 
   useEffect(() => {
     // USER INFO
@@ -205,7 +200,7 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
         });
     }
 
-    //INDIVIDUAL POST DATA
+    //INDIVIDUAL POST DATA REACTS
     get(child(dbRef, `posts/${post.post_id}/reacted_users`))
       .then((snapshot) => {
         if (snapshot.exists()) {
@@ -222,6 +217,26 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
         } else {
           setReacted(false);
           setNumOfReacts(0);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    //INDIVIDUAL POST DATA SHARES
+    get(child(dbRef, `posts/${post.post_id}/shared_by`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          let shares = 0;
+          let shared_by = [];
+          snapshot.forEach((data) => {
+            shared_by.push(data.key);
+            shares += 1;
+          });
+
+          setNumOfShares(shares);
+        } else {
+          setNumOfShares(0);
         }
       })
       .catch((error) => {
@@ -328,7 +343,7 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
       marginBottom: "20px",
       marginTop: "20px",
       overflow: "hidden",
-      borderRadius: "10px"
+      borderRadius: "10px",
     },
   };
 
@@ -348,8 +363,7 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
   };
 
   const handleSharePost = () => {
-
-   handleOpenModal();
+    handleOpenModal();
   };
 
   const handleCommentListener = (e) => {
@@ -379,54 +393,58 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
       });
   };
 
-
-  const SharedPost = () =>{
-
-    let data; 
+  const SharedPost = () => {
+    let data = {};
     let fetchData;
     let fetchInfo;
-    let fetchContent;
-   
-      const Get = () => {
-         fetchData = useGetPostData(post.shared_post);
-         fetchInfo = useGetUserInfo(post.shared_post_user_id);
-         if(fetchData){
-           console.log("data:" + fetchData.contents)
-          fetchContent =  getDownloadURL(
-            storageRef(storage, `posts/${post.shared_post_id}/${Object.keys(fetchData?.contents)}.jpeg`)
-          )
-            .then((url) => {
-              console.log("url: " + url)
-            })
-            .catch((error) => {
-           
-            });
-  
-         }
-        
-          data = {
+    
+    const [finish, setFinish] = useState(false);
 
-
-          }
-        
+    const Get = () => {
+      fetchData = useGetPostData(post.shared_post);
+      fetchInfo = useGetUserInfo(post.user_id);
+      if (fetchData) {
       
+        data.post_id = fetchData.post_id;
+        data.user_id = fetchData.user_id;
+        data.caption = fetchData.caption;
+        data.shared_post = fetchData.shared_post;
+        data.date_posted = fetchData.date_posted;
+        data.feeling = fetchData.feeling;
+
+        data.content = getDownloadURL(
+          storageRef(
+            storage,
+            `posts/${post.shared_post_id}/${Object.keys(
+              fetchData?.contents
+            )}.jpeg`
+          )
+        )
+          .then((url) => {
+            console.log("url: " + url);
+          })
+          .catch((error) => {});
       }
 
-      Get();
+      if (fetchInfo) {
+        data.firstname = fetchInfo.firstname;
+        data.lastname = fetchInfo.lastname;
+        console.log("fetchInfo:"+JSON.stringify(fetchInfo));
+      }
 
-  
+      if (fetchData && fetchInfo) {
+        setFinish(true);
+      }
 
-   
-    return(
-      <div>
-       
-        
-      </div>
+      console.log("data:"+JSON.stringify(data));
+    };
 
-    )
+    // Get();
 
+    console.log("render: "+post.post_id);
 
-  }
+    return <div>{finish ? <SharedPostContent sharedPost={data} /> : ""}</div>;
+  };
 
   return (
     <Post
@@ -453,33 +471,36 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
               minWidth: "auto",
             }}
             setOpenPostModal={setOpenPostModal}
-            sharedPost={{ shared: true , data:{
-              firstname: firstname,
-              lastname: lastname,
-              content: content? content : null,
-              feeling: post.feeling,
-              date_posted: post.date_posted,
-              caption: post.caption,
-              shared_post_user_id: post.user_id,
-              shared_post_id: post.post_id
-            }}}
+            sharedPost={{
+              shared: true,
+              data: {
+                firstname: firstname,
+                lastname: lastname,
+                content: content ? content : null,
+                feeling: post.feeling,
+                date_posted: post.date_posted,
+                caption: post.caption,
+                shared_post_user_id: post.user_id,
+                shared_post_id: post.post_id,
+              },
+            }}
           />
         </Modal>
       ) : (
         ""
       )}
 
+      {post.shared_post ? (
+        <div className="text-left ">
+          <p className="mt-4 ml-4 mb-3 font-normal text-sm">{`${firstname} ${lastname} shared a post`}</p>
+          <Divider />
+        </div>
+      ) : (
+        ""
+      )}
 
-    {post.shared_post ? <div className="text-left ">
-      <p className="mt-4 ml-4 mb-3 font-normal text-sm">{`${firstname} ${lastname} shared a post`}</p>
-      <Divider />
-
-    </div> : ""}
-    
       <RowBottom className="pt-4">
-        
         <Row>
-      
           <div>
             <ReactRoundedImage
               image={useGetUserProfilePicture(post.user_id)}
@@ -536,7 +557,7 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
         {post.caption}
       </Caption>
 
-      {post.shared_post? <SharedPost/> : ""}
+      {post.shared_post ? <SharedPost /> : ""}
 
       {notView ? (
         post.contents ? (
@@ -584,20 +605,35 @@ const Posts = ({ notView, post, handleRefresh, setViewData, setShowView }) => {
           ) : (
             ""
           )}
+          <div className="flex flex-row">
+            {numOfComments ? (
+              <div className="self-center mr-3 text-neutral-500 font-semibold">
+                <p>
+                  {numOfComments
+                    ? numOfComments == 1
+                      ? numOfComments + " Comment"
+                      : numOfComments + " Comments"
+                    : ""}
+                </p>
+              </div>
+            ) : (
+              ""
+            )}
 
-          {numOfComments ? (
-            <div className="self-center mr-3 text-neutral-500 font-semibold">
-              <p>
-                {numOfComments
-                  ? numOfComments == 1
-                    ? numOfComments + " Comment"
-                    : numOfComments + " Comments"
-                  : ""}
-              </p>
-            </div>
-          ) : (
-            ""
-          )}
+            {numOfShare ? (
+              <div className="self-center mr-3 text-neutral-500 font-semibold">
+                <p>
+                  {numOfShare
+                    ? numOfShare == 1
+                      ? numOfShare + " Share"
+                      : numOfShare + " Shares"
+                    : ""}
+                </p>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
         </RowBottom>
         <Divider />
       </div>

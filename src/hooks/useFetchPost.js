@@ -20,6 +20,7 @@ const useFetchPost = (dbRef,updateHome) => {
               user_id: dataVal.user_id,
               caption: dataVal.caption,
               shared_post: dataVal?.shared_post,
+              shared_by: dataVal?.shared_by,
               contents: dataVal.contents,
               date_posted: dataVal.date_posted,
               feeling: dataVal?.feeling,
